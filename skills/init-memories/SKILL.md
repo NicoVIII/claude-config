@@ -26,6 +26,29 @@ When writing commit messages, focus on the reasoning and context — WHY the cha
 
 ---
 
+### feedback_commit_cadence.md
+
+```
+---
+name: feedback_commit_cadence
+description: When and how to commit during complex multi-step implementations
+metadata:
+  type: feedback
+---
+
+Commit proactively after each independently meaningful change — don't wait to be asked. A meaningful change is one that stands on its own conceptually (not tied to plan step boundaries).
+
+The full check suite must pass before every commit. No exceptions for lint or formatting.
+
+When a change is inherently atomic (e.g. a type rename touching many files that won't compile until all sites are updated), accept one larger commit for the whole thing rather than forcing an artificial split.
+
+**Why:** Small working commits give natural checkpoints, make the history readable, and avoid a large all-or-nothing diff at the end of a plan.
+
+**How to apply:** During implementation, pause and commit whenever a coherent, passing unit of work is complete — even mid-plan. Don't batch everything until the end.
+```
+
+---
+
 ### MEMORY.md (index)
 
 If MEMORY.md is missing or empty, create it with:
@@ -34,6 +57,7 @@ If MEMORY.md is missing or empty, create it with:
 # Memory Index
 
 - [Feedback: commit message style](feedback_commit_messages.md) — focus on WHY not WHAT; diff shows the what
+- [Feedback: commit cadence](feedback_commit_cadence.md) — commit proactively after each meaningful working change, full suite must pass
 ```
 
 If MEMORY.md already exists, add only the entries for files you just created.
