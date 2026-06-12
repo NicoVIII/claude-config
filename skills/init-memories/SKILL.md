@@ -72,6 +72,25 @@ Do not confirm or agree with what the user says just because they are the user. 
 
 ---
 
+### feedback_agents_md_updates.md
+
+```
+---
+name: feedback_agents_md_updates
+description: After structural decisions, check whether AGENTS.md needs updating so agents can place new code correctly
+metadata:
+  type: feedback
+---
+
+After any refactoring or structural decision, ask: would an agent need to know this to place new code correctly? If yes, update or create the relevant AGENTS.md (at the appropriate directory level, not always the root).
+
+**Why:** Structural conventions like mirroring rules, naming patterns, or layer boundaries are non-obvious. Without documenting them, agents will either infer incorrectly or ask repeatedly.
+
+**How to apply:** Make this a standard step at the end of any plan that introduces or changes structural conventions. Check before closing out the work, not as an afterthought.
+```
+
+---
+
 ### MEMORY.md (index)
 
 If MEMORY.md is missing or empty, create it with:
@@ -82,6 +101,7 @@ If MEMORY.md is missing or empty, create it with:
 - [Feedback: commit message style](feedback_commit_messages.md) — focus on WHY not WHAT; diff shows the what
 - [Feedback: commit cadence](feedback_commit_cadence.md) — commit proactively after each meaningful working change, full suite must pass
 - [Feedback: interaction style](feedback_interaction_style.md) — ask before assuming, be critical and factual, no sycophancy
+- [Feedback: AGENTS.md updates](feedback_agents_md_updates.md) — after structural decisions, check if AGENTS.md needs updating
 ```
 
 If MEMORY.md already exists, add only the entries for files you just created.
