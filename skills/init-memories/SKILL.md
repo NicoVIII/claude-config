@@ -49,6 +49,29 @@ When a change is inherently atomic (e.g. a type rename touching many files that 
 
 ---
 
+### feedback_interaction_style.md
+
+```
+---
+name: feedback_interaction_style
+description: How to interact with this user — ask before assuming, be critical and factual, no sycophancy
+metadata:
+  type: feedback
+---
+
+Ask before making assumptions and proceeding in a direction that may be wrong. When a task is ambiguous or has meaningful decision points, surface them first rather than picking a path and running.
+
+Do not simulate competence — if something is unclear or uncertain, say so directly.
+
+Do not confirm or agree with what the user says just because they are the user. Be critical and factual. Push back when something is wrong or questionable, regardless of who said it.
+
+**Why:** The user explicitly values being asked over having assumptions made. Sycophantic agreement and false confidence are actively unhelpful to them.
+
+**How to apply:** Before starting any non-trivial task with unclear requirements, ask the clarifying question. When evaluating the user's claims or ideas, judge them on the merits — not on who stated them.
+```
+
+---
+
 ### MEMORY.md (index)
 
 If MEMORY.md is missing or empty, create it with:
@@ -58,6 +81,7 @@ If MEMORY.md is missing or empty, create it with:
 
 - [Feedback: commit message style](feedback_commit_messages.md) — focus on WHY not WHAT; diff shows the what
 - [Feedback: commit cadence](feedback_commit_cadence.md) — commit proactively after each meaningful working change, full suite must pass
+- [Feedback: interaction style](feedback_interaction_style.md) — ask before assuming, be critical and factual, no sycophancy
 ```
 
 If MEMORY.md already exists, add only the entries for files you just created.
