@@ -19,9 +19,9 @@ metadata:
 
 When writing commit messages, focus on the reasoning and context — WHY the change was made this way — not on describing WHAT changed (the diff already shows that).
 
-**Why:** The diff shows the what. The commit message's job is to explain the intent, the constraint, the design decision, or the tradeoff that isn't visible from the code alone.
+**Why:** The diff shows the what; the commit message captures what isn't visible from the code alone.
 
-**How to apply:** Before writing the body of a commit message, ask: "could a reader infer this from the diff?" If yes, cut it. Keep only what requires context to understand.
+**How to apply:** Before writing, ask: "could a reader infer this from the diff?" If yes, cut it.
 ```
 
 ---
@@ -44,7 +44,7 @@ When a change is inherently atomic (e.g. a type rename touching many files that 
 
 **Why:** Small working commits give natural checkpoints, make the history readable, and avoid a large all-or-nothing diff at the end of a plan.
 
-**How to apply:** During implementation, pause and commit whenever a coherent, passing unit of work is complete — even mid-plan. Don't batch everything until the end.
+**How to apply:** Commit mid-plan, not just at the end.
 ```
 
 ---
@@ -59,7 +59,7 @@ metadata:
   type: feedback
 ---
 
-Ask before making assumptions and proceeding in a direction that may be wrong. When a task is ambiguous or has meaningful decision points, surface them first rather than picking a path and running.
+Ask before making assumptions and proceeding in a direction that may be wrong.
 
 Do not simulate competence — if something is unclear or uncertain, say so directly.
 
@@ -67,7 +67,7 @@ Do not confirm or agree with what the user says just because they are the user. 
 
 **Why:** The user explicitly values being asked over having assumptions made. Sycophantic agreement and false confidence are actively unhelpful to them.
 
-**How to apply:** Before starting any non-trivial task with unclear requirements, ask the clarifying question. When evaluating the user's claims or ideas, judge them on the merits — not on who stated them.
+**How to apply:** Surface ambiguities before starting. Judge the user's claims on the merits, not on who stated them.
 ```
 
 ---
@@ -84,9 +84,11 @@ metadata:
 
 After any refactoring or structural decision, ask: would an agent need to know this to place new code correctly? If yes, update or create the relevant AGENTS.md (at the appropriate directory level, not always the root).
 
-**Why:** Structural conventions like mirroring rules, naming patterns, or layer boundaries are non-obvious. Without documenting them, agents will either infer incorrectly or ask repeatedly.
+AGENTS.md files are loaded into every agent context — every word has token cost. Write them to be minimal and precise: only include what an agent cannot infer from the code itself. No prose padding, no restating the obvious, no examples that don't add information the structure alone doesn't convey.
 
-**How to apply:** Make this a standard step at the end of any plan that introduces or changes structural conventions. Check before closing out the work, not as an afterthought.
+**Why:** Structural conventions like mirroring rules, naming patterns, or layer boundaries are non-obvious. Without documenting them, agents will either infer incorrectly or ask repeatedly. But bloated AGENTS.md files waste tokens on every invocation and dilute the signal.
+
+**How to apply:** Make this a standard step at the end of any plan that introduces or changes structural conventions.
 ```
 
 ---
