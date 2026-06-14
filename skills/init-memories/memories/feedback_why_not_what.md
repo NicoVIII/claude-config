@@ -1,6 +1,6 @@
 ---
 name: feedback_why_not_what
-description: Commit messages and code comments explain WHY not WHAT; the diff, or the types and names, already carry the what
+description: WHY not WHAT in comments and commits; grouping/orientation labels are allowed and encouraged
 metadata:
   type: feedback
 ---
@@ -10,6 +10,8 @@ In both commit messages and code comments, explain WHY — reasoning, context, t
 - **Commit messages:** the diff shows what changed; the message captures what the diff can't — why the change was made this way.
 - **Code comments:** the types and names carry what the code does; prose is reserved for rationale and non-obvious constraints.
 
-**Carve-out:** Public library APIs get real doc comments regardless. A library's interface is a contract for callers who can't read its internals — documenting it tells a caller what they need, which isn't the same as narrating what the code does.
+**Carve-out — public APIs:** Public library APIs get real doc comments regardless. A library's interface is a contract for callers who can't read its internals — documenting it tells a caller what they need, which isn't the same as narrating what the code does.
 
-**How to apply:** Before writing, ask: "could a reader infer this from the artifact itself — the diff, or the types and names?" If yes, cut it. Reserve prose for the reasoning. Exception: public library API surfaces.
+**Carve-out — grouping/readability:** Short labels that chunk a long function or case expression into named sections are allowed and encouraged. These are orientation markers, not explanations: a one-line comment like `// Fallback path` or `// Phase 2: reconcile` tells the reader where they are in the flow without restating what each line does. Favour these over prose that explains logic the code already expresses.
+
+**How to apply:** Before writing, ask: "could a reader infer this from the artifact itself — the diff, or the types and names?" If yes, cut it. Reserve prose for the reasoning. Exceptions: public library API surfaces; orientation markers that chunk a long block.

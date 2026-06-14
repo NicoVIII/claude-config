@@ -12,6 +12,7 @@ projects/
 
 # Runtime / cache
 .last-cleanup
+.last-update-result.json
 cache/
 backups/
 file-history/
