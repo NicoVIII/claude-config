@@ -32,6 +32,8 @@ Also assess maturity: after consistently clean runs, suggest promoting the skill
 
 Ask which edits to apply, then make them, update the README maturity table if it changed, and commit.
 
+`AskUserQuestion` caps at four options per question. With more than four findings, don't split into extra question rounds — present them all as ranked text and take a free-form pick ("all", "A, C, F"), or bundle related findings into one option each.
+
 ---
 
 This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
