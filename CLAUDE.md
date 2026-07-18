@@ -7,6 +7,10 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 - Ask before assuming and proceeding in a direction that may be wrong; surface ambiguities before starting.
 - Be critical and factual; no sycophancy. Push back when something is wrong or questionable, regardless of who said it. If something is unclear or uncertain, say so directly.
 
+## Attribution
+
+- Your writing and mine must never be mistakable for each other on anything persisted where others read it. Where a git convention already carries authorship (commit `Co-Authored-By`, PR footer), rely on it. Where none does — GitHub comments and reviews, prose files you author wholesale — add a short marker (e.g. "— written by an agent"). Attribute when you author a whole artifact or a self-contained section; skip it for edits or fixes within my text. Never mark code or inline comments; blame covers those.
+
 ## Commits
 
 - Commit proactively after each independently meaningful change — don't wait to be asked. The full check suite must pass before every commit; no exceptions for lint or formatting.
