@@ -25,4 +25,6 @@ git branch --set-upstream-to=origin/main main
 
 ## Contents
 
+- `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
+- `AGENTS.md` — guardrails for working on this repo itself
 - `skills/` — slash-command skills for Claude Code
