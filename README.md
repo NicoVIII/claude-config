@@ -35,5 +35,8 @@ git branch --set-upstream-to=origin/main main
 | --- | --- | --- |
 | [`grill-me`](skills/grill-me/SKILL.md) | Opus | 🟢 Usable |
 | [`prioritize`](skills/prioritize/SKILL.md) | Sonnet | 🧪 Experimental |
+| [`skill-retro`](skills/skill-retro/SKILL.md) | Opus | 🧪 Experimental |
 
 Maturity: 🛡️ Battle-tested → 🟢 Usable → 🧪 Experimental → 🚧 WIP
+
+Skills below 🛡️ end with a feedback footer that asks the agent to surface friction during runs; `/skill-retro` turns that feedback into skill edits.
