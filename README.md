@@ -1,10 +1,8 @@
-# AI Agent Config
+# Claude Code Config
 
-Shared skills and configuration for AI coding agents.
+Shared skills and configuration for Claude Code, versioned as `~/.claude`.
 
 ## Setup
-
-### Claude Code
 
 ```sh
 git clone <repo-url> ~/.claude
@@ -17,15 +15,8 @@ cd ~/.claude
 git init
 git remote add origin <repo-url>
 git pull origin main
+git branch --set-upstream-to=origin/main main
 ```
-
-### GitHub Copilot
-
-```sh
-git clone <repo-url> ~/.copilot
-```
-
-Adjust the target path to wherever your Copilot installation reads skills from.
 
 ## After cloning
 
@@ -34,4 +25,4 @@ Adjust the target path to wherever your Copilot installation reads skills from.
 
 ## Contents
 
-- `skills/` — slash-command skills usable in Claude Code and compatible agents
+- `skills/` — slash-command skills for Claude Code
