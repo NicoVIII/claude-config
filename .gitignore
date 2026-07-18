@@ -4,6 +4,7 @@
 # deliberate opt-in below.
 /*
 !/.gitignore
+!/AGENTS.md
 !/LICENSE
 !/README.md
 !/skills
