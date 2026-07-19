@@ -1,11 +1,13 @@
 # Claude Code Config
 
 Shared skills and configuration for Claude Code, versioned as `~/.claude`.
+Primarily versioning my own setup, but meant to be usable by others —
+fork it and make it yours.
 
 ## Setup
 
 ```sh
-git clone <repo-url> ~/.claude
+git clone https://github.com/NicoVIII/claude-config.git ~/.claude
 ```
 
 If `~/.claude` already exists:
@@ -13,7 +15,7 @@ If `~/.claude` already exists:
 ```sh
 cd ~/.claude
 git init
-git remote add origin <repo-url>
+git remote add origin https://github.com/NicoVIII/claude-config.git
 git pull origin main
 git branch --set-upstream-to=origin/main main
 ```
@@ -22,6 +24,8 @@ git branch --set-upstream-to=origin/main main
 
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
+- If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
+  into every Claude Code session — review it and replace what isn't yours.
 
 ## Contents
 
