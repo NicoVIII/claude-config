@@ -11,7 +11,7 @@ Scope: a single PR in the current repo whose diff is "a dependency changed versi
 
 Skip the *static* findings a same-session report established (use sites, workflow reading, changelog links) — never skip the PR-state query.
 
-- PR state: `gh pr view <n> --json title,body,headRefName,baseRefName,mergeStateStatus,statusCheckRollup,isDraft`.
+- PR state: `gh pr view <n> --json title,body,headRefName,baseRefName,mergeStateStatus,statusCheckRollup,isDraft`. `mergeStateStatus` is computed lazily and often reads `UNKNOWN` on the first query — re-query `gh pr view <n> --json mergeStateStatus,mergeable` before acting on it.
 - Every bumped package: for grouped PRs parse each ``Updates `x` from A to B`` line in the body, not just the title.
 - Situations to surface before verifying (they change the plan, not necessarily abort it):
   - **CI red** → read the failure first (`gh run view <run-id> --log-failed`); the verification plan then includes fixing it, not just observing it.
@@ -39,7 +39,7 @@ git fetch origin pull/<n>/head:verify-bump-<n>
 git worktree add <scratchpad>/verify-bump-<n> verify-bump-<n>
 ```
 
-For baseline comparisons, add a second worktree at the PR's merge-base. Run the planned checks and capture actual output, not impressions. Capture exit codes from the command itself, never after a pipe — `cmd | tail; echo $?` reports the pipe tail's status; use `${PIPESTATUS[0]}` or run the command unpiped. Clean up after the verdict (and after any merge):
+For baseline comparisons, add a second worktree at the tip of the PR's base branch (usually `origin/main`), and in the PR worktree merge the base branch first (`git merge origin/<base> --no-edit`). Comparing base-tip vs base-tip+PR isolates the bump exactly as well as the merge-base does, and it tests the tree that will actually land — a stale merge-base can predate repo fixes it needs to even build (tool config, lockfile policy). If that merge conflicts, the PR needed a rebase anyway — fire it and stop, per Gather. Run the planned checks and capture actual output, not impressions. Capture exit codes from the command itself, never after a pipe — `cmd | tail; echo $?` reports the pipe tail's status; use `${PIPESTATUS[0]}` or run the command unpiped. Clean up after the verdict (and after any merge):
 
 ```sh
 git worktree remove --force <path> && git branch -D verify-bump-<n>
