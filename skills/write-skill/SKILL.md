@@ -8,7 +8,7 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 ## Before writing
 
 - **Model check.** Skill authoring wants the most capable model available. If you are not running on the Fable/Opus tier, say so and suggest switching via `/model` before continuing — session context survives the switch.
-- **Read the conventions at their source** — they only auto-load in sessions inside `~/.claude`, and this skill usually runs elsewhere: `~/.claude/AGENTS.md` (skill guardrails) and the Skills section of `~/.claude/README.md` (maturity table, feedback footer, workflows). Follow what they say now; don't rely on a remembered copy.
+- **Read the conventions at their source** — they only auto-load in sessions inside `~/.claude`, and this skill usually runs elsewhere: `~/.claude/AGENTS.md` (skill guardrails) and the Skills section of `~/.claude/README.md` (maturity table, workflows). Follow what they say now; don't rely on a remembered copy.
 - **Confirm it's global.** Default home is `~/.claude/skills` — personal, cross-project. If the workflow only makes sense in the current repo, say so and ask whether it belongs in the project's `.claude/skills` instead; a project skill follows that repo's conventions, not the `~/.claude` ones.
 
 ## Mine the session

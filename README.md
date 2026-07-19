@@ -40,13 +40,10 @@ git branch --set-upstream-to=origin/main main
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Verifies a single dependency-bump PR by running the checks its green CI doesn't cover, then merges on confirmation or proposes the fix it needs. | Opus | 🧪 Experimental |
 | [`write-skill`](skills/write-skill/SKILL.md) | Creates a new global skill from the current session's context, carrying this repo's conventions into project sessions where AGENTS.md doesn't load. | Fable | 🚧 WIP |
 
-"Suggested model" is the model to *run* a skill with. *Writing* or refining a
-skill is different: always use the most capable model available (currently
-Fable, otherwise Opus) — skill text is written once but steers every future
-run, so authoring quality dominates authoring cost. Deliberate exception:
-`skill-retro` runs on Opus. Its edits are narrow and anchored to friction
-observed in the transcript rather than open-ended authoring, and it runs
-after every skill iteration, so cost weighs heavier there.
+"Suggested model" is the model to *run* a skill with. Writing or refining a
+skill is different: switch to the most capable model available (currently
+Fable, otherwise Opus) before editing — conventions and rationale in
+[AGENTS.md](AGENTS.md).
 
 ## Workflows
 
@@ -67,13 +64,6 @@ Some skills are meant to run in sequence:
 
 These are starting points, not fixed pipelines — each skill also stands alone.
 
-Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested
-
-Maturity is judged from each skill's run log, not from a single run: every
-`/skill-retro` appends one line to the skill's `RUNS.md` (`YYYY-MM-DD · repo ·
-clean` or `YYYY-MM-DD · repo · friction: <one clause>`). Rough promotion bars:
-~3 clean entries for 🟢 Usable, ~5 clean entries across 2–3 different repos
-for 🛡️ Battle-tested — breadth of conditions counts as much as run count.
-`RUNS.md` is read on demand by the retro; it never loads into skill runs.
-
-Skills below 🟢 Usable end with a feedback footer that asks the agent to surface friction during runs; `/skill-retro` turns that feedback into skill edits.
+Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
+from each skill's run log by `/skill-retro`; promotion bars and log format
+live in [its SKILL.md](skills/skill-retro/SKILL.md).
