@@ -26,11 +26,13 @@ Present each finding as a concrete edit to the SKILL.md — quote current text, 
 
 Write edits for the skill's suggested model in the README maturity table (`~/.claude/README.md`), not for the model doing the retro — the retro may run on a stronger model (switch via `/model`; session context survives), so do not compress instructions the target model would need spelled out.
 
-Also assess maturity: after consistently clean runs, suggest promoting the skill in the README table; promotion to 🛡️ Battle-tested removes the feedback footer.
+Also assess maturity — from the run log, not this run alone. Read the skill's `RUNS.md` (next to its SKILL.md; missing means no logged runs yet) and judge against the rough bars: 🧪 Experimental → 🟢 Usable after ~3 clean entries; 🟢 Usable → 🛡️ Battle-tested after ~5 clean entries spanning at least 2–3 different repos — breadth of conditions counts as much as the number of runs. Suggest promotions in the README table; promotion to 🟢 Usable removes the feedback footer.
 
 ## Apply
 
 Ask which edits to apply, then make them, update the README maturity table if it changed, and commit.
+
+Log the reviewed run before committing: append one line to the skill's `RUNS.md` (create the file if missing) — `YYYY-MM-DD · <repo the skill ran in> · clean` when the run needed no edits, or `YYYY-MM-DD · <repo> · friction: <one clause>` otherwise. This log is the evidence base for maturity promotions, so write the entry even when the run was clean and nothing else changed.
 
 `AskUserQuestion` caps at four options per question. With more than four findings, don't split into extra question rounds — present them all as ranked text and take a free-form pick ("all", "A, C, F"), or bundle related findings into one option each.
 

@@ -69,4 +69,11 @@ These are starting points, not fixed pipelines — each skill also stands alone.
 
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested
 
+Maturity is judged from each skill's run log, not from a single run: every
+`/skill-retro` appends one line to the skill's `RUNS.md` (`YYYY-MM-DD · repo ·
+clean` or `YYYY-MM-DD · repo · friction: <one clause>`). Rough promotion bars:
+~3 clean entries for 🟢 Usable, ~5 clean entries across 2–3 different repos
+for 🛡️ Battle-tested — breadth of conditions counts as much as run count.
+`RUNS.md` is read on demand by the retro; it never loads into skill runs.
+
 Skills below 🟢 Usable end with a feedback footer that asks the agent to surface friction during runs; `/skill-retro` turns that feedback into skill edits.
