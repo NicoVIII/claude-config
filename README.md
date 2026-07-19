@@ -33,7 +33,7 @@ git branch --set-upstream-to=origin/main main
 
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
-| [`grill-me`](skills/grill-me/SKILL.md) | Interviews you about a plan or design one question at a time, resolving each decision branch until you reach shared understanding. | Opus | 🟢 Usable |
+| [`grilling`](skills/grilling/SKILL.md) | Grill the user relentlessly about a plan, decision, or idea, one question at a time, resolving each decision branch until you reach shared understanding. | Opus | 🟢 Usable |
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Assesses the current repo's open Dependabot PRs, merges the bumps a real test suite verifies, and flags the rest with test or manual-verification guidance. | Sonnet | 🚧 WIP |
 | [`prioritize`](skills/prioritize/SKILL.md) | Scans your GitHub repos for open PRs, issues, CI failures, and security alerts, then ranks what to tackle first. | Sonnet | 🧪 Experimental |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Reviews a skill's run in the current session against its SKILL.md and turns observed friction into concrete skill edits. | Opus | 🧪 Experimental |
