@@ -1,9 +1,9 @@
 ---
-name: write-skill
-description: Create a new skill in ~/.claude/skills from the current session's context, following my skill conventions from inside any project. Use when I say write a skill, create or make a skill for this, turn this workflow into a skill, or want to capture what we just did as a skill.
+name: author-skill
+description: Create a new skill in ~/.claude/skills from the current session's context, or edit an existing one against my skill standards, from inside any project. Use when I say write, create, or make a skill, edit, update, or extend a skill, turn this workflow into a skill, or want to capture what we just did as a skill. Not for reviewing a skill right after it ran — that is skill-retro.
 ---
 
-Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the workflow while its context is live in this session.
+Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the workflow while its context is live in this session — or edit an existing skill on request, holding it to the same standards. For edits, skip the creation-only steps (directory, maturity row starts at WIP) and update the README maturity-table row only if the skill's one-line summary no longer fits; post-run friction review stays with `skill-retro`.
 
 ## Before writing
 
