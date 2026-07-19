@@ -35,7 +35,7 @@ List safe PRs, then flagged PRs grouped by reason. Ask **once** to merge the saf
 
 For each **flagged** PR, make it actionable — state the reason, then:
 
-- **major / unverified:** grep the repo for the package's import/use sites (`rg <package>`), link the changelog/release notes from the PR body, and give a targeted manual-test suggestion for those sites plus what a covering test would assert. Do **not** write test files — this is guidance.
+- **major / unverified:** grep the repo for the package's import/use sites (`rg <package>`), link the changelog/release notes from the PR body, and give a targeted manual-test suggestion for those sites plus what a covering test would assert. Do **not** write test files — this is guidance; `/verify-bump <n>` is the skill that actually runs it.
 - **red CI:** the failing check + excerpt is enough; the fix is code, which you'd start deliberately.
 - **needs rebase / pending:** the one-line note is enough.
 - **policy:** say which rule it hits and offer to close it (`gh pr close <n> --comment ...`); if it exposes a config gap — an ignore rule that should exist but doesn't — say so.
@@ -55,7 +55,16 @@ Keep it dense — one verdict block per PR, no padding. Example:
 ⚠ policy FSharp.Core 10.0→10.1 — matches dependabot.yml ignore (/src); library must stay compatible with the old floor — close?
 ```
 
-Stop after merging the safe batch and reporting the flagged ones. Don't start fixing broken bumps or writing tests unless I ask.
+## Unstick
+
+After reporting, collect the mechanical unstick actions and offer them as one batch (a second confirmation, separate from the merge batch):
+
+- Post `@dependabot rebase` (via `gh pr comment`) on each PR flagged needs-rebase, and on red-CI PRs whose logs have expired or whose last run used a stale toolchain — a fresh run beats chasing a gone log.
+- Close superseded PRs: when two open bot PRs bump the same dependency, the one targeting the lower version is superseded — close it in favor of the survivor (`gh pr close <n> --comment ...`).
+
+On confirmation fire the batch, report what was posted and closed, and end — never wait or poll for the fresh CI runs; the next `merge-dependabot` run picks up the results.
+
+Stop after merging the safe batch, reporting the flagged ones, and firing any confirmed unstick batch. Don't start fixing broken bumps or writing tests unless I ask — deep verification of a single flagged bump is `/verify-bump`'s job.
 
 ---
 
