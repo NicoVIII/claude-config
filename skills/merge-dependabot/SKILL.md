@@ -19,23 +19,23 @@ Run these once for the repo (batch the independent ones):
 
 ## Classify
 
-Per PR, in order — first match wins:
+Per PR, in order — first match wins. **First, for any grouped or lockfile-only PR** (whatever verdict it seems headed for — the stale-body trap bites safe-looking patches too): confirm with `gh pr diff <n> --name-only` that a manifest file actually changes before trusting the body's versions. A diff touching only the lockfile, with the resolved version staying inside the existing manifest range, is a stale refresh — check whether another open PR bumps the same dependency (likely superseded; see Unstick), and classify from the diff, not the body.
 
 1. **CI not green** — any check FAILURE/ERROR/CANCELLED → `✗ red CI`. Name the failing check and a one-line excerpt (`gh run view <run-id> --log-failed`). Old runs expire: `--log-failed` returns HTTP 410 once logs are gone. When the excerpt is unavailable — or the run predates the repo's current toolchain (stale PR) — say so and recommend `@dependabot rebase` to regenerate CI rather than chasing a gone log. A broken bump needs code changes, not tests — out of scope here; flag and move on.
 2. **Checks still pending** → `⏳ pending` — skip this run, no verdict yet.
 3. **No real test suite** (from Gather) → `⚠ unverified` — green CI is meaningless without tests.
 4. **Not mergeable** (`mergeStateStatus` is `DIRTY`/`CONFLICTING`) → `⚠ needs rebase` — note `@dependabot rebase`; do not merge.
-5. **Major bump** → `⚠ major` — breaking by design; tests rarely cover intentional breakage. Treat a PR as major if any bumped dependency crosses a major version, **or** crosses a pre-1.0 minor (`0.27 → 0.28`, `0.x → 1.0`) since pre-1.0 minors can break. For grouped PRs the highest-risk member decides (worst-member wins) — parse each `Update(s|d) x from A to B` line in the body, not just the title. The body can be stale: before classifying a grouped or lockfile-only PR by its body versions, confirm with `gh pr diff <n> --name-only` that a manifest file actually changes. A diff touching only the lockfile, with the resolved version staying inside the existing manifest range, is not the bump the body claims — treat it as a stale refresh, check whether another open PR bumps the same dependency (it's likely superseded; see Unstick), and don't flag it major on the body's say-so.
+5. **Major bump** → `⚠ major` — breaking by design; tests rarely cover intentional breakage. Treat a PR as major if any bumped dependency crosses a major version, **or** crosses a pre-1.0 minor (`0.27 → 0.28`, `0.x → 1.0`) since pre-1.0 minors can break. For grouped PRs the highest-risk member decides (worst-member wins) — parse each `Update(s|d) x from A to B` line in the body, not just the title.
 6. **Contradicts repo policy** → `⚠ policy` — even green + minor. A bump matching a `.github/dependabot.yml` ignore rule shouldn't merge (likely a config gap — offer to close it). For a **library**, also be wary of bumps that raise a dependency floor consumers must match (target framework, `FSharp.Core`, a declared minimum) — the library should keep working against the *old* version, so verify compatibility instead of bumping. Flag; do not merge.
 7. Otherwise (**green + real tests + patch/minor + mergeable + no policy conflict**) → `✓ safe`.
 
 ## Present & merge
 
-List safe PRs, then flagged PRs grouped by reason. Ask **once** to merge the safe batch. If no PR is safe, say so, skip the merge ask, and go straight to the flagged report and the unstick confirmation — one question total. On confirmation, merge each with the repo's method and delete the branch: `gh pr merge <n> --squash --delete-branch` (swap `--squash` for `--merge`/`--rebase` per Gather). Never touch a flagged PR.
+List safe PRs, then flagged PRs grouped by reason. Ask **once** to merge the safe batch. If no PR is safe, say so, skip the merge ask, and go straight to the flagged report and the unstick confirmation — one question total. On confirmation, merge each with the repo's method and delete the branch: `gh pr merge <n> --squash --delete-branch` (swap `--squash` for `--merge`/`--rebase` per Gather). `gh pr merge` is silent on success — treat exit 0 as merged; no need to re-verify. Never touch a flagged PR.
 
 For each **flagged** PR, make it actionable — state the reason, then:
 
-- **major / unverified:** grep the repo for the package's import/use sites (`rg <package>`), link the changelog/release notes from the PR body, and give a targeted manual-test suggestion for those sites plus what a covering test would assert. Do **not** write test files — this is guidance; `/verify-bump <n>` is the skill that actually runs it.
+- **major / unverified:** grep the repo for the package's import/use sites (`rg <package>`), link the release notes from the PR body — grep it for them (`gh pr view <n> --json body -q .body | grep -Eo 'https://[^ )]*(releases|changelog)[^ )]*' | sort -u`), falling back to the repo link from the `Update(s|d)` line if none — and give a targeted manual-test suggestion for those sites plus what a covering test would assert. Do **not** write test files — this is guidance; `/verify-bump <n>` is the skill that actually runs it.
 - **red CI:** the failing check + excerpt is enough; the fix is code, which you'd start deliberately.
 - **needs rebase / pending:** the one-line note is enough.
 - **policy:** say which rule it hits and offer to close it (`gh pr close <n> --comment ...`); if it exposes a config gap — an ignore rule that should exist but doesn't — say so.
