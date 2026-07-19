@@ -9,7 +9,7 @@ Improve the skill that ran in this session, using the transcript as evidence.
 
 Review the most recent skill run in this session, or the skill named as argument. The transcript is the evidence base — if the named skill did not run in this session, say so and stop; do not review a skill from its text alone.
 
-One retro covers one skill: if other skills also ran this session, name them at the end as candidates for separate retros (`/skill-retro <name>`) rather than folding their friction into this one.
+One retro covers one skill: never fold another skill's friction into this one. Other skills that ran this session get their own retros, often in branched sessions this transcript can't see — before naming one as a candidate, check for evidence its retro already happened (today's entry in its `RUNS.md`, or a commit today touching `skills/<name>/` in `~/.claude`) and stay silent if so. A surviving candidate gets one brief mention at the end of the findings — never repeated in the wrap-up.
 
 ## Collect evidence
 
@@ -34,7 +34,7 @@ Also assess maturity — from the run log, not this run alone. Read the skill's 
 
 Ask which edits to apply, then make them, update the README maturity table if it changed, and commit.
 
-Log the reviewed run before committing: append one line to the skill's `RUNS.md` (create the file if missing) — `YYYY-MM-DD · <repo the skill ran in> · clean` when the run needed no edits, or `YYYY-MM-DD · <repo> · friction: <one clause>` otherwise. This log is the evidence base for maturity promotions, so write the entry even when the run was clean and nothing else changed.
+Log the reviewed run before committing: append one line to the skill's `RUNS.md` (create the file if missing) — `YYYY-MM-DD · <repo the skill ran in> · clean` when the run needed no edits, or `YYYY-MM-DD · <repo> · friction: <one clause>` otherwise. This log is the evidence base for maturity promotions, so write the entry even when the run was clean and nothing else changed. The `RUNS.md` entry belongs in the same commit as the skill edits — a retro commit touching only SKILL.md means this step was skipped.
 
 How to ask is your call — no tool is mandated. A plain-prose "which should I apply?" taking a free-form pick ("all", "1 and 3", "2 but reword X") usually fits best: the decision needs the quoted diffs in view, and answers often carry modifications. `AskUserQuestion` remains an option when a simple pick suffices, but mind its limits — options cap at four and multiSelect questions can't show previews, so the option slots must never become the only place the findings live.
 
