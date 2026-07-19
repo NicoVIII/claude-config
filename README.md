@@ -38,6 +38,11 @@ git branch --set-upstream-to=origin/main main
 | [`prioritize`](skills/prioritize/SKILL.md) | Scans your GitHub repos for open PRs, issues, CI failures, and security alerts, then ranks what to tackle first. | Sonnet | 🧪 Experimental |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Reviews a skill's run in the current session against its SKILL.md and turns observed friction into concrete skill edits. | Opus | 🧪 Experimental |
 
+"Suggested model" is the model to *run* a skill with. *Writing* or refining a
+skill is different: always use the most capable model available (currently
+Fable, otherwise Opus) — skill text is written once but steers every future
+run, so authoring quality dominates authoring cost.
+
 ## Workflows
 
 Some skills are meant to run in sequence:
