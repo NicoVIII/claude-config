@@ -37,6 +37,7 @@ git branch --set-upstream-to=origin/main main
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Assesses the current repo's open Dependabot PRs, merges the bumps a real test suite verifies, and flags the rest with test or manual-verification guidance. | Sonnet | 🚧 WIP |
 | [`prioritize`](skills/prioritize/SKILL.md) | Scans your GitHub repos for open PRs, issues, CI failures, and security alerts, then ranks what to tackle first. | Sonnet | 🧪 Experimental |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Reviews a skill's run in the current session against its SKILL.md and turns observed friction into concrete skill edits. | Opus | 🧪 Experimental |
+| [`verify-bump`](skills/verify-bump/SKILL.md) | Verifies a single dependency-bump PR by running the checks its green CI doesn't cover, then merges on confirmation or proposes the fix it needs. | Opus | 🚧 WIP |
 | [`write-skill`](skills/write-skill/SKILL.md) | Creates a new global skill from the current session's context, carrying this repo's conventions into project sessions where AGENTS.md doesn't load. | Fable | 🚧 WIP |
 
 "Suggested model" is the model to *run* a skill with. *Writing* or refining a
@@ -50,7 +51,8 @@ Some skills are meant to run in sequence:
 
 - **Session triage** — Run `/prioritize` to scan your repos and decide what to
   work on. When it surfaces dependency bumps, `cd` into that repo and run
-  `/merge-dependabot` to clear the ones CI actually verifies.
+  `/merge-dependabot` to clear the ones CI actually verifies. For a flagged
+  bump you still want to land, follow up with `/verify-bump <n>`.
 - **Capturing a workflow as a skill** — When a session in any project reveals a
   repeatable workflow, run `/write-skill` while the context is fresh — the
   transcript holds the commands, quirks, and decisions the skill should encode.
