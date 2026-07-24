@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+description: Grill me relentlessly about a plan, decision, or idea — walk the decision tree one question at a time until we reach shared understanding. Use when I say grill me, want my thinking stress-tested, want a plan or design pressure-tested, or ask you to poke holes in an idea.
 ---
 
 Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
