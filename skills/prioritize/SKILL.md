@@ -7,7 +7,7 @@ Help me decide what to work on next across my GitHub repositories.
 
 ## Gather
 
-Run `bash ~/.claude/skills/prioritize/gather.sh` (takes ~10s).
+Run `~/.claude/skills/prioritize/gather.rs` — a single-file Rust program run by `cargo +nightly -Zscript` via its shebang. ~10s, plus a few seconds the first time it builds.
 
 It prints one row per non-archived, non-fork repo I own — open PR count, open issue count, default-branch CI, alert severities, last push — then an ATTENTION block holding only what needs a judgement call: PRs failing CI, human-authored PRs, issues opened by someone else (with whether I ever replied), and PRs awaiting my review in repos I don't own. The counts are complete; the ATTENTION block is the shortlist's raw material, and everything absent from it is cluster-line material by construction.
 

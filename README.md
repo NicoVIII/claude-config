@@ -28,7 +28,9 @@ to keep.
 
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
-  it), `jq` (`prioritize`'s gather script), and `rg` (ripgrep).
+  it), a Rust **nightly** toolchain (`prioritize`'s gather step is a
+  `cargo -Zscript` single-file program, and `-Zscript` is nightly-only), and
+  `rg` (ripgrep).
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
