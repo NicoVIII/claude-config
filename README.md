@@ -14,14 +14,21 @@ If `~/.claude` already exists:
 
 ```sh
 cd ~/.claude
-git init
+git init -b main
 git remote add origin https://github.com/NicoVIII/claude-config.git
 git pull origin main
 git branch --set-upstream-to=origin/main main
 ```
 
+`git pull` refuses to overwrite untracked files, so move an existing
+`CLAUDE.md`, `README.md`, or `skills/` aside first and merge back what you want
+to keep.
+
 ## After cloning
 
+- Install what the skills shell out to: [`gh`](https://cli.github.com/),
+  authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
+  it), and `rg` (ripgrep).
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
