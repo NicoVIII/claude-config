@@ -28,7 +28,16 @@ Present each finding as a concrete edit to the SKILL.md — quote current text, 
 
 Write edits for the skill's suggested model in the README maturity table (`~/.claude/README.md`), not for the model doing the retro — the retro may run on a stronger model (switch via `/model`; session context survives), so do not compress instructions the target model would need spelled out.
 
-Also assess maturity — from the run log, not this run alone. Read the skill's `RUNS.md` (next to its SKILL.md; missing means no logged runs yet) and judge against the rough bars: 🚧 WIP → 🧪 Experimental once any run has completed end-to-end (WIP means untested, or every attempt so far was canceled — one logged completed run clears it, friction or not); 🧪 Experimental → 🟢 Usable after ~3 entries that are clean or `minor:` — the bar is that the skill reliably completes, even if its text is still being polished; 🟢 Usable → 🛡️ Battle-tested after ~5 strictly clean entries spanning at least 2–3 different repos — `minor:` entries don't count here, and breadth of conditions counts as much as the number of runs. Suggest promotions in the README table; promotion to 🟢 Usable removes the feedback footer.
+Also assess maturity — from the run log, not this run alone. Read the skill's `RUNS.md`, next to its SKILL.md. A missing file means no logged runs yet; if the skill is nonetheless rated above 🚧 WIP, that rating is grandfathered (an import, or use predating the log) — start the log, and don't read the empty file as evidence for a demotion.
+
+Judge against these rough bars:
+
+- **🚧 WIP → 🧪 Experimental** — any one run completed end-to-end. WIP means untested, or every attempt so far was canceled; one logged completed run clears it, friction or not.
+- **🧪 Experimental → 🟢 Usable** — ~3 entries that are clean or `minor:`. The bar is that the skill reliably completes, even if its text is still being polished.
+- **🟢 Usable → 🛡️ Battle-tested** — ~5 strictly clean entries spanning at least 2–3 different repos. `minor:` entries don't count here, and breadth of conditions counts as much as the number of runs.
+- **Demotion to 🧪 Experimental** — a `friction:` entry logged against a 🟢 Usable or 🛡️ Battle-tested skill. Both ratings claim the skill reliably completes; a run that didn't is evidence against the claim, and the restored footer puts the next runs back under observation.
+
+Suggest the change in the README table. Crossing up into 🟢 Usable removes the feedback footer; dropping back below it restores the footer.
 
 ## Apply
 
