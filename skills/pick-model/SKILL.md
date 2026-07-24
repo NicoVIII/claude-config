@@ -3,8 +3,6 @@ name: pick-model
 description: Recommend which Claude model (Haiku, Sonnet, Opus, Fable) fits the task at hand in an interactive Claude Code session, so a too-strong model doesn't burn budget and a too-weak one doesn't waste retries. Use when I ask which model to use, whether the current model is overkill, whether a cheaper model would do, what model a task needs, or say pick a model.
 ---
 
-# Pick a model
-
 Recommend the model for the task I describe (or the work already underway in this session). You only recommend — switching is my move via `/model`. Session context survives a switch, but the new model re-reads it as uncached input: a one-time cost proportional to conversation length. Near-free early in a session, real deep into a long one — factor that into the advice.
 
 ## Ladder
@@ -14,7 +12,7 @@ Recommend the cheapest tier that plausibly handles the task. Cost and capability
 - **Haiku** — mechanical and fully specified: renames, formatting, boilerplate, running commands and triaging their output, summarizing, single-file edits with an obvious shape. Wrong when the task needs multi-file reasoning or leaves ambiguity to resolve.
 - **Sonnet** — the default workhorse: routine features, bug fixes with a clear repro, tests, refactors inside established patterns, procedural skill runs. When in doubt between Haiku and Sonnet, take Sonnet — Haiku's savings are small next to one failed attempt.
 - **Opus** — judgment-heavy: debugging without a repro, cross-cutting refactors, design and architecture decisions, code review, unfamiliar codebases.
-- **Fable** — escalation target, rarely a starting point: problems Opus stalled on, and write-once-run-many text (skills, prompts, agent docs) where quality compounds across future runs.
+- **Fable** — escalation target, rarely a starting point: problems Opus stalled on.
 
 ## Overrides
 
