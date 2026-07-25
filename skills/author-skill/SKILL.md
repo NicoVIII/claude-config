@@ -7,8 +7,8 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 
 ## Before writing
 
-- **Model check.** Skill authoring wants the most capable model available. If you are not running on the Fable/Opus tier, say so and suggest switching via `/model` before continuing — session context survives the switch.
 - **Read the conventions at their source** — they only auto-load in sessions inside `~/.claude`, and this skill usually runs elsewhere: `~/.claude/AGENTS.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences. Follow what they say now; don't rely on a remembered copy.
+- **Model check.** AGENTS.md names the model to author with — the only statement of that threshold, so don't restate it here. If you are on a weaker one, say so and suggest switching via `/model` before continuing; session context survives.
 - **Confirm it's global.** Default home is `~/.claude/skills` — personal, cross-project. If the workflow only makes sense in the current repo, say so and ask whether it belongs in the project's `.claude/skills` instead; a project skill follows that repo's conventions, not the `~/.claude` ones.
 
 ## Mine the session
@@ -20,7 +20,7 @@ The reason to write the skill now, here, is that the knowledge is in this transc
 - Corrections and clarifications from the user — these become explicit instructions
 - Where the workflow started and stopped — these become scope and stop conditions
 
-Some skills are requested outright ("add a skill for X") rather than distilled from work just done — then there is no workflow to mine and the knowledge lives in my head instead. Extract it before drafting: ask scope questions, or run the `grilling` skill when the design has real decision branches to resolve. Flag in the draft presentation that the content is derived rather than observed — the rules haven't been exercised even once, so I should review them harder.
+Not every rule comes from the transcript. When a skill is requested outright ("add a skill for X"), or when — as is common — some rules are mined and others designed to fill gaps, extract the derived ones before drafting: ask scope questions, or run the `grilling` skill when the design has real decision branches to resolve. Mark each derived rule as untested **in the SKILL.md itself**, not only in the draft presentation, which does not survive the session: a rule with no evidence behind it is what the next `/skill-retro` most needs to find.
 
 Encode this observed knowledge, not generic advice. A skill earns its tokens by stating what the executing agent would otherwise re-derive or get wrong.
 
@@ -36,7 +36,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 Present the draft and incorporate feedback before persisting anything. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
 
-- Write the SKILL.md with the feedback footer, copying the exact wording from an existing 🧪 Experimental skill — the footer is dropped at 🟢 Usable, so a Usable skill has none to copy from despite the footer's own "not yet battle-tested" phrasing.
+- Write the SKILL.md with the feedback footer, copying the exact wording from an existing 🧪 Experimental skill — the footer is dropped at 🟢 Usable, so a Usable skill has none to copy from despite the footer's own "not yet battle-tested" phrasing. Don't create a `RUNS.md`; `runlog log` writes it at the first `/skill-retro`, and `maturity`/`ratio` both read a missing one correctly.
 - Add the README maturity-table row, starting at 🚧 WIP; if the skill pairs with existing ones, extend the Workflows section.
 - Commit in `~/.claude` — the message explains why the skill exists, not what it contains.
 
