@@ -11,3 +11,4 @@
 2026-07-25 · claude-config · friction: declined findings had to be improvised into the commit message; RUNS.md mechanics moved to a script after four prose patches
 2026-07-25 · claude-config · compacted: 974 words
 2026-07-25 · claude-config · friction: the counter the reviewed run corrupted was found only by a check the skill never called for, and the one-skill rule pointed away from fixing it
+2026-07-25 · claude-config · minor: two unstated cases resolved mid-run — whether projecting the ratio counts as acting on it, and where a numbered edit argued against belongs
