@@ -11,7 +11,7 @@ Reduce a skill's SKILL.md without losing what it knows.
 
 One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`.
 
-The pass must end with **fewer words than it started**. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide.
+The pass must end with **fewer words in the SKILL.md than it started** — that file is the whole measure; a script or reference the pass creates costs nothing against it. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide. Ending still above the trigger is a fine outcome: the pass is bounded by the candidates that carry evidence, not by the ratio.
 
 ## Find candidates
 
@@ -22,7 +22,7 @@ Read the SKILL.md against its `RUNS.md` and `git log -p` for its directory. Ever
 - **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
 - **Several rules that are one principle** — coverage survives, the words don't.
 
-You cannot observe that a rule is unnecessary — a clean run is equally consistent with the rule working and with it never having been needed. So don't decide alone. Present each candidate with its evidence (what it was added for, what the log shows since) and let me pick. A deletion is an experiment the run log will judge, and git makes reverting free.
+You cannot observe that a rule is unnecessary — a clean run is equally consistent with the rule working and with it never having been needed. So don't decide alone. Present each candidate with its evidence (what it was added for, what the log shows since) in prose, and take a free-form pick ("all", "1 and 3", "merge 2 into 4") — the evidence *is* the decision, and `AskUserQuestion`'s option slots hold neither it nor candidates that depend on each other. A deletion is an experiment the run log will judge, and git makes reverting free.
 
 ## Ladder
 
@@ -36,7 +36,7 @@ Take the furthest move down this list that fits:
 
 ## Finish
 
-Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write, and `maturity` counts the verdict lines as runs. The savings come out of the SKILL.md.
+Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write, and `maturity` counts the verdict lines as runs.
 
 Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
 
