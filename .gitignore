@@ -9,3 +9,8 @@
 !/LICENSE
 !/README.md
 !/skills
+
+# `!/skills` un-ignores everything beneath it, build output included. These
+# tighten the allowlist back up; they are not an exception to it.
+/skills/**/obj/
+/skills/**/bin/

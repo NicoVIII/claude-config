@@ -28,9 +28,8 @@ to keep.
 
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
-  it), a Rust **nightly** toolchain (`prioritize`'s gather step is a
-  `cargo -Zscript` single-file program, and `-Zscript` is nightly-only), and
-  `rg` (ripgrep).
+  it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer
+  (`prioritize`'s gather step is an F# program), and `rg` (ripgrep).
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
