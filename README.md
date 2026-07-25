@@ -54,6 +54,7 @@ to keep.
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
 | [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
+| [`claude-md-compact`](skills/claude-md-compact/SKILL.md) | Shrink `CLAUDE.md` when global preferences have accreted. | Opus | 🚧 WIP |
 | [`grilling`](skills/grilling/SKILL.md) | Stress-test a plan or idea through relentless questioning. | Opus | 🧪 Experimental |
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`pick-model`](skills/pick-model/SKILL.md) | Pick the cheapest Claude model that still fits the task. | Sonnet | 🧪 Experimental |
@@ -85,6 +86,11 @@ Some skills are meant to run in sequence:
   Past 🟢 Usable, run it on demand. `/skill-retro` only ever adds, so it also
   reports how far the skill has grown past its baseline; when it says the skill
   is over the trigger, run `/skill-compact` on it as a separate pass.
+- **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
+  ordinary sessions rather than from a skill, so nothing announces its growth:
+  it has no run log and `runlog ratio` only measures skills. Check it by hand
+  with `wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it has
+  drifted well past ~500 words.
 
 These are starting points, not fixed pipelines — each skill also stands alone.
 
