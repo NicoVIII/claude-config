@@ -68,8 +68,12 @@ let parseVerdict (text: string) : Verdict option =
         text
         |> between "compacted: " " words"
         |> Option.bind (fun words ->
+            // Int32.TryParse takes a leading sign, so "compacted: -5 words" used
+            // to reach Ratio as a baseline and divide into a -1.0x that printed
+            // as "under the trigger" — a wrong answer wearing the shape of a
+            // reassuring one. A SKILL.md of zero or fewer words is not a size.
             match Int32.TryParse words with
-            | true, words -> Some(Compacted words)
+            | true, words when words > 0 -> Some(Compacted words)
             | _ -> None)
     | _ -> None
 

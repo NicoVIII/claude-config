@@ -28,7 +28,16 @@ let skillDir (skill: string) =
 
     dir
 
-let skillFile (skill: string) = Path.Combine(skillDir skill, "SKILL.md")
+/// Checked like `skillDir` above, and for the same reason: an unreadable path
+/// returned as if it were fine surfaces as a FileNotFoundException in the
+/// caller, which is not a RunlogFailure and so escapes Program.fs's handler.
+let skillFile (skill: string) =
+    let path = Path.Combine(skillDir skill, "SKILL.md")
+
+    if not (File.Exists path) then
+        fail $"skill '{skill}' has no SKILL.md"
+
+    path
 
 let private runsFile (skill: string) = Path.Combine(skillDir skill, "RUNS.md")
 
