@@ -141,9 +141,10 @@ let reviewRequests () =
           "--review-requested=@me"
           "--state=open"
           "--limit"
-          "100"
+          string Gh.limit
           "--json"
           "number,title,repository,author,updatedAt" ]
+    |> Gh.guardTruncation "review requests"
     |> List.map (fun pull ->
         { kind = Review
           target = $"{pull.repository.nameWithOwner}#{pull.number}"
