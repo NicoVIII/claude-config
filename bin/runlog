@@ -1,0 +1,203 @@
+#!/usr/bin/env sh
+# Reads and writes the RUNS.md log that every skill directory carries.
+#
+# This was three scripts under two skills (skill-retro/{log-run,maturity},
+# skill-compact/ratio) until each had replicated its own idea of what a log line
+# is. They drifted exactly once, and the commit message for it (a8531b1) states
+# the failure: "RUNS.md now has two readers with opposite needs, and the skill
+# only knew about one" — `maturity` counted a `compacted:` baseline as a run.
+# One file, one `entries`, one verdict vocabulary, so the readers cannot
+# disagree about what an entry is.
+set -eu
+
+root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+
+# The verdict vocabulary, shared by the writer and the maturity counter. A form
+# accepted here that the counter doesn't know is the drift this file exists to
+# prevent, so `log` rejects anything outside it rather than writing a line that
+# would silently not count.
+verdicts='^(clean|minor: .+|friction: .+|compacted: [0-9]+ words)$'
+run_verdicts='^(clean|minor|friction)' # `compacted:` is a baseline, not a run
+
+skill_dir() {
+    dir="$root/skills/$1"
+    [ -d "$dir" ] || {
+        echo "runlog: no skill named '$1'" >&2
+        exit 1
+    }
+    printf '%s\n' "$dir"
+}
+
+# One entry per line: `YYYY-MM-DD · repo · verdict`. Both readers select their
+# lines through here; nothing else may decide what counts as an entry.
+entries() {
+    grep '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] · ' "$1/RUNS.md" 2>/dev/null || true
+}
+
+# The repo is the one the session ran in — for a cross-repo skill, still where
+# the session ran, not the repos it touched. That is what running `git` from the
+# working directory gives, which is why it is not derived from the skill path.
+session_repo() {
+    git rev-parse --show-toplevel >/dev/null 2>&1 || {
+        echo "runlog: not inside a git repo, so the run's repo cannot be named" >&2
+        exit 1
+    }
+
+    # The remote, not the directory: this repo is checked out as ~/.claude but
+    # is named claude-config, and the log has always recorded the latter.
+    remote="$(git remote get-url origin 2>/dev/null)" || remote=""
+    if [ -n "$remote" ]; then
+        basename "$remote" .git
+    else
+        basename "$(git rev-parse --show-toplevel)"
+    fi
+}
+
+# Appends one entry. Date, repo and file creation are mechanical and had been
+# patched four times as SKILL.md prose (45ad1bb, 55146ed, f00f040) before moving
+# into a script. The verdict is the retro's judgement and has to be passed in.
+cmd_log() {
+    [ $# -eq 2 ] || {
+        echo "usage: runlog log <skill> <verdict>" >&2
+        echo "  e.g. runlog log grilling 'minor: footer placement guessed'" >&2
+        exit 1
+    }
+
+    dir="$(skill_dir "$1")"
+
+    printf '%s' "$2" | grep -Eq "$verdicts" || {
+        echo "runlog: '$2' is not a verdict" >&2
+        echo "  expected: clean | minor: <clause> | friction: <clause> | compacted: <n> words" >&2
+        exit 1
+    }
+
+    [ -f "$dir/RUNS.md" ] || printf '# Run log\n\n' >"$dir/RUNS.md"
+    printf '%s · %s · %s\n' "$(date +%F)" "$(session_repo)" "$2" >>"$dir/RUNS.md"
+}
+
+# Rates a skill's maturity from its run log.
+#
+# The promotion bars had been patched three times as SKILL.md prose (2e46084,
+# 9060c13, 4543bab); counting entries by verdict and repo is mechanical, so it
+# lives here. What stays in SKILL.md is the judgement a script can't make:
+# whether a rewrite invalidated the entries the count is based on.
+#
+# Demotion needs no separate rule — a friction entry ends the trailing streak,
+# which drops the log-derived rating on its own.
+cmd_maturity() {
+    [ $# -eq 1 ] || {
+        echo "usage: runlog maturity <skill>" >&2
+        exit 1
+    }
+
+    dir="$(skill_dir "$1")"
+
+    # The README's rating is reported for comparison only. It is a claim, not
+    # evidence: where the two disagree, the log wins. Matched as a fixed string
+    # so one skill's row cannot match another whose name extends it.
+    claimed="$(awk -F'|' -v link="[\`$1\`](" '
+        index($2, link) { gsub(/^ +| +$/, "", $5); print $5 }
+    ' "$root/README.md")"
+
+    entries "$dir" | awk -F' · ' \
+        -v skill="$1" -v claimed="${claimed:-unlisted}" -v runs="$run_verdicts" '
+    $3 ~ runs { n++; repo[n] = $2; verdict[n] = $3 }
+
+    END {
+        # Trailing entries since the last friction. A minor: entry counts toward
+        # 🟢 Usable but not toward 🛡️ Battle-tested, and does not break the streak.
+        for (i = n; i >= 1; i--) {
+            if (verdict[i] ~ /^friction/) break
+            streak++
+            if (verdict[i] ~ /^clean/) {
+                spotless++
+                if (!(repo[i] in seen)) { seen[repo[i]] = 1; repos++ }
+            }
+        }
+
+        if (n == 0)                           rating = "🚧 WIP"
+        else if (spotless >= 5 && repos >= 2) rating = "🛡️ Battle-tested"
+        else if (streak >= 3)                 rating = "🟢 Usable"
+        else                                  rating = "🧪 Experimental"
+
+        printf "%s: log supports %s — README says %s\n", skill, rating, claimed
+        printf "  %d %s; %d since the last friction (%d strictly clean, across %d repos)\n",
+            n, (n == 1 ? "entry" : "entries"), streak, spotless, repos
+
+        if (rating == "🚧 WIP")
+            print "  🧪 Experimental needs one run logged"
+        else if (rating == "🧪 Experimental")
+            print "  🟢 Usable needs ~3 clean-or-minor entries since the last friction"
+        else if (rating == "🟢 Usable")
+            print "  🛡️ Battle-tested needs ~5 strictly clean entries across 2–3 repos"
+    }'
+}
+
+# How far a skill's SKILL.md has grown past its last compaction baseline.
+#
+# Growth rather than absolute size: a skill born complex should not be penalised
+# for it, and a universal word limit would be an arbitrary number applied to
+# skills of very different jobs. Only accretion since a skill's own last cleanup
+# counts, which makes the threshold meaningful without having to pick one.
+#
+# The baseline is the count recorded by the last /skill-compact run in RUNS.md,
+# or — before a skill has ever been compacted — its size at first commit.
+cmd_ratio() {
+    [ $# -eq 1 ] || {
+        echo "usage: runlog ratio <skill>" >&2
+        exit 1
+    }
+
+    trigger=15 # tenths, i.e. 1.5x
+    dir="$(skill_dir "$1")"
+    now=$(wc -w <"$dir/SKILL.md")
+
+    # Anchored on the whole verdict field, so a friction entry that happens to
+    # quote "compacted: <n> words" is not mistaken for a baseline.
+    base=$(entries "$dir" | sed -n 's/^.* · .* · compacted: \([0-9][0-9]*\) words$/\1/p' | tail -1)
+    if [ -n "$base" ]; then
+        origin="last compaction"
+    else
+        first=$(git -C "$dir" log --format=%h --reverse -- SKILL.md | head -1)
+        if [ -z "$first" ]; then
+            echo "$1: $now words, never committed — no baseline to compare against"
+            return 0
+        fi
+        base=$(git -C "$dir" show "$first:./SKILL.md" | wc -w)
+        origin="first commit"
+    fi
+
+    [ "$base" -gt 0 ] || {
+        echo "runlog: baseline is zero words, cannot compare" >&2
+        exit 1
+    }
+
+    tenths=$((now * 10 / base))
+
+    if [ "$tenths" -ge "$trigger" ]; then
+        verdict="over the 1.5x trigger — run /skill-compact before this grows further"
+    else
+        verdict="under the 1.5x trigger"
+    fi
+
+    printf '%s: %s words, %s.%sx its baseline of %s (%s) — %s\n' \
+        "$1" "$now" "$((tenths / 10))" "$((tenths % 10))" "$base" "$origin" "$verdict"
+}
+
+[ $# -ge 1 ] || {
+    echo "usage: runlog <log|maturity|ratio> <skill> [verdict]" >&2
+    exit 1
+}
+
+command="$1"
+shift
+
+case "$command" in
+log) cmd_log "$@" ;;
+maturity) cmd_maturity "$@" ;;
+ratio) cmd_ratio "$@" ;;
+*)
+    echo "runlog: unknown command '$command' (expected log, maturity or ratio)" >&2
+    exit 1
+    ;;
+esac

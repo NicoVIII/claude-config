@@ -10,6 +10,11 @@
 !/README.md
 !/skills
 
+# One line per script, rather than `!/bin` un-ignoring the whole directory:
+# nothing here is generated, so the allowlist can stay strict by default.
+!/bin/
+!/bin/runlog
+
 # `!/skills` un-ignores everything beneath it, build output included. These
 # tighten the allowlist back up; they are not an exception to it.
 /skills/**/obj/
