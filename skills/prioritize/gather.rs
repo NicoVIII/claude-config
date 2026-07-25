@@ -299,16 +299,18 @@ fn issue_signal(repo: &str, me: &str, attention: &mut Vec<Attention>) -> usize {
         )
         .expect("issue view declares no tolerated failure");
 
-        let answered = detail.comments.iter().any(|c| c.author.login == me);
+        // Who spoke last, not whether I ever spoke: an issue I answered and they
+        // came back to is still on me, and one sitting on my own reply is not.
+        let turn = match detail.comments.last() {
+            None => "UNANSWERED",
+            Some(last) if last.author.login == me => "MINE-LAST",
+            Some(_) => "THEIRS-LAST",
+        };
         attention.push(Attention {
             kind: "issue",
             target: format!("{repo}#{number}"),
             who: detail.author.login,
-            state: format!(
-                "{} {} replies",
-                if answered { "answered" } else { "UNANSWERED" },
-                detail.comments.len()
-            ),
+            state: format!("{turn} {} replies", detail.comments.len()),
             date: day(&detail.created_at),
             title: clip(&detail.title, TITLE_WIDTH),
         });

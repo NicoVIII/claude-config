@@ -9,20 +9,20 @@ Help me decide what to work on next across my GitHub repositories.
 
 Run `~/.claude/skills/prioritize/gather.rs` — a single-file Rust program run by `cargo +nightly -Zscript` via its shebang. ~10s, plus a few seconds the first time it builds.
 
-It prints one row per non-archived, non-fork repo I own — open PR count, open issue count, default-branch CI, alert severities, last push — then an ATTENTION block holding only what needs a judgement call: PRs failing CI, human-authored PRs, issues opened by someone else (with whether I ever replied), and PRs awaiting my review in repos I don't own. The counts are complete; the ATTENTION block is the shortlist's raw material, and everything absent from it is cluster-line material by construction.
+It prints one row per non-archived, non-fork repo I own — open PR count, open issue count, default-branch CI, alert severities, last push — then an ATTENTION block holding only what needs a judgement call: PRs failing CI, human-authored PRs, issues opened by someone else (with who spoke last: `UNANSWERED`, `THEIRS-LAST` — both waiting on me — or `MINE-LAST`, which is not), and PRs awaiting my review in repos I don't own. The counts are complete; the ATTENTION block is the shortlist's raw material, and everything absent from it is cluster-line material by construction.
 
 The script aborts instead of half-reporting, because a short digest and good news look identical here. If it fails, fix the cause — don't fall back to hand-rolled `gh` queries, since the point is that every run covers the same ground.
 
 Drill down only where the ranking actually turns on it:
 
 - **Several PRs in one repo failing the same check** — sample one log to tell a real blocker (e.g. a config migration) from flakiness; the answer shapes the WHY line. The PR list carries no run id, so get it from `gh pr checks <number> -R <repo>`, whose failing row links `.../runs/<run-id>/job/<job-id>`. Then `gh run view -R <repo> <run-id> --log-failed | grep -iE 'error|failed' | head -30` — the raw log ends in pages of git cleanup, so tailing it shows the teardown instead of the failure.
-- **An ATTENTION issue whose title doesn't say enough to place it** — `gh issue view <n> -R <repo>`.
+- **An ATTENTION row whose title doesn't say enough to place it** — `gh issue view <n> -R <repo>` or `gh pr view <n> -R <repo>`.
 
 ## Rank
 
 Two weights, in order:
 
-1. **People waiting on me** — PRs awaiting my review, issues from others I never answered. Age amplifies urgency.
+1. **People waiting on me** — PRs awaiting my review, issues from others where the last word is theirs (`UNANSWERED` or `THEIRS-LAST`). An issue sitting on my own reply is not waiting on me. Age amplifies urgency.
 2. **Repo health** — failing default-branch CI, open security alerts, PRs going stale.
 
 Personal momentum and quick wins are tiebreakers, not drivers.
