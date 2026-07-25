@@ -1,0 +1,59 @@
+#!/usr/bin/env sh
+# Rates a skill's maturity from its run log.
+#
+# The promotion bars had been patched three times as SKILL.md prose (2e46084,
+# 9060c13, 4543bab); counting entries by verdict and repo is mechanical, so it
+# lives here. What stays in SKILL.md is the judgement a script can't make:
+# whether a rewrite invalidated the entries the count is based on.
+#
+# Demotion needs no separate rule here — a friction entry ends the trailing
+# streak, which drops the log-derived rating on its own.
+set -eu
+
+if [ $# -ne 1 ]; then
+    echo "usage: maturity <skill>" >&2
+    exit 1
+fi
+
+dir="$(dirname "$0")/../$1"
+
+if [ ! -d "$dir" ]; then
+    echo "maturity: no skill named '$1'" >&2
+    exit 1
+fi
+
+# The README's rating is reported for comparison only. It is a claim, not
+# evidence: where the two disagree, the log wins.
+claimed="$(awk -F'|' -v s="\`$1\`" '$2 ~ s { gsub(/^ +| +$/, "", $5); print $5 }' \
+    "$(dirname "$0")/../../README.md")"
+
+awk -F' · ' -v skill="$1" -v claimed="${claimed:-unlisted}" '
+/^[0-9][0-9][0-9][0-9]-/ { n++; repo[n] = $2; verdict[n] = $3 }
+
+END {
+    # Trailing entries since the last friction. A minor: entry counts toward
+    # 🟢 Usable but not toward 🛡️ Battle-tested, and does not break the streak.
+    for (i = n; i >= 1; i--) {
+        if (verdict[i] ~ /^friction/) break
+        streak++
+        if (verdict[i] ~ /^clean/) {
+            spotless++
+            if (!(repo[i] in seen)) { seen[repo[i]] = 1; repos++ }
+        }
+    }
+
+    if (n == 0)                          rating = "🚧 WIP"
+    else if (spotless >= 5 && repos >= 2) rating = "🛡️ Battle-tested"
+    else if (streak >= 3)                 rating = "🟢 Usable"
+    else                                  rating = "🧪 Experimental"
+
+    printf "%s: log supports %s — README says %s\n", skill, rating, claimed
+    printf "  %d %s; %d since the last friction (%d strictly clean, across %d repos)\n",
+        n, (n == 1 ? "entry" : "entries"), streak, spotless, repos
+
+    if (rating == "🧪 Experimental")
+        print "  🟢 Usable needs ~3 clean-or-minor entries since the last friction"
+    else if (rating == "🟢 Usable")
+        print "  🛡️ Battle-tested needs ~5 strictly clean entries across 2–3 repos"
+}
+' "$dir/RUNS.md" 2>/dev/null || echo "$1: no run log — 🚧 WIP until one run is logged"

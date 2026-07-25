@@ -81,5 +81,5 @@ Some skills are meant to run in sequence:
 These are starting points, not fixed pipelines — each skill also stands alone.
 
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
-from each skill's run log by `/skill-retro`; promotion bars and log format
-live in [its SKILL.md](skills/skill-retro/SKILL.md).
+from each skill's run log by `/skill-retro`; the promotion bars live in
+[its `maturity` script](skills/skill-retro/maturity).
