@@ -45,6 +45,7 @@ to keep.
 
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
 - `AGENTS.md` — guardrails for working on this repo itself
+- `references/` — depth `AGENTS.md` points to rather than inlining, read on demand
 - `skills/` — slash-command skills for Claude Code, see below
 - `bin/` — helpers shared by several skills, rather than owned by one
 

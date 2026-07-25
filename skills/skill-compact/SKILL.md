@@ -30,7 +30,7 @@ Take the furthest move down this list that fits:
 
 1. **Reword.** Weakest — rewording is what accretes in the first place.
 2. **Merge or generalize** several rules into one.
-3. **Move mechanics into a script** beside the SKILL.md; AGENTS.md carries when that fits.
+3. **Move mechanics into a script** beside the SKILL.md; `references/helpers.md` carries when that fits.
 4. **Move text into `references/`** — *only* if some runs need it and others don't. Always-needed content in a reference file is the same tokens plus a round trip, which is pure indirection.
 5. **Split into a second skill** — only where the extracted part is useful on its own. Two skills that always run together cost more than one file did.
 
