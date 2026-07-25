@@ -79,11 +79,11 @@ Some skills are meant to run in sequence:
   transcript holds the commands, quirks, and decisions the skill should encode.
   Later runs feed `/skill-retro` as usual.
 - **Refining a skill after use** — After running any skill that isn't yet
-  🛡️ Battle-tested, run `/skill-retro` in the same session to turn the friction
-  you hit into concrete skill edits (this is what the skills' feedback footer
-  feeds). `/skill-retro` only ever adds, so it also reports how far the skill has
-  grown past its baseline; when it says the skill is over the trigger, run
-  `/skill-compact` on it as a separate pass.
+  🟢 Usable, run `/skill-retro` in the same session to turn the friction you hit
+  into concrete skill edits (this is what the skills' feedback footer feeds).
+  Past 🟢 Usable, run it on demand. `/skill-retro` only ever adds, so it also
+  reports how far the skill has grown past its baseline; when it says the skill
+  is over the trigger, run `/skill-compact` on it as a separate pass.
 
 These are starting points, not fixed pipelines — each skill also stands alone.
 
