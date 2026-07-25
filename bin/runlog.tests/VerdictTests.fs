@@ -1,10 +1,12 @@
-/// The one unit-level suite. `parseVerdict` earns it on the strategy's own
-/// terms: Domain.fs calls the closed verdict union the reason this tool is F#
-/// rather than shell, all three bugs found reviewing the repo lived here, and
-/// it is a table — pushing a dozen rows through a process each would be slower
-/// and would report failures far less precisely than comparing values.
+/// The one unit-level suite, covering the log schema in Domain.fs. It earns the
+/// exception on the strategy's own terms: Domain.fs calls the closed verdict
+/// union the reason this tool is F# rather than shell, all three bugs found
+/// reviewing the repo lived here, and it is a table — pushing a dozen rows
+/// through a process each would be slower and would report failures far less
+/// precisely than comparing values.
 module VerdictTests
 
+open System
 open Expecto
 open Domain
 
@@ -73,4 +75,64 @@ let tests =
               // Act & Assert
               for text in cases do
                   Expect.isTrue (isRejected text) $"'{text}' is prose, not a verdict"
+          } ]
+
+/// `parseLine` is the other half of the schema, and its failure mode is worse
+/// than a rejection: a line it cannot read aborts the whole file, so one bad
+/// entry blinds every reader of that skill's log rather than being skipped.
+let lineTests =
+    testList
+        "parseLine"
+        [ test "reads an entry into its three fields" {
+              // Arrange
+              let line = "2026-07-25 · claude-config · minor: a clause"
+
+              // Act
+              let entry = parseLine line
+
+              // Assert
+              Expect.equal
+                  entry
+                  (Some
+                      { Date = DateOnly(2026, 7, 25)
+                        Repo = "claude-config"
+                        Verdict = Minor "a clause" })
+                  "the fields should survive the round trip"
+          }
+
+          test "keeps a separator inside the clause out of the field split" {
+              // Arrange — the clause is free text, so a retro can write the
+              // separator into it; an unbounded split made that abort the file
+              let line = "2026-07-25 · claude-config · friction: chose reword · not removal"
+
+              // Act
+              let entry = parseLine line
+
+              // Assert — the clause keeps the rest of the line, whole
+              Expect.equal
+                  (entry |> Option.map (fun entry -> entry.Verdict))
+                  (Some(Friction "chose reword · not removal"))
+                  "the separator belongs to the clause, not to a fourth field"
+          }
+
+          test "ignores the lines a log holds that are not entries" {
+              // Arrange
+              let cases = [ "# Run log"; ""; "some prose about a clean run" ]
+
+              // Act & Assert
+              for line in cases do
+                  Expect.equal (parseLine line) None $"'{line}' is not an entry"
+          }
+
+          test "aborts on a line that opens like an entry but is not one" {
+              // Arrange — silently skipping these is what leaves the counters
+              // wrong in the way that is hardest to notice
+              let cases =
+                  [ "2026-07-25 · claude-config"
+                    "2026-07-25 · claude-config · bogus"
+                    "2026-07-25 · claude-config · compacted: 0 words" ]
+
+              // Act & Assert
+              for line in cases do
+                  Expect.throwsT<RunlogFailure> (fun () -> parseLine line |> ignore) $"'{line}' should abort"
           } ]

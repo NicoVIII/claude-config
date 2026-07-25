@@ -91,7 +91,11 @@ let parseLine (line: string) : Entry option =
     if line.Length < dateFormat.Length || (parseDate (line.Substring(0, dateFormat.Length))).IsNone then
         None
     else
-        match line.Split(separator, StringSplitOptions.None) with
+        // Bounded at 3 so the verdict keeps the rest of the line: date and repo
+        // cannot contain the separator, but the clause is free text a retro
+        // writes, and an unbounded split turned one stray " · " in it into a
+        // parse abort that took down every reader of that skill's whole log.
+        match line.Split(separator, 3, StringSplitOptions.None) with
         | [| date; repo; verdict |] ->
             match parseDate date, parseVerdict verdict with
             | Some date, Some verdict -> Some { Date = date; Repo = repo; Verdict = verdict }

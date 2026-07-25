@@ -8,4 +8,4 @@ open Expecto
 
 [<EntryPoint>]
 let main argv =
-    runTestsWithCLIArgs [] argv (testList "runlog" [ VerdictTests.tests; CliTests.tests ])
+    runTestsWithCLIArgs [] argv (testList "runlog" [ VerdictTests.tests; VerdictTests.lineTests; CliTests.tests ])
