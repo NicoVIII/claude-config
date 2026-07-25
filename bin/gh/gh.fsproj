@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- No PackageReference by design: System.Text.Json decodes gh's output
+         strictly on its own once RespectRequiredConstructorParameters is set,
+         and Process/Async cover the rest. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Gh.fs" />
+  </ItemGroup>
+
+</Project>

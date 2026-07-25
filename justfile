@@ -17,8 +17,13 @@ typecheck:
     done
 
 # Run the test suites.
+#
+# Listed by hand, unlike typecheck's project list: a `*.tests` glob over the
+# index would also match a suite in a foreign checkout that happened to be
+# tracked here, and there are few enough of these to name.
 test:
     dotnet run --project bin/runlog.tests
+    dotnet run --project skills/merge-dependabot/survey.tests
 
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.

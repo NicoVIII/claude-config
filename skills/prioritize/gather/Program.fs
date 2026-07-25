@@ -36,10 +36,10 @@ let main _ =
             |> Gh.guardTruncation "repo list"
 
         if List.isEmpty repos then
-            raise (Gh.GatherFailure "gh repo list returned nothing")
+            raise (Gh.GhFailure "gh repo list returned nothing")
 
         Render.digest (gatherAll user.login repos) (Signals.reviewRequests ())
         0
-    with Gh.GatherFailure message ->
+    with Gh.GhFailure message ->
         eprintfn $"gather: {message}"
         1

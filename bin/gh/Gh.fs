@@ -1,9 +1,9 @@
 /// Running `gh`, and turning its output into typed values or aborting.
 ///
-/// A repo missing from the digest reads exactly like a repo with nothing wrong,
-/// so a partial run must never reach stdout. Every unexpected condition here
-/// raises GatherFailure, which Program.fs catches in one place and turns into a
-/// non-zero exit.
+/// Shared by the skill helpers that shell out to gh. A row missing from their
+/// output reads exactly like a row with nothing wrong, so a partial run must
+/// never reach stdout. Every unexpected condition here raises GhFailure, which
+/// each Program.fs catches in one place and turns into a non-zero exit.
 module Gh
 
 open System.Diagnostics
@@ -12,9 +12,9 @@ open System.Text.Json
 /// gh's list commands default to 30 rows and truncate in silence.
 let limit = 200
 
-exception GatherFailure of string
+exception GhFailure of string
 
-let private fail message = raise (GatherFailure message)
+let fail message = raise (GhFailure message)
 
 /// Requires every field of every record to be present. A field gh renames or
 /// drops then becomes a loud parse error naming it, rather than a null that
@@ -63,6 +63,13 @@ let decode<'T> (args: string list) : 'T =
 /// For queries where one specific stderr means "this repo has the feature off".
 let decodeTolerating<'T> (tolerated: string) (args: string list) : 'T option =
     run (Some tolerated) args |> Option.map (parse<'T> args)
+
+/// For the commands with no `--json` form (`gh pr diff --name-only`), whose
+/// stdout the caller reads line by line.
+let lines (args: string list) : string list =
+    run None args
+    |> Option.get
+    |> fun stdout -> stdout.Split '\n' |> Array.toList |> List.map (fun line -> line.Trim()) |> List.filter (fun line -> line <> "")
 
 /// A result arriving at the ceiling means the query truncated and the digest is
 /// incomplete — which this script exists to prevent.

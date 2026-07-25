@@ -29,9 +29,9 @@ to keep.
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
   it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer
-  (`prioritize`'s gather step and the shared `bin/runlog` are F# programs — the
-  latter makes it a prerequisite of the skill-authoring workflow, not just of
-  one skill), and `rg` (ripgrep).
+  (`prioritize`'s gather step, `merge-dependabot`'s survey step and the shared
+  `bin/runlog` are F# programs — the last makes it a prerequisite of the
+  skill-authoring workflow, not just of one skill), and `rg` (ripgrep).
 - To work *on* this repo you also need [`just`](https://just.systems) and
   [`lefthook`](https://lefthook.dev); run `lefthook install` once to activate
   the pre-commit typecheck. `just check` runs it by hand. Neither is needed to
