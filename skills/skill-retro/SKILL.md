@@ -30,6 +30,8 @@ Write edits for the skill's suggested model in the README maturity table (`~/.cl
 
 Also assess maturity — from the run log, not this run alone. Read the skill's `RUNS.md`, next to its SKILL.md. The log is the only evidence: a rating the entries don't support is over-rated, whatever the README currently claims, and a missing file means no logged runs to support anything. When a rewrite replaces the machinery an entry was logged against — a step moved into a script, a mechanism deleted — that entry stops being evidence about the current skill. Don't delete it; say in the retro that the ladder restarts, and hold the rating until runs against the new machinery accumulate. A skill is not more mature for having had its problems rewritten away.
 
+Also report accretion: run `~/.claude/skills/skill-compact/ratio <skill>` and pass on its line. Don't act on it — removing text in the same pass that fixes friction is how the friction always wins, which is why `/skill-compact` is separate.
+
 Judge against these rough bars:
 
 - **🚧 WIP → 🧪 Experimental** — any one run completed end-to-end. WIP means untested, or every attempt so far was canceled; one logged completed run clears it, friction or not.
