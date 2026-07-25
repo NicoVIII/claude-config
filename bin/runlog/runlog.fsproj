@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- FS0025 is the guarantee this project is written for: a new Verdict case
+         must be an error at every match that decides what it means, not a
+         warning scrolling past in a build log. Without this the port buys
+         nothing the shell version did not already have. -->
+    <WarningsAsErrors>FS0025</WarningsAsErrors>
+    <!-- No PackageReference by design: the log is a line format, and Process
+         covers the one external tool. -->
+  </PropertyGroup>
+
+  <!-- Compile order is the architecture: every file may reference only files
+       above it, so the dependency direction is checked by the compiler. -->
+  <ItemGroup>
+    <Compile Include="Domain.fs" />
+    <Compile Include="Layout.fs" />
+    <Compile Include="Git.fs" />
+    <Compile Include="Log.fs" />
+    <Compile Include="Maturity.fs" />
+    <Compile Include="Ratio.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>

@@ -29,7 +29,9 @@ to keep.
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
   it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer
-  (`prioritize`'s gather step is an F# program), and `rg` (ripgrep).
+  (`prioritize`'s gather step and the shared `bin/runlog` are F# programs — the
+  latter makes it a prerequisite of the skill-authoring workflow, not just of
+  one skill), and `rg` (ripgrep).
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
@@ -40,7 +42,7 @@ to keep.
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
 - `AGENTS.md` — guardrails for working on this repo itself
 - `skills/` — slash-command skills for Claude Code, see below
-- `bin/` — helper scripts shared by several skills, rather than owned by one
+- `bin/` — helpers shared by several skills, rather than owned by one
 
 ## Skills
 
@@ -83,4 +85,4 @@ These are starting points, not fixed pipelines — each skill also stands alone.
 
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
 from each skill's run log by `/skill-retro`; the promotion bars live in
-[`bin/runlog`](bin/runlog).
+[`bin/runlog`](bin/runlog/Maturity.fs).

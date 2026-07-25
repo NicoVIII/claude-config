@@ -9,7 +9,7 @@ Reduce a skill's SKILL.md without losing what it knows.
 
 ## Scope
 
-One skill, named as argument. Start with `~/.claude/bin/runlog ratio <skill>`.
+One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`.
 
 The pass must end with **fewer words than it started**. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide.
 
@@ -38,7 +38,7 @@ Take the furthest move down this list that fits:
 
 Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write, and `maturity` counts the verdict lines as runs. The savings come out of the SKILL.md.
 
-Record the new baseline: `~/.claude/bin/runlog log <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
+Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
 
 ---
 
