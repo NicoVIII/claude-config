@@ -36,6 +36,8 @@ let private sessionRepo () =
         | None -> repoName toplevel
 
 let run (skill: string) (verdict: string) =
+    // Rejects an unknown skill before sessionRepo() can fail with "not inside a
+    // git repo" — the confusing error for what is really a typo'd skill name.
     Layout.skillDir skill |> ignore
 
     match parseVerdict verdict with
