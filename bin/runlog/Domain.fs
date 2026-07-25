@@ -41,26 +41,36 @@ let renderVerdict verdict =
 let render (entry: Entry) =
     String.concat separator [ entry.Date.ToString(dateFormat); entry.Repo; renderVerdict entry.Verdict ]
 
+/// None when the two affixes overlap rather than bracketing something: a
+/// `StartsWith` and an `EndsWith` can both hold on a string shorter than the two
+/// together ("compacted: words"), which is a negative Substring length and an
+/// exception that escapes Program.fs's handler.
 let private between (prefix: string) (suffix: string) (text: string) =
-    text.Substring(prefix.Length, text.Length - prefix.Length - suffix.Length)
+    match text.Length - prefix.Length - suffix.Length with
+    | length when length < 0 -> None
+    | length -> Some(text.Substring(prefix.Length, length))
 
 /// The one definition of the vocabulary. `log` validates what it is given by
 /// running it through here, so the writer cannot accept a form the readers do
 /// not recognise — in the shell version those were two separate regexes.
 let parseVerdict (text: string) : Verdict option =
     let clause prefix =
-        match (text |> between prefix "").Trim() with
-        | "" -> None
-        | clause -> Some clause
+        text
+        |> between prefix ""
+        |> Option.map (fun clause -> clause.Trim())
+        |> Option.filter (fun clause -> clause <> "")
 
     match text with
     | "clean" -> Some Clean
     | _ when text.StartsWith "minor: " -> clause "minor: " |> Option.map Minor
     | _ when text.StartsWith "friction: " -> clause "friction: " |> Option.map Friction
     | _ when text.StartsWith "compacted: " && text.EndsWith " words" ->
-        match Int32.TryParse(text |> between "compacted: " " words") with
-        | true, words -> Some(Compacted words)
-        | _ -> None
+        text
+        |> between "compacted: " " words"
+        |> Option.bind (fun words ->
+            match Int32.TryParse words with
+            | true, words -> Some(Compacted words)
+            | _ -> None)
     | _ -> None
 
 /// None for a line that is not an entry at all — the heading, blanks, prose.
