@@ -32,6 +32,10 @@ to keep.
   (`prioritize`'s gather step and the shared `bin/runlog` are F# programs — the
   latter makes it a prerequisite of the skill-authoring workflow, not just of
   one skill), and `rg` (ripgrep).
+- To work *on* this repo you also need [`just`](https://just.systems) and
+  [`lefthook`](https://lefthook.dev); run `lefthook install` once to activate
+  the pre-commit typecheck. `just check` runs it by hand. Neither is needed to
+  merely use the skills.
 - Add your `settings.json` manually — it is gitignored and not tracked.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads

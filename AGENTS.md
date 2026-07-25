@@ -2,7 +2,8 @@
 
 This is the live `~/.claude` config — edits to skills take effect in running Claude Code sessions immediately.
 
-- No build, tests, or linter here: `CLAUDE.md`'s "full check suite must pass before every commit" has nothing to run in this repo. Validation is reading the diff, and — for a skill — running it.
+- `just check` is the check suite: it typechecks every F# project in the repo. Lefthook runs it pre-commit when a `*.fs`/`*.fsproj` is staged, and GitHub Actions runs the same recipe on push and PR — add checks to the `justfile` rather than to the workflow, or the two drift. There are still no tests or linter, so for markdown and skills validation stays reading the diff and running the skill.
+- The `just check` project list comes from `git ls-files '*.fsproj'`, not a glob: `~/.claude` holds untracked state and foreign checkouts that a `**` walk would wander into. A new helper is therefore checked as soon as it is staged, and needs no registration anywhere.
 - This repo is public (`github.com/NicoVIII/claude-config`) and meant to be usable by others, though its primary goal is versioning my own setup. The README addresses third-party users too; first-person voice in skills ("my repos") is fine — it resolves to whoever runs them.
 - No ADRs. Decision rationale lives in commit messages; a decision that must constrain future work (especially "we tried/considered X — don't") gets a one-line guardrail here or in the relevant SKILL.md, citing its commit for the full story.
 - `.gitignore` is an allowlist by design: secrets and runtime state live in this directory, so everything is ignored by default. Never loosen the catch-all; tracking a new file means adding an explicit `!/...` entry.

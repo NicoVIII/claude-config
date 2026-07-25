@@ -1,0 +1,10 @@
+# Run `lefthook install` once per clone to activate these.
+pre-commit:
+  jobs:
+    # Most commits here touch only skills and markdown; the glob keeps those
+    # instant and pays the build cost only when F# actually changed.
+    - name: typecheck
+      glob:
+        - "*.fs"
+        - "*.fsproj"
+      run: just check

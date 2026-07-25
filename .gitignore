@@ -3,9 +3,12 @@
 # state files can never be committed by accident; tracking something new is a
 # deliberate opt-in below.
 /*
+!/.github
 !/.gitignore
 !/AGENTS.md
 !/CLAUDE.md
+!/justfile
+!/lefthook.yml
 !/LICENSE
 !/README.md
 !/skills
