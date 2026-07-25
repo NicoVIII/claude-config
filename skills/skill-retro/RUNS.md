@@ -7,3 +7,4 @@
 2026-07-19 · SimpleOptics · friction: proposed re-patching a repeatedly-patched mechanism instead of removal
 2026-07-19 · claude-config · minor: RUNS.md creation format unspecified (heading had to be guessed)
 2026-07-24 · claude-config · friction: escalation ladder stopped at rewording where the fix was a script, so 3 of 6 edits were deleted within the hour; speculative no-action finding numbered into the pick list
+2026-07-25 · claude-config · friction: verdict taxonomy had no slot for an unbudgeted check that saved the output; typo'd argument hit the stop-rule
