@@ -17,9 +17,10 @@ The pass must end with **fewer words than it started**. Generalizing three rules
 
 Read the SKILL.md against its `RUNS.md` and `git log -p` for its directory. Every rule was added for a reason; `git blame` names the commit and its message gives the reason. Rank by:
 
+- **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. Rung 3 turns it into a script, and this is usually where the words actually are. A mechanism the git log shows patched more than twice is the same signal.
 - **Special cases that never recurred** — a clause added for one run's mishap, with nothing resembling it in the log since.
 - **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
-- **Several rules that are one principle.** The strongest find: coverage survives, the words don't.
+- **Several rules that are one principle** — coverage survives, the words don't.
 
 You cannot observe that a rule is unnecessary — a clean run is equally consistent with the rule working and with it never having been needed. So don't decide alone. Present each candidate with its evidence (what it was added for, what the log shows since) and let me pick. A deletion is an experiment the run log will judge, and git makes reverting free.
 
@@ -35,7 +36,7 @@ Take the furthest move down this list that fits:
 
 ## Finish
 
-Collapse `RUNS.md` entries older than the previous baseline into one summary line — they have already been acted on and git holds the detail.
+Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write, and `maturity` counts the verdict lines as runs. The savings come out of the SKILL.md.
 
 Record the new baseline: `~/.claude/skills/skill-retro/log-run <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
 

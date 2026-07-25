@@ -28,7 +28,8 @@ claimed="$(awk -F'|' -v s="\`$1\`" '$2 ~ s { gsub(/^ +| +$/, "", $5); print $5 }
     "$(dirname "$0")/../../README.md")"
 
 awk -F' · ' -v skill="$1" -v claimed="${claimed:-unlisted}" '
-/^[0-9][0-9][0-9][0-9]-/ { n++; repo[n] = $2; verdict[n] = $3 }
+# /skill-compact records its baseline in this file too; only verdicts are runs.
+/^[0-9][0-9][0-9][0-9]-/ && $3 ~ /^(clean|minor|friction)/ { n++; repo[n] = $2; verdict[n] = $3 }
 
 END {
     # Trailing entries since the last friction. A minor: entry counts toward
