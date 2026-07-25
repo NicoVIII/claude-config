@@ -38,7 +38,14 @@ let private pulls (repo: string) =
             let failing =
                 pull.statusCheckRollup
                 |> Option.defaultValue []
-                |> List.exists (fun check -> check.conclusion = Some "FAILURE")
+                |> List.exists (fun check ->
+                    match check.conclusion with
+                    // Absent = still running. Anything not known-good is a
+                    // decision for a human, including conclusions GitHub
+                    // adds after this was written.
+                    | None -> false
+                    | Some("SUCCESS" | "NEUTRAL" | "SKIPPED") -> false
+                    | Some _ -> true)
 
             match failing, pull.author.isBot with
             | false, true -> None
