@@ -7,9 +7,9 @@ Improve the skill that ran in this session, using the transcript as evidence.
 
 ## Scope
 
-Review the most recent skill run in this session, or the skill named as argument. A completed skill-retro run is itself a valid subject: when every other skill run in the session is already retro'd, reviewing the retro is the expected reading, not an error. The transcript is the evidence base — if the named skill did not run in this session, say so and stop; do not review a skill from its text alone. An argument that isn't a skill name at all resolves to the nearest skill that did run (`skill-retryo` → `skill-retro`); say which you took it as and continue. Stopping is for a real skill this session never ran, not for a typo.
+Review the most recent skill run in this session — the skill that executed, not a skill it took as an argument — or the skill named as argument. A completed skill-retro run is itself a valid subject: when every other skill run in the session is already retro'd, reviewing the retro is the expected reading, not an error. The transcript is the evidence base — if the named skill did not run in this session, say so and stop; do not review a skill from its text alone. An argument that isn't a skill name at all resolves to the nearest skill that did run (`skill-retryo` → `skill-retro`); say which you took it as and continue. Stopping is for a real skill this session never ran, not for a typo.
 
-One retro covers one skill: never fold another skill's friction into this one.
+One retro covers one skill: never fold another skill's friction into this one. A defect the reviewed run *created* in shared machinery is the exception — fix it here and say why, rather than filing it against a skill whose own next run would have to rediscover it.
 
 ## Collect evidence
 
@@ -20,6 +20,7 @@ Walk the run and collect observed friction only:
 - Knowledge re-derived during the run (commands, flags, environment quirks) that the skill could state once
 - Corrections the user made mid-run
 - Trigger mismatch: the skill fired when it shouldn't have, or had to be invoked manually when its description should have caught the request
+- What the run left behind — when it wrote to a shared script, log, or README table, run the readers of that file and check they still agree. The transcript won't show a counter the run quietly corrupted.
 - Anything the run's feedback footer surfaced
 
 ## Propose
