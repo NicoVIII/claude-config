@@ -58,6 +58,7 @@ to keep.
 
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
+| [`add-dependabot`](skills/add-dependabot/SKILL.md) | Set up a repo's Dependabot config so bumps arrive in mergeable batches. | Sonnet | 🚧 WIP |
 | [`add-devcontainer`](skills/add-devcontainer/SKILL.md) | Pin a repo's toolchain in a devcontainer and run CI inside it. | Opus | 🚧 WIP |
 | [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
 | [`claude-md-compact`](skills/claude-md-compact/SKILL.md) | Shrink `CLAUDE.md` when global preferences have accreted. | Opus | 🧪 Experimental |
@@ -82,6 +83,10 @@ Some skills are meant to run in sequence:
   work on. When it surfaces dependency bumps, `cd` into that repo and run
   `/merge-dependabot` to clear the ones CI actually verifies. For a flagged
   bump you still want to land, follow up with `/verify-bump <n>`.
+- **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
+  at it; `/add-dependabot` then watches what that toolchain depends on. Run in
+  that order: the devcontainer decides which ecosystems exist to watch. The PRs
+  it produces are what Session triage above clears.
 - **Capturing a workflow as a skill** — When a session in any project reveals a
   repeatable workflow, run `/author-skill` while the context is fresh — the
   transcript holds the commands, quirks, and decisions the skill should encode.

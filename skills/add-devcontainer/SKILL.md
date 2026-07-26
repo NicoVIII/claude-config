@@ -5,7 +5,7 @@ description: Add a devcontainer to a repository so its toolchain is pinned in ex
 
 Give a repo a devcontainer that *is* its toolchain definition: every version pinned in `devcontainer.json`, and CI running the repo's own check suite inside that container, so no second install path exists to drift from it.
 
-Scope: one repository. This skill sets up the container and points CI at it. It does not wire up Dependabot, publish prebuilt images to a registry, or tune CI caching — stop and report if the user wants those.
+Scope: one repository. This skill sets up the container and points CI at it. It does not wire up Dependabot (`add-dependabot` does, and is worth running after this one), publish prebuilt images to a registry, or tune CI caching — stop and report if the user wants those.
 
 ## Pin to what the machine already runs
 
