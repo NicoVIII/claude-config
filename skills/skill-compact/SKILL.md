@@ -7,7 +7,7 @@ Reduce a skill's SKILL.md without losing what it knows.
 
 ## Scope
 
-One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`. Its second line splits the file into rules and words per rule: more words per rule points at rungs 1–2, more rules at rungs 3–5.
+One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`. Its second line splits the file into rules and words per rule: more words per rule points at the ladder's shrink rungs, more rules at its remove and move-out rungs.
 
 The pass must end with **fewer words in the SKILL.md than it started** — that file is the whole measure; text the pass moves out costs nothing against it, into a new file or an existing one — provided a file the consuming run does load still points at it. Only the SKILL.md is guaranteed in context; everything else is read only when an agent opens it. Moving a fact obliges you to update its other readers in the same pass — a half-migrated fact is what some other skill's next run rediscovers. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide. Ending still above the trigger is a fine outcome: the pass is bounded by the candidates that carry evidence, not by the ratio.
 
@@ -15,7 +15,7 @@ The pass must end with **fewer words in the SKILL.md than it started** — that 
 
 Read the SKILL.md against its `RUNS.md` and `git log -p` for its directory. Every rule was added for a reason; `git blame` names the commit and its message gives the reason. Rank by:
 
-- **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. Rung 3 turns it into a script, and this is usually where the words actually are. A mechanism the git log shows patched more than twice is the same signal.
+- **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. The ladder's script rung turns it into one, and this is usually where the words actually are. A mechanism the git log shows patched more than twice is the same signal.
 - **A fact this SKILL.md restates from elsewhere** — a `references/` file, the README, another skill. The copy drags prose explaining which copy wins, and `git log` will show one copy corrected while the others drifted. Give the fact one home; the explanation goes with it.
 - **Special cases that never recurred** — a clause added for one run's mishap, with nothing resembling it in the log since.
 - **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
@@ -25,13 +25,7 @@ You cannot observe that a rule is unnecessary — a clean run is equally consist
 
 ## Ladder
 
-Delete outright when the fact has another home or its case never recurred. When text must survive, take the furthest move down this list that fits:
-
-1. **Reword.** Weakest — rewording is what accretes in the first place.
-2. **Merge or generalize** several rules into one.
-3. **Move mechanics into a script** beside the SKILL.md; `references/helpers.md` carries when that fits.
-4. **Move text into `references/`** — *only* if some runs need it and others don't. Always-needed content in a reference file is the same tokens plus a round trip, which is pure indirection.
-5. **Split into a second skill** — only where the extracted part is useful on its own. Neither half standing alone is the failure; one depending on the other is ordinary layering.
+Take the strongest rung of `~/.claude/references/prose-ladder.md` that fits each candidate — read it, don't recall it. Retro findings resolve against the same list, which is why it lives in one file.
 
 ## Finish
 
