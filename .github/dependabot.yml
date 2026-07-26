@@ -1,0 +1,64 @@
+version: 2
+
+# Two groups per ecosystem — minor/patch in one PR, major in another — rather
+# than one catch-all group. `merge-dependabot` classifies a grouped PR at its
+# worst member, so a single major bump would drag every safe minor in the batch
+# into the flagged-and-unmerged pile with it. Splitting keeps the routine half
+# mergeable while majors wait for `verify-bump`. Worst case is two PRs per
+# ecosystem per week; most weeks it is none.
+#
+# Dependabot puts an update in the first group whose patterns *and* update-types
+# both match, so the `*` patterns below are disambiguated purely by level.
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+      actions-major:
+        patterns: ["*"]
+        update-types: [major]
+
+  # Globs rather than `/`: the projects live two levels down and Dependabot only
+  # reads manifests in the directories it is pointed at. `*` is the documented
+  # wildcard; `**` is not, and a glob that silently matches nothing would leave
+  # NuGet unwatched with no error to notice. These two patterns cover the whole
+  # current layout — a project nested deeper would need its level added here.
+  - package-ecosystem: nuget
+    directories:
+      - /bin/*
+      - /skills/*/*
+    schedule:
+      interval: weekly
+    groups:
+      nuget:
+        patterns: ["*"]
+        update-types: [minor, patch]
+      nuget-major:
+        patterns: ["*"]
+        update-types: [major]
+
+  # This one sees the Feature *references* (`.../dotnet:2`); whether it also
+  # refreshes `devcontainer-lock.json` is undocumented, so assume the digests
+  # stay ours to refresh until a PR proves otherwise. The tool versions that
+  # actually go stale — dotnet 10.0.110,
+  # gh, node, and the rest — are Feature *options*, arbitrary key/values that
+  # Dependabot has no way to read as versions. Since every reference here is
+  # pinned to a major tag, this fires only when a Feature ships a new major.
+  # Low yield, but it costs nothing and it is the only automated watch on them;
+  # the pinned options stay a manual bump.
+  - package-ecosystem: devcontainers
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      devcontainers:
+        patterns: ["*"]
+        update-types: [minor, patch]
+      devcontainers-major:
+        patterns: ["*"]
+        update-types: [major]
