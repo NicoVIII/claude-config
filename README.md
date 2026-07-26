@@ -103,3 +103,7 @@ These are starting points, not fixed pipelines — each skill also stands alone.
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
 from each skill's run log by `/skill-retro`; the promotion bars live in
 [`bin/runlog`](bin/runlog/Maturity.fs).
+
+Credits: [`grilling`](skills/grilling/SKILL.md) is based on
+<https://github.com/mattpocock/skills> (MIT License). Attributions live here
+rather than in a `SKILL.md`, which loads into context on every invocation.

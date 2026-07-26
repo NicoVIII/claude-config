@@ -14,7 +14,3 @@ Do not act on it until I confirm we have reached a shared understanding.
 ---
 
 This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
-
----
-
-Based on https://github.com/mattpocock/skills (MIT License)
