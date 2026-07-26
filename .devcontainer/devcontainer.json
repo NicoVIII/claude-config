@@ -1,0 +1,55 @@
+{
+	"name": "claude-config",
+	"image": "mcr.microsoft.com/devcontainers/base:debian13",
+
+	// Every version the repo depends on is pinned here and nowhere else: CI runs
+	// `just check` inside this very container, so there is no parallel install
+	// path that could drift off these numbers. Bump a version here and the
+	// devcontainer and CI move together.
+	//
+	// Features are grouped by provenance, most-preferred source first: official,
+	// then the tool's own maintainers, then mine, then devcontainers-extra.
+	"features": {
+		// Official. `dotnet` takes an exact X.Y.Z, so the container and CI
+		// compile with the same compiler rather than a 10.0.x band.
+		"ghcr.io/devcontainers/features/dotnet:2": { "version": "10.0.110" },
+		"ghcr.io/devcontainers/features/github-cli:1": { "version": "2.96.0" },
+		// Node exists only to carry the Claude Code CLI.
+		"ghcr.io/devcontainers/features/node:1": { "version": "24.18.0" },
+
+		// Maintained by the tool's authors. It exposes no version option, so
+		// this one tracks latest — which is what Claude Code does at runtime
+		// anyway, pinned or not.
+		"ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+
+		// Mine. claude-mount shares the host's ~/.claude — skills, memory and
+		// the login — read-write, so Claude Code in here works against the live
+		// config. That is this repo, so the workspace and ~/.claude are the same
+		// directory seen twice. In CI the host path does not exist and the mount
+		// is an empty no-op, which nothing in `just check` reads.
+		"ghcr.io/nicoviii/devcontainer-features/just:0": { "version": "1.57.0" },
+		"ghcr.io/nicoviii/devcontainer-features/lefthook:0": { "version": "2.1.10" },
+		"ghcr.io/nicoviii/devcontainer-features/claude-mount:0": {},
+
+		// devcontainers-extra, for the three with no better-maintained source.
+		"ghcr.io/devcontainers-extra/features/shellcheck:1": { "version": "0.11.0" },
+		"ghcr.io/devcontainers-extra/features/shfmt:1": { "version": "3.13.1" },
+		"ghcr.io/devcontainers-extra/features/ripgrep:1": { "version": "14.1.1" }
+	},
+
+	// safe.directory first: the workspace keeps its host ownership, so git
+	// refuses the checkout wherever the container user's uid differs from the
+	// owner's — as it does on a CI runner — and every recipe here starts with
+	// `git ls-files`. `lefthook install` is idempotent, hence safe on rebuilds.
+	"postCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && lefthook install",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ionide.ionide-fsharp",
+				"timonwong.shellcheck",
+				"mkhl.shfmt"
+			]
+		}
+	}
+}

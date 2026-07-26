@@ -26,6 +26,11 @@ to keep.
 
 ## After cloning
 
+- Or skip the installing: open the repo in its
+  [devcontainer](.devcontainer/devcontainer.json) and everything below is already
+  there at a pinned version. It bind-mounts the host's `~/.claude`, so Claude
+  Code inside the container shares your skills, memory **and login** read-write —
+  convenient for working on this config, not a sandbox.
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
   it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer

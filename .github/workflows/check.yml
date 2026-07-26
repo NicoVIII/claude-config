@@ -6,23 +6,18 @@ on:
   pull_request:
 
 jobs:
-  typecheck:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
+      # The suite runs inside the devcontainer rather than on the runner, so the
+      # toolchain CI checks with is by construction the one the container
+      # defines. Every version lives once, in devcontainer.json; there is no
+      # second install path here to keep in step with it.
+      #
+      # No image caching yet: the build is a few minutes, and pushing to GHCR
+      # needs packages: write plus a registry login. Add imageName/cacheFrom if
+      # that wait starts to bite.
+      - uses: devcontainers/ci@v0.3
         with:
-          dotnet-version: "10.0.x"
-      - uses: extractions/setup-just@v4
-      # shellcheck ships with the runner image; shfmt does not. Pinned to the
-      # version Arch currently packages, so the formatter agrees with what the
-      # pre-commit hook ran locally — and so a shfmt release cannot turn a
-      # green branch red without a commit here.
-      - name: install shfmt
-        run: |
-          sudo curl -fsSL -o /usr/local/bin/shfmt \
-            https://github.com/mvdan/sh/releases/download/v3.13.1/shfmt_v3.13.1_linux_amd64
-          sudo chmod +x /usr/local/bin/shfmt
-      # Same entry point as the pre-commit hook, so CI cannot drift from what
-      # the hook accepted locally.
-      - run: just check
+          runCmd: just check
