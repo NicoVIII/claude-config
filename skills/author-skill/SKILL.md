@@ -10,6 +10,7 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 - **Read the conventions at their source** — nothing auto-loads them, wherever this skill runs: `~/.claude/references/skill-conventions.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences. Follow what they say now; don't rely on a remembered copy.
 - **Model check.** `skill-conventions.md` names the model to author with — the only statement of that threshold, so don't restate it here. If you are on a weaker one, say so and suggest switching via `/model` before continuing; session context survives. If I decline, proceed and record the exception in the commit message — otherwise the next retro cannot tell a deliberate call from an oversight.
 - **Confirm it's global.** If the workflow only makes sense in the current repo, ask whether it belongs in that repo's `.claude/skills` instead — where it follows that repo's conventions, not these.
+- **Earn it before mining.** Say why the skill should exist, and be willing to answer no — the case is strongest when a capable agent would get this *wrong* by default, or when an existing skill declares the gap and hands off to nothing. If a docs link would do, say so and stop.
 
 ## Mine the session
 
@@ -26,7 +27,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 ## Write
 
-- The frontmatter `description` is the only trigger signal: pack it with phrases I would actually say, ending with a first-person "Use when …" clause.
+- The frontmatter `description`: phrases I would actually say, ending with a first-person "Use when …" clause — and nothing about how the skill works. `skill-conventions.md` carries the rule and the length signal; don't restate them here.
 - Write the body for the suggested execution model, which may be weaker than you: spell out commands, orderings, and edge cases rather than compressing.
 - Size the draft against what exists (`wc -w ~/.claude/skills/*/SKILL.md`) — the counterweight to the bullet above. Landing above the current longest is a signal to cut before committing, not after: until a `/skill-compact` records a baseline, `runlog ratio` measures growth from the first commit, so an overweight first draft raises its own trigger permanently instead of ever reporting as accretion.
 - State scope and stop conditions explicitly — what the skill does *not* do, and when to stop and report instead of continuing.
@@ -35,9 +36,9 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 ## Land it
 
-Present the draft and incorporate feedback before persisting anything — write it to a scratchpad file and show that file's contents rather than pasting the text into the reply, so the bytes reviewed are the bytes installed and a long skill is never typed twice. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
+Write the SKILL.md straight to its final path, `cat` it for review, and edit in place until I'm happy — never retype it into the reply, so a long skill is never typed twice. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
 
-- Write the SKILL.md, ending it with the feedback footer verbatim from `~/.claude/references/skill-footer.md`. Don't create a `RUNS.md`; `runlog log` writes it at the first `/skill-retro`, and `maturity`/`ratio` both read a missing one correctly.
+- End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`. Don't create a `RUNS.md`; `runlog log` writes it at the first `/skill-retro`, and `maturity`/`ratio` both read a missing one correctly.
 - Add the README maturity-table row, starting at 🚧 WIP; if the skill pairs with existing ones, extend the Workflows section.
 - Commit in `~/.claude` — the message explains why the skill exists, not what it contains.
 
