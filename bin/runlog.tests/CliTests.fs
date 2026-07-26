@@ -278,6 +278,68 @@ let private ratioTests =
                   // Assert
                   Expect.equal result.ExitCode 1 "should fail cleanly rather than crash"
                   Expect.stringContains result.Stderr "no SKILL.md" "the message says what is missing")
+          }
+
+          test "reports the risen floor a headline ratio against the last compaction hides" {
+              withRoot (fun root ->
+                  // Arrange — three cycles ending higher each time, so the
+                  // headline reads a reassuring 1.2x while the file is 3x the
+                  // smallest it was ever compacted to
+                  root |> skill "demo" (words 120)
+
+                  root
+                  |> logged
+                      "demo"
+                      [ "compacted: 40 words"
+                        "friction: something"
+                        "compacted: 70 words"
+                        "friction: something else"
+                        "compacted: 100 words" ]
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "1.2x its baseline of 100" "the headline is unchanged"
+                  Expect.stringContains result.Stdout "3.0x its lowest baseline of 40" "and the floor is measured too"
+                  Expect.stringContains result.Stdout "2026-01-01" "naming the compaction it dates from"
+                  Expect.stringContains result.Stdout "risen 60 words over 2 compactions" "with the drift spelled out")
+          }
+
+          test "says nothing about the floor while the last compaction is the lowest" {
+              withRoot (fun root ->
+                  // Arrange — the second cycle landed below the first, so there
+                  // is no ratchet and the extra line would be noise
+                  root |> skill "demo" (words 120)
+
+                  root
+                  |> logged "demo" [ "compacted: 90 words"; "friction: something"; "compacted: 80 words" ]
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "1.5x its baseline of 80" "the headline still reports"
+                  Expect.isFalse (result.Stdout.Contains "lowest baseline") "but the floor line stays silent")
+          }
+
+          test "measures the floor from compactions only, never from the first draft" {
+              withRoot (fun root ->
+                  // Arrange — one compaction, so the only smaller number
+                  // available is the uncompacted first commit. A first draft is
+                  // a size nobody weighed; anchoring to it would hold a skill to
+                  // the shape of its first pass forever.
+                  root |> skill "demo" (words 120)
+                  root |> logged "demo" [ "compacted: 100 words" ]
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.isFalse (result.Stdout.Contains "lowest baseline") "one compaction is no ratchet to report")
           } ]
 
 let private dispatchTests =

@@ -36,7 +36,7 @@ Take the furthest move down this list that fits:
 
 ## Finish
 
-Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write, and `maturity` counts the verdict lines as runs.
+Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write and its floor from every earlier one, so tidying old baselines away resets the only record of the floor rising; `maturity` counts the verdict lines as runs.
 
 Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
 
