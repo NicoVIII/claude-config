@@ -5,7 +5,7 @@ description: Grill me relentlessly about a plan, decision, or idea — walk the 
 
 Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer. An answer late in the tree can invalidate an argument you used early in it. When one does, retract it out loud before asking the next question — a recommendation still standing on a dead argument is worse than no recommendation — and check whether the branch it closed should reopen.
 
-Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering. When a question has enumerable candidate answers, ask it via the AskUserQuestion tool with your recommendation first; when it's genuinely open-ended, ask in prose — don't fabricate options that would anchor my thinking.
+Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering. When a question has enumerable candidate answers, ask it via the AskUserQuestion tool with your recommendation as the first option, argued in its description rather than flagged in its label; when it's genuinely open-ended, ask in prose — don't fabricate options that would anchor my thinking.
 
 If a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.
 
