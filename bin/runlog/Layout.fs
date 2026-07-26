@@ -39,6 +39,15 @@ let skillFile (skill: string) =
 
     path
 
+/// Agrees with `wc -w`: runs of non-whitespace, split on POSIX whitespace. The
+/// baselines already recorded in the logs were produced by wc, so a different
+/// notion of a word would silently shift every one of them.
+let wordCount (text: string) =
+    text.Split([| ' '; '\t'; '\n'; '\r'; '\f'; '\v' |], StringSplitOptions.RemoveEmptyEntries)
+    |> Array.length
+
+let skillWords (skill: string) = skillFile skill |> File.ReadAllText |> wordCount
+
 let private runsFile (skill: string) = Path.Combine(skillDir skill, "RUNS.md")
 
 /// Both readers select their entries through here, so neither can hold its own

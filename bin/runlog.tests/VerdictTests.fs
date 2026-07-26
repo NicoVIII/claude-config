@@ -83,8 +83,10 @@ let tests =
 let lineTests =
     testList
         "parseLine"
-        [ test "reads an entry into its three fields" {
-              // Arrange
+        [ test "reads the three-field entries written before the count existed" {
+              // Arrange — every entry logged up to 2026-07-26 has this shape;
+              // rewriting them to add a field would invent a measurement
+              // nobody took, so both arities stay readable forever
               let line = "2026-07-25 · claude-config · minor: a clause"
 
               // Act
@@ -96,8 +98,46 @@ let lineTests =
                   (Some
                       { Date = DateOnly(2026, 7, 25)
                         Repo = "claude-config"
+                        Words = None
                         Verdict = Minor "a clause" })
-                  "the fields should survive the round trip"
+                  "the fields should survive the round trip, with no count claimed"
+          }
+
+          test "reads the recorded word count when an entry carries one" {
+              // Arrange
+              let line = "2026-07-25 · claude-config · 912 words · minor: a clause"
+
+              // Act
+              let entry = parseLine line
+
+              // Assert
+              Expect.equal
+                  entry
+                  (Some
+                      { Date = DateOnly(2026, 7, 25)
+                        Repo = "claude-config"
+                        Words = Some 912
+                        Verdict = Minor "a clause" })
+                  "the count is a field of its own, not part of the clause"
+          }
+
+          test "round-trips an entry through render and back" {
+              // Arrange — a writer the readers disagree with is the failure this
+              // module exists to prevent, and the count doubled the ways to
+              // disagree
+              let entries =
+                  [ { Date = DateOnly(2026, 7, 25)
+                      Repo = "claude-config"
+                      Words = Some 912
+                      Verdict = Friction "a clause" }
+                    { Date = DateOnly(2026, 7, 25)
+                      Repo = "claude-config"
+                      Words = None
+                      Verdict = Compacted 974 } ]
+
+              // Act & Assert
+              for entry in entries do
+                  Expect.equal (entry |> render |> parseLine) (Some entry) $"{entry} should survive"
           }
 
           test "keeps a separator inside the clause out of the field split" {

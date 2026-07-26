@@ -33,13 +33,6 @@ open Domain
 /// In tenths, i.e. 1.5x.
 let private trigger = 15
 
-/// Agrees with `wc -w`: runs of non-whitespace, split on POSIX whitespace. The
-/// baselines already recorded in the logs were produced by wc, so a different
-/// notion of a word would silently shift every one of them.
-let private wordCount (text: string) =
-    text.Split([| ' '; '\t'; '\n'; '\r'; '\f'; '\v' |], StringSplitOptions.RemoveEmptyEntries)
-    |> Array.length
-
 /// A markdown list marker: the shape that opens a rule. The trailing space
 /// matters — without it a `---` frontmatter delimiter would count as one.
 let private isListMarker (token: string) =
@@ -105,7 +98,7 @@ let private floorLine (now: int) (baselines: (int * DateOnly) list) =
                 $"  {formatTenths (tenthsOf now lowest)} its lowest baseline of {lowest} ({since}) — the floor has risen {last - lowest} words over {cycles} compactions since"
 
 let private density (text: string) =
-    let words, rules = wordCount text, ruleCount text
+    let words, rules = Layout.wordCount text, ruleCount text
 
     match rules with
     | 0 -> $"no rules across {words} words"
@@ -125,7 +118,7 @@ let private densityLine (text: string) (firstCommit: string option) =
 
 let run (skill: string) =
     let text = File.ReadAllText(Layout.skillFile skill)
-    let now = wordCount text
+    let now = Layout.wordCount text
     let firstCommit = Layout.skillDir skill |> firstCommittedText
     let baselines = recordedBaselines skill
 
@@ -134,7 +127,7 @@ let run (skill: string) =
     let baseline =
         match baselines |> List.tryLast with
         | Some(words, _) -> Some(words, "last compaction")
-        | None -> firstCommit |> Option.map (fun first -> wordCount first, "first commit")
+        | None -> firstCommit |> Option.map (fun first -> Layout.wordCount first, "first commit")
 
     match baseline with
     | None -> printfn $"{skill}: {now} words, never committed — no baseline to compare against"

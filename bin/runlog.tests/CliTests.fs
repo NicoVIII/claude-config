@@ -44,8 +44,8 @@ let private logTests =
 
                   Expect.stringContains
                       (root |> runsFile "demo" |> Option.defaultValue "")
-                      $"{today} · {sessionRepoName} · clean"
-                      "the entry carries today's date and the session repo")
+                      $"{today} · {sessionRepoName} · 2 words · clean"
+                      "the entry carries today's date, the session repo and the file's size")
           }
 
           test "appends without disturbing the entries already there" {
@@ -61,7 +61,58 @@ let private logTests =
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
                   let log = root |> runsFile "demo" |> Option.defaultValue ""
                   Expect.stringContains log "friction: something went wrong" "the existing entry survives"
-                  Expect.stringContains log $"{today} · {sessionRepoName} · clean" "the new entry is appended")
+
+                  Expect.stringContains
+                      log
+                      $"{today} · {sessionRepoName} · 2 words · clean"
+                      "the new entry is appended")
+          }
+
+          test "measures the SKILL.md itself rather than trusting a number it was handed" {
+              withRoot (fun root ->
+                  // Arrange — the caller is an agent that has just edited the
+                  // file, so a count it retypes is a count that can be stale
+                  root |> skill "demo" (words 42)
+
+                  // Act
+                  let result = root |> runlog [ "log"; "demo"; "friction: something" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> runsFile "demo" |> Option.defaultValue "")
+                      "· 42 words · friction: something"
+                      "the size is recorded when it is observed, not inferred later")
+          }
+
+          test "leaves a compaction's count where its verdict already states it" {
+              withRoot (fun root ->
+                  // Arrange — recording it twice would only create two places
+                  // for the numbers to disagree
+                  root |> skill "demo" (words 42)
+
+                  // Act
+                  let result = root |> runlog [ "log"; "demo"; "compacted: 42 words" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  let log = root |> runsFile "demo" |> Option.defaultValue ""
+                  Expect.stringContains log "· compacted: 42 words" "the baseline reads as it always has"
+                  Expect.isFalse (log.Contains "42 words · compacted") "and the count is not restated beside it")
+          }
+
+          test "refuses to log a run for a skill with no SKILL.md to measure" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> bareSkill "demo"
+
+                  // Act
+                  let result = root |> runlog [ "log"; "demo"; "clean" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 1 "should fail cleanly rather than record an unmeasured run"
+                  Expect.stringContains result.Stderr "no SKILL.md" "the message says what is missing")
           }
 
           test "rejects a malformed verdict cleanly and leaves the log untouched" {

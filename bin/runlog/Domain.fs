@@ -22,9 +22,14 @@ type Verdict =
     /// Not a run: /skill-compact's baseline for the growth ratio.
     | Compacted of words: int
 
+/// `Words` is the SKILL.md's size when the entry was written, so growth is a
+/// recorded fact rather than something a later reader has to infer from the
+/// file's shape. `None` on entries written before the field existed, and on
+/// compactions, whose verdict already states the number — nothing invents one.
 type Entry =
     { Date: DateOnly
       Repo: string
+      Words: int option
       Verdict: Verdict }
 
 let private separator = " · "
@@ -38,8 +43,16 @@ let renderVerdict verdict =
     | Friction clause -> $"friction: {clause}"
     | Compacted words -> $"compacted: {words} words"
 
+let renderWords words = $"{words} words"
+
+/// The word count sits before the verdict, not after it, so the verdict stays
+/// last: its clause is free text a retro writes and may hold the separator,
+/// which a trailing field would have to guess its way back past.
 let render (entry: Entry) =
-    String.concat separator [ entry.Date.ToString(dateFormat); entry.Repo; renderVerdict entry.Verdict ]
+    let head = [ entry.Date.ToString(dateFormat); entry.Repo ]
+    let words = entry.Words |> Option.map renderWords |> Option.toList
+
+    String.concat separator (head @ words @ [ renderVerdict entry.Verdict ])
 
 /// None when the two affixes overlap rather than bracketing something: a
 /// `StartsWith` and an `EndsWith` can both hold on a string shorter than the two
@@ -77,6 +90,17 @@ let parseVerdict (text: string) : Verdict option =
             | _ -> None)
     | _ -> None
 
+/// The word-count field, which is only that when it is exactly a count: a
+/// three-field entry whose clause happens to contain the separator would
+/// otherwise have its first fragment read as one.
+let private (|Words|_|) (text: string) =
+    match text |> between "" " words" with
+    | Some count when text.EndsWith " words" ->
+        match Int32.TryParse count with
+        | true, words when words > 0 -> Some words
+        | _ -> None
+    | _ -> None
+
 /// None for a line that is not an entry at all — the heading, blanks, prose.
 ///
 /// A line that opens with a date but does not parse aborts rather than being
@@ -91,17 +115,34 @@ let parseLine (line: string) : Entry option =
     if line.Length < dateFormat.Length || (parseDate (line.Substring(0, dateFormat.Length))).IsNone then
         None
     else
-        // Bounded at 3 so the verdict keeps the rest of the line: date and repo
-        // cannot contain the separator, but the clause is free text a retro
-        // writes, and an unbounded split turned one stray " · " in it into a
-        // parse abort that took down every reader of that skill's whole log.
-        match line.Split(separator, 3, StringSplitOptions.None) with
-        | [| date; repo; verdict |] ->
+        // Bounded so the verdict keeps the rest of the line: date, repo and the
+        // count cannot contain the separator, but the clause is free text a
+        // retro writes, and an unbounded split turned one stray " · " in it into
+        // a parse abort that took down every reader of that skill's whole log.
+        //
+        // Both arities are live: every entry written before the count existed
+        // has three fields, and rewriting them to add one would be inventing a
+        // measurement nobody took.
+        let parts =
+            match line.Split(separator, 4, StringSplitOptions.None) with
+            | [| date; repo; Words words; verdict |] -> Some(date, Some words, repo, verdict)
+            | _ ->
+                match line.Split(separator, 3, StringSplitOptions.None) with
+                | [| date; repo; verdict |] -> Some(date, None, repo, verdict)
+                | _ -> None
+
+        match parts with
+        | None -> fail $"run-log entry is not `date{separator}repo{separator}verdict`: {line}"
+        | Some(date, words, repo, verdict) ->
             match parseDate date, parseVerdict verdict with
-            | Some date, Some verdict -> Some { Date = date; Repo = repo; Verdict = verdict }
+            | Some date, Some verdict ->
+                Some
+                    { Date = date
+                      Repo = repo
+                      Words = words
+                      Verdict = verdict }
             | _, None -> fail $"run log holds a verdict no reader knows: {line}"
             | None, _ -> fail $"run log holds a malformed date: {line}"
-        | _ -> fail $"run-log entry is not `date{separator}repo{separator}verdict`: {line}"
 
 /// A run happened. The compaction baseline shares the log but is not a run —
 /// counting it as one is the bug a8531b1 had to patch out of the shell version.

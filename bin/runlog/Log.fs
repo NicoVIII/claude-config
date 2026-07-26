@@ -45,8 +45,20 @@ let run (skill: string) (verdict: string) =
         fail
             $"'{verdict}' is not a verdict\n  expected: clean | minor: <clause> | friction: <clause> | compacted: <n> words"
     | Some verdict ->
+        // Measured here rather than passed in: the caller is an agent that has
+        // just edited the file, and a number it retypes is a number that can be
+        // stale. A compaction states its own count in the verdict, so recording
+        // it twice would only create two places for them to disagree.
+        let words =
+            match verdict with
+            | Compacted _ -> None
+            | Clean
+            | Minor _
+            | Friction _ -> Some(Layout.skillWords skill)
+
         Layout.appendEntry
             skill
             { Date = DateOnly.FromDateTime DateTime.Now
               Repo = sessionRepo ()
+              Words = words
               Verdict = verdict }
