@@ -45,6 +45,8 @@ let run (skill: string) =
     | None -> printfn $"{skill}: {now} words, never committed — no baseline to compare against"
     | Some(words, _) when words = 0 -> fail "baseline is zero words, cannot compare"
     | Some(words, origin) ->
+        // Truncated rather than rounded, so the printed figure and the trigger
+        // can never disagree: "1.5x" appears exactly when the trigger fires.
         let tenths = now * 10 / words
 
         let verdict =
