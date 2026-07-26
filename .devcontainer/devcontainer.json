@@ -25,8 +25,8 @@
 		// Mine. claude-mount shares the host's ~/.claude — skills, memory and
 		// the login — read-write, so Claude Code in here works against the live
 		// config. That is this repo, so the workspace and ~/.claude are the same
-		// directory seen twice. In CI the host path does not exist and the mount
-		// is an empty no-op, which nothing in `just check` reads.
+		// directory seen twice. The bind is unconditional, so CI has to create
+		// an empty ~/.claude for it to land on; nothing in `just check` reads it.
 		"ghcr.io/nicoviii/devcontainer-features/just:0": { "version": "1.57.0" },
 		"ghcr.io/nicoviii/devcontainer-features/lefthook:0": { "version": "2.1.10" },
 		"ghcr.io/nicoviii/devcontainer-features/claude-mount:0": {},

@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # The claude-mount feature bind-mounts ~/.claude unconditionally, and a
+      # bind whose source is missing aborts `docker run` rather than being
+      # skipped. The runner has no ~/.claude, so create an empty one: the mount
+      # then succeeds and stays the no-op `just check` already assumes it is.
+      - run: mkdir -p ~/.claude
       # The suite runs inside the devcontainer rather than on the runner, so the
       # toolchain CI checks with is by construction the one the container
       # defines. Every version lives once, in devcontainer.json; there is no
