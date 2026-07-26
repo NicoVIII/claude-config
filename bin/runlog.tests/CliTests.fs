@@ -340,6 +340,72 @@ let private ratioTests =
                   // Assert
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
                   Expect.isFalse (result.Stdout.Contains "lowest baseline") "one compaction is no ratchet to report")
+          }
+
+          test "counts the rules a skill states, not only the words it spends" {
+              withRoot (fun root ->
+                  // Arrange — two rules carrying ten words each
+                  root |> skill "demo" $"- {words 9}\n- {words 9}\n"
+                  root |> logged "demo" [ "compacted: 20 words" ]
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "2 rules at 10 words each" "the second axis, alongside the words")
+          }
+
+          test "skips fenced code, whose lines are list items by shape alone" {
+              withRoot (fun root ->
+                  // Arrange — one rule, plus a workflow snippet whose YAML
+                  // sequence entries are indistinguishable from bullets
+                  // (add-devcontainer embeds exactly this)
+                  root
+                  |> skill "demo" "- the only rule\n\n```yaml\nsteps:\n  - uses: actions/checkout@v7\n  - uses: devcontainers/ci@v0.3\n```\n"
+
+                  root |> logged "demo" [ "compacted: 10 words" ]
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "1 rule of" "the fenced YAML is not three more rules")
+          }
+
+          test "separates growth in coverage from growth in prose, against the first commit" {
+              withRoot (fun root ->
+                  // Arrange — one rule becomes two while the words grow tenfold:
+                  // the shape a headline anchored to a later compaction misses
+                  root |> skill "demo" "- one\n"
+                  root |> committed "demo"
+                  root |> skill "demo" $"- one {words 18}\n- two {words 18}\n"
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "2 rules at 20 words each" "what it states now"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "at the first commit, 1 rule of 2 words"
+                      "against what it stated to begin with")
+          }
+
+          test "reports density even for a skill with no baseline at all" {
+              withRoot (fun root ->
+                  // Arrange — never compacted, never committed: the case the
+                  // headline can say nothing about
+                  root |> skill "demo" $"- {words 4}\n"
+
+                  // Act
+                  let result = root |> runlog [ "ratio"; "demo" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "no baseline" "the headline still has nothing to compare"
+                  Expect.stringContains result.Stdout "1 rule of 5 words" "but density needs no baseline to be measurable")
           } ]
 
 let private dispatchTests =

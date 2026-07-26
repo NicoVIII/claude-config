@@ -120,6 +120,32 @@ let loggedIn (name: string) (entries: (string * string) list) (root: Root) =
 let logged (name: string) (verdicts: string list) (root: Root) =
     root |> loggedIn name (verdicts |> List.map (fun verdict -> "repo-a", verdict))
 
+/// Commits the skill as it currently stands, giving `ratio` a first commit to
+/// read back. The root becomes a repo only on demand: the tests that assert on
+/// a *missing* first commit depend on it not being one, so making every root a
+/// repo would silently defeat them. Identity and signing are forced on the
+/// command line — the suite must not depend on the running user's git config.
+let committed (name: string) (root: Root) =
+    let git args = exec "git" root.Dir args |> ignore
+
+    if not (Directory.Exists(Path.Combine(root.Dir, ".git"))) then
+        git [ "init"; "--quiet" ]
+
+    // Only the skill file: `add .` would descend into the nested session repo.
+    git [ "add"; Path.Combine("skills", name, "SKILL.md") ]
+
+    git
+        [ "-c"
+          "user.email=test@example.com"
+          "-c"
+          "user.name=test"
+          "-c"
+          "commit.gpgsign=false"
+          "commit"
+          "--quiet"
+          "-m"
+          $"add {name}" ]
+
 /// Adds the skill's row to the README maturity table — the claim `maturity`
 /// compares its log-derived rating against.
 let listed (name: string) (maturity: string) (root: Root) =
