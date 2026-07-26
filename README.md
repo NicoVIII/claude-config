@@ -53,6 +53,53 @@ to keep.
 - `skills/` — slash-command skills for Claude Code, see below
 - `bin/` — helpers shared by several skills, rather than owned by one
 
+## Concept
+
+Two ideas drive the structure. First, **context is billed**: anything that
+auto-loads — `CLAUDE.md`, every skill's frontmatter `description` — costs
+tokens in every session, so each fact lives at the least-loaded level that
+still reaches its reader. Trigger phrases go in the description, procedure in
+the SKILL.md body, shared conventions in `references/` files read by path, and
+fixed pipelines into compiled helpers, because prose that makes a model
+reproduce a pipeline reloads every run and regresses where a program doesn't.
+
+```mermaid
+flowchart LR
+    subgraph always ["in context every session, every project"]
+        CM["CLAUDE.md"]
+        DESC["skill descriptions (frontmatter)"]
+    end
+    subgraph invoked ["loaded when a skill is invoked"]
+        BODY["SKILL.md body"]
+    end
+    subgraph demand ["read or run only when pointed at"]
+        REF["references/*.md"]
+        BIN["bin/ and per-skill helpers"]
+    end
+    DESC -->|"trigger phrase matches"| BODY
+    BODY -->|"reads by path"| REF
+    BODY -->|"shells out to"| BIN
+```
+
+Second, **skills are maintained like code**: every run leaves evidence, the
+evidence drives edits, and growth is measured so accretion has a counter-force.
+`/skill-retro` turns a run's observed friction into edits and logs a verdict to
+the skill's `RUNS.md`; `bin/runlog` rates maturity from that log and reports
+growth since the last compaction; `/skill-compact` is the separate pass that
+shrinks — separate because removing text in the same pass that fixes friction
+is how the friction always wins.
+
+```mermaid
+flowchart TD
+    AUTHOR["/author-skill<br/>capture a session's workflow"] --> RUN["skill run, in any repo"]
+    RUN --> RETRO["/skill-retro<br/>observed friction → skill edits"]
+    RETRO -->|"runlog log: verdict"| LOG["RUNS.md"]
+    LOG -->|"runlog maturity"| TABLE["README maturity table"]
+    RETRO -->|"runlog ratio past trigger"| COMPACT["/skill-compact<br/>shrink, record new baseline"]
+    COMPACT --> LOG
+    RETRO --> RUN
+```
+
 ## Skills
 
 | Skill | Summary | Suggested model | Maturity |
