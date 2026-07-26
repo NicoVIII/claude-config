@@ -5,8 +5,6 @@ description: Shrink a skill whose SKILL.md has accreted rules — merge, general
 
 Reduce a skill's SKILL.md without losing what it knows.
 
-`/skill-retro` adds; this removes. They stay separate passes because a removal that also fixes friction spends all its attention on the friction — every logged size reduction so far was cancelled by additions made in the same commit.
-
 ## Scope
 
 One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`. Its second line splits the file into rules and words per rule: more words per rule points at rungs 1–2, more rules at rungs 3–5.
@@ -37,7 +35,7 @@ Take the furthest move down this list that fits:
 
 ## Finish
 
-Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write and its floor from every earlier one, so tidying old baselines away resets the only record of the floor rising; `maturity` counts the verdict lines as runs.
+Leave `RUNS.md` alone — the earlier baselines are the only record of whether the floor is rising.
 
 Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> compacted`, which measures the file itself. Commit the skill edits and the log together.
 
