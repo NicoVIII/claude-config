@@ -86,6 +86,24 @@ let private logTests =
                       "the size is recorded when it is observed, not inferred later")
           }
 
+          test "fills in the baseline a compaction is recording, rather than being told it" {
+              withRoot (fun root ->
+                  // Arrange — the baseline is the number every later ratio is
+                  // read against, so it is the last one to trust a caller with
+                  root |> skill "demo" (words 37)
+
+                  // Act
+                  let result = root |> runlog [ "log"; "demo"; "compacted" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> runsFile "demo" |> Option.defaultValue "")
+                      "· compacted: 37 words"
+                      "the shorthand lands in the log as the form every reader knows")
+          }
+
           test "leaves a compaction's count where its verdict already states it" {
               withRoot (fun root ->
                   // Arrange — recording it twice would only create two places

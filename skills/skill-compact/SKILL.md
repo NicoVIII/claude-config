@@ -9,7 +9,7 @@ Reduce a skill's SKILL.md without losing what it knows.
 
 ## Scope
 
-One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`.
+One skill, named as argument. Start with `dotnet run --project ~/.claude/bin/runlog -- ratio <skill>`. Its second line splits the file into rules and words per rule: more words per rule points at rungs 1–2, more rules at rungs 3–5.
 
 The pass must end with **fewer words in the SKILL.md than it started** — that file is the whole measure; text the pass moves out costs nothing against it, whether into a file it creates or into one that is already the fact's better home (`AGENTS.md`, the README, a skill that consumes the same fact). Moving a fact obliges you to update its other readers in the same pass — a half-migrated fact is what some other skill's next run rediscovers. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide. Ending still above the trigger is a fine outcome: the pass is bounded by the candidates that carry evidence, not by the ratio.
 
@@ -39,7 +39,7 @@ Take the furthest move down this list that fits:
 
 Leave `RUNS.md` alone — `ratio` reads its baseline from the line you are about to write and its floor from every earlier one, so tidying old baselines away resets the only record of the floor rising; `maturity` counts the verdict lines as runs.
 
-Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> 'compacted: <n> words'`, using the final `wc -w` of the SKILL.md. Commit the skill edits and the log together.
+Record the new baseline: `dotnet run --project ~/.claude/bin/runlog -- log <skill> compacted`, which measures the file itself. Commit the skill edits and the log together.
 
 ---
 

@@ -40,10 +40,20 @@ let run (skill: string) (verdict: string) =
     // git repo" — the confusing error for what is really a typo'd skill name.
     Layout.skillDir skill |> ignore
 
+    // A shorthand resolved before parsing, not a second vocabulary: the readers
+    // still see only `compacted: <n> words`. The baseline is the one number
+    // every later ratio is measured against, which makes it the last one that
+    // should arrive by an agent retyping what wc printed.
+    let verdict =
+        if verdict = "compacted" then
+            renderVerdict (Compacted(Layout.skillWords skill))
+        else
+            verdict
+
     match parseVerdict verdict with
     | None ->
         fail
-            $"'{verdict}' is not a verdict\n  expected: clean | minor: <clause> | friction: <clause> | compacted: <n> words"
+            $"'{verdict}' is not a verdict\n  expected: clean | minor: <clause> | friction: <clause> | compacted"
     | Some verdict ->
         // Measured here rather than passed in: the caller is an agent that has
         // just edited the file, and a number it retypes is a number that can be
