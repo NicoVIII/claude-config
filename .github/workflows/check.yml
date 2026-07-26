@@ -14,6 +14,15 @@ jobs:
         with:
           dotnet-version: "10.0.x"
       - uses: extractions/setup-just@v4
+      # shellcheck ships with the runner image; shfmt does not. Pinned to the
+      # version Arch currently packages, so the formatter agrees with what the
+      # pre-commit hook ran locally — and so a shfmt release cannot turn a
+      # green branch red without a commit here.
+      - name: install shfmt
+        run: |
+          sudo curl -fsSL -o /usr/local/bin/shfmt \
+            https://github.com/mvdan/sh/releases/download/v3.13.1/shfmt_v3.13.1_linux_amd64
+          sudo chmod +x /usr/local/bin/shfmt
       # Same entry point as the pre-commit hook, so CI cannot drift from what
       # the hook accepted locally.
       - run: just check

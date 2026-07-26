@@ -25,6 +25,22 @@ test:
     dotnet run --project bin/runlog.tests
     dotnet run --project skills/merge-dependabot/survey.tests
 
+# Lint and format-check every shell script in the repo.
+#
+# Same index-driven file list as typecheck, for the same reason, and `-r` so an
+# empty list is a no-op rather than a tool invoked with no arguments.
+#
+# shellcheck runs with every optional check enabled (`-o all`), not just the
+# default severity. The scripts here are few and short, so the style rules cost
+# nothing to satisfy, and the opt-in ones are the ones with teeth: SC2312 is
+# what caught `failing-log.sh` guarding a pipeline by an exit status `head`
+# always made zero, leaving its fallback branch silently dead.
+shell:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    git ls-files -z '*.sh' | xargs -0 -r shellcheck -o all -S style
+    git ls-files -z '*.sh' | xargs -0 -r shfmt -d
+
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.
-check: typecheck test
+check: typecheck test shell

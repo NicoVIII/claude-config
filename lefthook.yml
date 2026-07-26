@@ -8,3 +8,9 @@ pre-commit:
         - "*.fs"
         - "*.fsproj"
       run: just check
+
+    # Split out rather than folded into the glob above so a shell-only commit
+    # lints in milliseconds instead of waiting on a full dotnet build.
+    - name: shell
+      glob: "*.sh"
+      run: just shell

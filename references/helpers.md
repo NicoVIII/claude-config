@@ -40,6 +40,14 @@ is an error at every site that has to decide about it:
 Only a helper performing a single mechanical action nobody parses is a shell
 script.
 
+A shell one has to pass `just shell` — `shellcheck -o all -S style` and
+`shfmt -d`. Every optional shellcheck check is on, not just the default
+severity, because at this size the style rules cost nothing to satisfy and the
+opt-in ones are where the bugs were: SC2312 caught `failing-log.sh` gating its
+fallback on a pipeline exit status that `head` made zero unconditionally, so
+the branch had never once run. Write `${braces}`, `[[ ]]`, and no bare
+pipelines whose exit status you mean to test, and it passes first try.
+
 Judge by the contract, not by whether the code looks short: `runlog` read as
 three tidy shell scripts and was one four-case taxonomy with two readers that
 disagreed twice (a8531b1, f803d2a).
