@@ -4,6 +4,61 @@ Shared skills and configuration for Claude Code, versioned as `~/.claude`.
 Primarily versioning my own setup, but meant to be usable by others —
 fork it and make it yours.
 
+## Skills
+
+| Skill | Summary | Suggested model | Maturity |
+| --- | --- | --- | --- |
+| [`add-dependabot`](skills/add-dependabot/SKILL.md) | Set up a repo's Dependabot config so bumps arrive in mergeable batches. | Sonnet | 🚧 WIP |
+| [`add-devcontainer`](skills/add-devcontainer/SKILL.md) | Pin a repo's toolchain in a devcontainer and run CI inside it. | Opus | 🚧 WIP |
+| [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
+| [`claude-md-compact`](skills/claude-md-compact/SKILL.md) | Shrink `CLAUDE.md` when global preferences have accreted. | Opus | 🧪 Experimental |
+| [`grilling`](skills/grilling/SKILL.md) | Stress-test a plan or idea through relentless questioning. | Opus | 🧪 Experimental |
+| [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
+| [`pick-model`](skills/pick-model/SKILL.md) | Pick the cheapest Claude model that still fits the task. | Sonnet | 🧪 Experimental |
+| [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
+| [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
+| [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🧪 Experimental |
+| [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
+
+Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
+from each skill's run log by `/skill-retro`; the promotion bars live in
+[`bin/runlog`](bin/runlog/Maturity.fs).
+
+"Suggested model" is the model to *run* a skill with. Writing or refining a
+skill is different — switch to the most capable model first; the threshold and
+rationale live in
+[references/skill-conventions.md](references/skill-conventions.md).
+
+## Workflows
+
+Some skills are meant to run in sequence:
+
+- **Session triage** — `/prioritize` scans your repos and decides what to work
+  on. When it surfaces dependency bumps, `cd` into that repo and run
+  `/merge-dependabot` to clear the ones CI actually verifies; for a flagged
+  bump you still want to land, follow up with `/verify-bump <n>`.
+- **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
+  at it; `/add-dependabot` then watches what that toolchain depends on. Run in
+  that order: the devcontainer decides which ecosystems exist to watch. The PRs
+  it produces are what Session triage above clears.
+- **Capturing a workflow as a skill** — when a session in any project reveals a
+  repeatable workflow, run `/author-skill` while the context is fresh — the
+  transcript holds the commands, quirks, and decisions the skill should encode.
+  Later runs feed `/skill-retro` as usual.
+- **Refining a skill after use** — after running any skill below 🟢 Usable, run
+  `/skill-retro` in the same session to turn the friction you hit into concrete
+  skill edits (this is what the skills' feedback footer feeds); past 🟢 Usable,
+  run it on demand. `/skill-retro` only ever adds, so it also reports how far
+  the skill has grown past its baseline — when it says the skill is over the
+  trigger, run `/skill-compact` on it as a separate pass.
+- **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
+  ordinary sessions rather than a skill, so nothing announces its growth
+  (`runlog ratio` only measures skills). Check it by hand with
+  `wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it has drifted
+  well past ~500 words.
+
+These are starting points, not fixed pipelines — each skill also stands alone.
+
 ## Setup
 
 ```sh
@@ -50,7 +105,7 @@ to keep.
 
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
 - `references/` — guardrails for working on this repo and on its skills; nothing auto-loads them, so the skills that need one point at it by path
-- `skills/` — slash-command skills for Claude Code, see below
+- `skills/` — slash-command skills for Claude Code, see the table above
 - `bin/` — helpers shared by several skills, rather than owned by one
 
 ## Concept
@@ -99,61 +154,6 @@ flowchart TD
     COMPACT --> LOG
     RETRO --> RUN
 ```
-
-## Skills
-
-| Skill | Summary | Suggested model | Maturity |
-| --- | --- | --- | --- |
-| [`add-dependabot`](skills/add-dependabot/SKILL.md) | Set up a repo's Dependabot config so bumps arrive in mergeable batches. | Sonnet | 🚧 WIP |
-| [`add-devcontainer`](skills/add-devcontainer/SKILL.md) | Pin a repo's toolchain in a devcontainer and run CI inside it. | Opus | 🚧 WIP |
-| [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
-| [`claude-md-compact`](skills/claude-md-compact/SKILL.md) | Shrink `CLAUDE.md` when global preferences have accreted. | Opus | 🧪 Experimental |
-| [`grilling`](skills/grilling/SKILL.md) | Stress-test a plan or idea through relentless questioning. | Opus | 🧪 Experimental |
-| [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
-| [`pick-model`](skills/pick-model/SKILL.md) | Pick the cheapest Claude model that still fits the task. | Sonnet | 🧪 Experimental |
-| [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
-| [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
-| [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🧪 Experimental |
-| [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
-
-"Suggested model" is the model to *run* a skill with. Writing or refining a
-skill is different: switch to the most capable model available (currently
-Fable, otherwise Opus) before editing — conventions and rationale in
-[references/skill-conventions.md](references/skill-conventions.md).
-
-## Workflows
-
-Some skills are meant to run in sequence:
-
-- **Session triage** — Run `/prioritize` to scan your repos and decide what to
-  work on. When it surfaces dependency bumps, `cd` into that repo and run
-  `/merge-dependabot` to clear the ones CI actually verifies. For a flagged
-  bump you still want to land, follow up with `/verify-bump <n>`.
-- **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
-  at it; `/add-dependabot` then watches what that toolchain depends on. Run in
-  that order: the devcontainer decides which ecosystems exist to watch. The PRs
-  it produces are what Session triage above clears.
-- **Capturing a workflow as a skill** — When a session in any project reveals a
-  repeatable workflow, run `/author-skill` while the context is fresh — the
-  transcript holds the commands, quirks, and decisions the skill should encode.
-  Later runs feed `/skill-retro` as usual.
-- **Refining a skill after use** — After running any skill that isn't yet
-  🟢 Usable, run `/skill-retro` in the same session to turn the friction you hit
-  into concrete skill edits (this is what the skills' feedback footer feeds).
-  Past 🟢 Usable, run it on demand. `/skill-retro` only ever adds, so it also
-  reports how far the skill has grown past its baseline; when it says the skill
-  is over the trigger, run `/skill-compact` on it as a separate pass.
-- **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
-  ordinary sessions rather than from a skill, so nothing announces its growth:
-  it has no run log and `runlog ratio` only measures skills. Check it by hand
-  with `wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it has
-  drifted well past ~500 words.
-
-These are starting points, not fixed pipelines — each skill also stands alone.
-
-Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
-from each skill's run log by `/skill-retro`; the promotion bars live in
-[`bin/runlog`](bin/runlog/Maturity.fs).
 
 Credits: [`grilling`](skills/grilling/SKILL.md) is based on
 <https://github.com/mattpocock/skills> (MIT License). Attributions live here
