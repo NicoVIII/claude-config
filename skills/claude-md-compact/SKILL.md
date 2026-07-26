@@ -9,7 +9,7 @@ Reduce what loads into every session in every project, without losing a preferen
 
 `~/.claude/CLAUDE.md` only. Removal only — never add a rule in this pass; note what you spot and let a later session add it. `/skill-compact` keeps its passes separate for this reason, and CLAUDE.md has the same failure mode: additions made alongside a removal cancel it.
 
-The pass must end with **fewer words in CLAUDE.md than it started**. A rule moved into an AGENTS.md or a SKILL.md counts — those load in fewer sessions.
+The pass must end with **fewer words in CLAUDE.md than it started**. A rule moved into an imported AGENTS.md or a SKILL.md counts — those load in fewer sessions.
 
 Compaction passes have no run log of their own. Git is the log:
 
@@ -30,7 +30,7 @@ Don't build a ledger beside the file — that command reconstructs every baselin
 
 ## Check where a destination loads before proposing a move
 
-`~/.claude/AGENTS.md` loads **only in sessions inside `~/.claude`**. A rule that fires in every repo cannot move there — the move reads as deduplication and silently drops the rule everywhere else. When the same idea appears in CLAUDE.md and an AGENTS.md, the redundant copy is usually the narrower one, so the deletion belongs at that end.
+An AGENTS.md is in context **only where a CLAUDE.md imports it** — check the import before proposing the move, or the rule lands somewhere nothing reads. A rule that fires in every repo cannot move to one even then: the move reads as deduplication and silently drops the rule everywhere else. When the same idea appears in CLAUDE.md and an AGENTS.md, the redundant copy is usually the narrower one, so the deletion belongs at that end.
 
 Destinations, by what needs the rule:
 

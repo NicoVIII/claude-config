@@ -27,4 +27,4 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 ## Documentation for agents
 
 - After any refactoring or structural decision, ask: would an agent need this to place new code or content correctly? If yes, update the relevant AGENTS.md at the appropriate directory level.
-- AGENTS.md and memory files load into context on every invocation — every word has token cost. Include only what can't be inferred from the code; no padding, no restating the obvious.
+- An AGENTS.md is in context only where a CLAUDE.md imports it — verify the import exists before putting anything there, or nothing will read it. Where imported, it and memory files load on every invocation, so every word has token cost: include only what can't be inferred from the code; no padding, no restating the obvious.
