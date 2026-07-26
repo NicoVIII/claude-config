@@ -19,7 +19,7 @@ Recommend the cheapest tier that plausibly handles the task. Cost and capability
 These beat the ladder:
 
 - **Start high when failure is hard to detect.** The ladder assumes a cheap model's failure is visible, so escalating fixes it. If a subtle error would survive review (security-sensitive changes, tricky concurrency, irreversible operations), start at Opus or above.
-- **Write-once-run-many text starts at the top.** Skills, prompts, and agent-facing docs steer every future run; authoring them wants Fable (`~/.claude/AGENTS.md` encodes the same rule for skills).
+- **Write-once-run-many text starts at the top.** Skills, prompts, and agent-facing docs steer every future run; authoring them wants Fable (`~/.claude/references/skill-conventions.md` encodes the same rule for skills).
 - **Repo skills are pre-decided.** For skills in `~/.claude/skills`, the "Suggested model" column in the README maturity table is the answer — don't re-derive it.
 - **Split multi-phase work.** For larger features: plan on Opus, execute on Sonnet. If the `/model` menu offers a plan/execute hybrid, that's the mechanism.
 

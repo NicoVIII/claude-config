@@ -7,8 +7,8 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 
 ## Before writing
 
-- **Read the conventions at their source** — they only auto-load in sessions inside `~/.claude`, and this skill usually runs elsewhere: `~/.claude/AGENTS.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences. Follow what they say now; don't rely on a remembered copy.
-- **Model check.** AGENTS.md names the model to author with — the only statement of that threshold, so don't restate it here. If you are on a weaker one, say so and suggest switching via `/model` before continuing; session context survives. If I decline, proceed and record the exception in the commit message — otherwise the next retro cannot tell a deliberate call from an oversight.
+- **Read the conventions at their source** — nothing auto-loads them, wherever this skill runs: `~/.claude/references/skill-conventions.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences. Follow what they say now; don't rely on a remembered copy.
+- **Model check.** `skill-conventions.md` names the model to author with — the only statement of that threshold, so don't restate it here. If you are on a weaker one, say so and suggest switching via `/model` before continuing; session context survives. If I decline, proceed and record the exception in the commit message — otherwise the next retro cannot tell a deliberate call from an oversight.
 - **Confirm it's global.** If the workflow only makes sense in the current repo, ask whether it belongs in that repo's `.claude/skills` instead — where it follows that repo's conventions, not these.
 
 ## Mine the session

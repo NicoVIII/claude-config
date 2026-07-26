@@ -35,7 +35,7 @@ An AGENTS.md is in context **only where a CLAUDE.md imports it** — check the i
 Destinations, by what needs the rule:
 
 - **A project's own AGENTS.md** — only that repo needs it.
-- **`~/.claude/AGENTS.md`** — it only fires while working on `~/.claude` itself.
+- **`~/.claude/references/repo.md`** — only for working on `~/.claude` itself; nothing loads it, so the rule needs a skill that already points there.
 - **A SKILL.md** — only one workflow needs it (`a3cd73c` moved the attribution norm into `author-skill` this way; still the only reduction in the file's history).
 - **Deletion** — nothing else needs it. Last resort, and the only irreversible one.
 

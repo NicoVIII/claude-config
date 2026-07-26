@@ -16,7 +16,7 @@ The pass must end with **fewer words in the SKILL.md than it started** — that 
 Read the SKILL.md against its `RUNS.md` and `git log -p` for its directory. Every rule was added for a reason; `git blame` names the commit and its message gives the reason. Rank by:
 
 - **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. Rung 3 turns it into a script, and this is usually where the words actually are. A mechanism the git log shows patched more than twice is the same signal.
-- **A fact this SKILL.md restates from elsewhere** — `AGENTS.md`, the README, another skill. The copy drags prose explaining which copy wins, and `git log` will show one copy corrected while the others drifted. Give the fact one home; the explanation goes with it.
+- **A fact this SKILL.md restates from elsewhere** — a `references/` file, the README, another skill. The copy drags prose explaining which copy wins, and `git log` will show one copy corrected while the others drifted. Give the fact one home; the explanation goes with it.
 - **Special cases that never recurred** — a clause added for one run's mishap, with nothing resembling it in the log since.
 - **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
 - **Several rules that are one principle** — coverage survives, the words don't.

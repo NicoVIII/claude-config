@@ -3,10 +3,6 @@
 Read this before adding an executable helper to a skill, or when deciding
 whether one should be a shell script or an F# project.
 
-It lives here rather than in `AGENTS.md` because it is needed only when a
-helper is actually being written, and `AGENTS.md` is loaded into every session
-in this repo.
-
 ## When a skill should ship one
 
 A skill may ship an executable helper beside its `SKILL.md` when a step is a

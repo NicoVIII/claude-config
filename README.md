@@ -49,8 +49,7 @@ to keep.
 ## Contents
 
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
-- `AGENTS.md` — guardrails for working on this repo itself
-- `references/` — depth `AGENTS.md` points to rather than inlining, read on demand
+- `references/` — guardrails for working on this repo and on its skills; nothing auto-loads them, so the skills that need one point at it by path
 - `skills/` — slash-command skills for Claude Code, see below
 - `bin/` — helpers shared by several skills, rather than owned by one
 
@@ -73,7 +72,7 @@ to keep.
 "Suggested model" is the model to *run* a skill with. Writing or refining a
 skill is different: switch to the most capable model available (currently
 Fable, otherwise Opus) before editing — conventions and rationale in
-[AGENTS.md](AGENTS.md).
+[references/skill-conventions.md](references/skill-conventions.md).
 
 ## Workflows
 
