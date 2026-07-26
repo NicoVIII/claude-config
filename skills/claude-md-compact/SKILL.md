@@ -11,7 +11,7 @@ Reduce what loads into every session in every project, without losing a preferen
 
 The pass must end with **fewer words in CLAUDE.md than it started**. A rule moved into an AGENTS.md or a SKILL.md counts — those load in fewer sessions.
 
-There is no run log. Git is the log:
+Compaction passes have no run log of their own. Git is the log:
 
 ```sh
 git -C ~/.claude log --format='%h %s' -- CLAUDE.md
@@ -44,22 +44,27 @@ Destinations, by what needs the rule:
 Ranked by how well the evidence holds:
 
 1. **A rule the rest of the file already decides.** Strongest, because it is provable: name the other bullets that force the same outcome. They are often in a different section — the check-suite requirement under Commits is what makes a non-compiling commit impossible, not anything in Code style.
-2. **A rule scoped to one repo or one workflow.** Move it; see above.
-3. **A special case that never recurred.** `blame` names the commit and its message gives the reason; nothing resembling it in the log since. Weak on its own — a special case can be rare *and* load-bearing, so pair it with 1.
+2. **A rule that states its ruling and then illustrates it.** The same proof as 1, inside one bullet: name the clause that already decides it and cut the worked example — but only where the ruling survives alone. A counterweight whose whole value *is* its examples is not this ("skip extraction only when it would reduce clarity" is a blank check without them).
+3. **A rule scoped to one repo or one workflow.** Move it; see above.
+4. **A special case that never recurred.** `blame` names the commit and its message gives the reason; nothing resembling it in the log since. Weak on its own — a special case can be rare *and* load-bearing, so pair it with 1.
 
 Don't cut a rule because the model running this pass would follow it unprompted. `/skill-compact` can use that test — a skill has one suggested model in the README table. CLAUDE.md has none: it loads for every model, including Haiku and Sonnet subagents spawned inside a session that started on Opus, and the harness prompt around it varies by model, surface, and Claude Code version — none of it versioned here, none of it observable for the sessions you are cutting on behalf of. What you would do unprompted is evidence about you, not about the file.
-
-Trimming a rule to its ruling counts. Keep what a reader could not have concluded without it and cut the worked example — but only where the ruling survives alone.
 
 ## Decide
 
 You cannot observe that a rule is unnecessary: a session that went fine is equally consistent with the rule working and with it never having been needed. Present each candidate with its evidence in prose and take a free-form pick ("all", "1 and 3", "trim 2 instead") — the evidence is the decision.
 
-The one real verdict comes later. `git log -p -- CLAUDE.md` shows a cut rule coming back; a rule that was re-added is load-bearing — don't propose it a second time.
+The one real verdict comes later. This lists every line ever removed, so a rule that came back appears twice:
+
+```sh
+git -C ~/.claude log -p --reverse -- CLAUDE.md | grep -E '^-' | grep -v '^---'
+```
+
+A rule that was re-added is load-bearing — don't propose it a second time.
 
 ## Finish
 
-Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Run the repo's check suite, and commit CLAUDE.md together with any file a rule moved into.
+Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Run the repo's check suite, and commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else.
 
 ---
 
