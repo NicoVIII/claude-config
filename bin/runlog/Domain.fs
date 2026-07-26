@@ -4,8 +4,8 @@
 /// parsers and they disagreed twice: `maturity` counted a `compacted:` baseline
 /// as a run (a8531b1), and `ratio` matched that phrase inside unrelated prose.
 /// Both are missing-case bugs. So the verdicts are a closed union, and every
-/// match over it below lists all four cases rather than falling back to a
-/// wildcard — adding a fifth verdict is then a compile error at each site that
+/// match over it below lists all five cases rather than falling back to a
+/// wildcard — adding a sixth verdict is then a compile error at each site that
 /// has to decide what it means, which is the whole point of the port.
 module Domain
 
@@ -19,6 +19,15 @@ type Verdict =
     | Clean
     | Minor of clause: string
     | Friction of clause: string
+    /// Not a run either: friction seen and deliberately not fixed, waiting for a
+    /// second sighting to prove it is worth SKILL.md's permanent context cost.
+    /// It rides alongside the run's own verdict rather than replacing it, since
+    /// the run that defers one finding has usually just fixed another — forcing
+    /// one line to say both is what would hide it. Name the mechanism, not the
+    /// symptom: a later retro can only match a recurrence against wording it
+    /// recognises. Deliberately weightless on the ladder — a deferral that cost
+    /// the rating would be a deferral nobody writes.
+    | Deferred of clause: string
     /// Not a run: /skill-compact's baseline for the growth ratio.
     | Compacted of words: int
 
@@ -41,6 +50,7 @@ let renderVerdict verdict =
     | Clean -> "clean"
     | Minor clause -> $"minor: {clause}"
     | Friction clause -> $"friction: {clause}"
+    | Deferred clause -> $"deferred: {clause}"
     | Compacted words -> $"compacted: {words} words"
 
 let renderWords words = $"{words} words"
@@ -77,6 +87,7 @@ let parseVerdict (text: string) : Verdict option =
     | "clean" -> Some Clean
     | _ when text.StartsWith "minor: " -> clause "minor: " |> Option.map Minor
     | _ when text.StartsWith "friction: " -> clause "friction: " |> Option.map Friction
+    | _ when text.StartsWith "deferred: " -> clause "deferred: " |> Option.map Deferred
     | _ when text.StartsWith "compacted: " && text.EndsWith " words" ->
         text
         |> between "compacted: " " words"
@@ -151,14 +162,17 @@ let isRun verdict =
     | Clean
     | Minor _
     | Friction _ -> true
+    | Deferred _
     | Compacted _ -> false
 
-/// Ends the trailing streak the maturity ladder is counted from.
+/// Ends the trailing streak the maturity ladder is counted from. Never asked of
+/// a deferral or a baseline — `isRun` has already filtered both out.
 let isFriction verdict =
     match verdict with
     | Friction _ -> true
     | Clean
     | Minor _
+    | Deferred _
     | Compacted _ -> false
 
 let isClean verdict =
@@ -166,6 +180,7 @@ let isClean verdict =
     | Clean -> true
     | Minor _
     | Friction _
+    | Deferred _
     | Compacted _ -> false
 
 /// The word count /skill-compact recorded, if this entry is a baseline. Only a
@@ -176,4 +191,5 @@ let baselineWords verdict =
     | Compacted words -> Some words
     | Clean
     | Minor _
-    | Friction _ -> None
+    | Friction _
+    | Deferred _ -> None

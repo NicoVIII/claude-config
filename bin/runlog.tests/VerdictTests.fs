@@ -17,12 +17,13 @@ let private isRejected text = parseVerdict text = None
 let tests =
     testList
         "parseVerdict"
-        [ test "accepts the four verdicts the log is written in" {
+        [ test "accepts the five verdicts the log is written in" {
               // Arrange
               let cases =
                   [ "clean", Clean
                     "minor: footer placement guessed", Minor "footer placement guessed"
                     "friction: step needed a workaround", Friction "step needed a workaround"
+                    "deferred: ladder rung ambiguous", Deferred "ladder rung ambiguous"
                     "compacted: 974 words", Compacted 974 ]
 
               // Act & Assert — one table, so the failure names the row
@@ -32,7 +33,8 @@ let tests =
 
           test "round-trips every verdict it can render" {
               // Arrange — one of each case; the clause and count are arbitrary
-              let verdicts = [ Clean; Minor "a clause"; Friction "a clause"; Compacted 974 ]
+              let verdicts =
+                  [ Clean; Minor "a clause"; Friction "a clause"; Deferred "a clause"; Compacted 974 ]
 
               // Act & Assert — a writer the readers disagree with is the whole
               // failure this module exists to prevent
@@ -42,7 +44,7 @@ let tests =
 
           test "rejects a clause-carrying verdict whose clause is empty" {
               // Arrange
-              let cases = [ "minor: "; "friction: "; "minor:"; "friction:" ]
+              let cases = [ "minor: "; "friction: "; "deferred: "; "minor:"; "friction:"; "deferred:" ]
 
               // Act & Assert
               for text in cases do

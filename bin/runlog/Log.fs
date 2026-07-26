@@ -53,7 +53,7 @@ let run (skill: string) (verdict: string) =
     match parseVerdict verdict with
     | None ->
         fail
-            $"'{verdict}' is not a verdict\n  expected: clean | minor: <clause> | friction: <clause> | compacted"
+            $"'{verdict}' is not a verdict\n  expected: clean | minor: <clause> | friction: <clause> | deferred: <clause> | compacted"
     | Some verdict ->
         // Measured here rather than passed in: the caller is an agent that has
         // just edited the file, and a number it retypes is a number that can be
@@ -61,7 +61,10 @@ let run (skill: string) (verdict: string) =
         // it twice would only create two places for them to disagree.
         let words =
             match verdict with
-            | Compacted _ -> None
+            // A deferral changes nothing, so it has no size to record: the
+            // number would only invite a later reader to read growth into it.
+            | Compacted _
+            | Deferred _ -> None
             | Clean
             | Minor _
             | Friction _ -> Some(Layout.skillWords skill)

@@ -211,6 +211,27 @@ let private maturityTests =
                   Expect.stringContains result.Stdout "1 strictly clean" "the minor is not strictly clean")
           }
 
+          test "a deferral is a note beside the runs, not one of them" {
+              withRoot (fun root ->
+                  // Arrange — a deferral rides alongside a run's own verdict, so
+                  // it must neither inflate the count nor break the streak
+                  root |> skill "demo" (words 100)
+
+                  root
+                  |> logged "demo" [ "clean"; "deferred: ladder rung ambiguous"; "clean"; "clean" ]
+
+                  // Act
+                  let result = root |> runlog [ "maturity"; "demo" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "3 entries" "the deferral is not a run"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "3 since the last friction"
+                      "and does not break the streak the runs around it build")
+          }
+
           test "reaches Usable at three clean-or-minor entries since the last friction" {
               withRoot (fun root ->
                   // Arrange — a minor does not break the streak
