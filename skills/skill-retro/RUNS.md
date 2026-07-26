@@ -18,3 +18,4 @@
 2026-07-26 · claude-config · minor: escalation ladder had no rung for stating a command inline; ratio truncation had to be verified by hand to rule out a bug
 2026-07-26 · claude-config · friction: ladder had no rung for fixing the artifact behind an instruction, and no home for a ruled-out rung
 2026-07-26 · claude-config · 1308 words · friction: shared-machinery carve-out hit the third case its last widening tried to pre-empt; nothing weighed a finding's prose cost against the friction it prevents
+2026-07-26 · claude-config · compacted: 1239 words
