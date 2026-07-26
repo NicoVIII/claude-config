@@ -12,17 +12,17 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 
 - Commit proactively after each independently meaningful change — don't wait to be asked. The full check suite must pass before every commit; no exceptions for lint or formatting.
 - When a follow-up refines the change just committed (corrections, tweaks, "do it this way"), amend that commit instead of stacking a new one — but only commits made this session, and only if `git branch -r --contains HEAD` is empty (never rewrite pushed history). A distinct capability or unrelated concern gets its own commit even in the same files; ambiguous mid-iteration cases default to amend. Adding paragraphs to a just-committed artifact is iteration, not a new concern.
-- Before committing in a repo you don't know, infer the workflow from history: if recent commits land directly on the default branch, commit there; if history shows a feature-branch/PR flow (merge commits, branch protection), branch first. Ask only when the signal is genuinely mixed.
+- Before committing in a repo you don't know, infer the workflow from history rather than defaulting to a branch. Ask only when the signal is genuinely mixed.
 - Commit messages explain WHY — reasoning, trade-offs, non-obvious constraints — not WHAT; the diff carries the what.
 - Never push, and don't ask about pushing — I push manually.
 
 ## Code style
 
 - Before writing new code, exhaust reuse in this order: existing helper/pattern in the codebase → stdlib → native platform feature → already-installed dependency. Only then write it — and keep it minimal. Never add a new dependency without asking.
-- Bug fixes target the root cause, not the reported symptom: before patching the path a report names, check the other callers of the function you're touching — one fix in the shared function beats a guard per caller, and patching only the named path leaves sibling callers broken.
+- Bug fixes target the root cause, not the reported symptom: check the other callers of the function you're touching — one fix in the shared function beats a guard per caller.
 - Prefer small, composable, single-purpose functions; a well-named function is the default unit of decomposition. A `// this block does X` comment is a trigger to extract a named function instead. Skip extraction only when it would reduce clarity: helpers needing many threaded parameters, or one-shot blocks that add pure indirection.
-- Order files top-to-bottom F#-style: every definition references only things defined above it. Helpers before callers, types before functions that use them, entry point last. Exceptions only for circular dependencies.
-- Comments explain WHY, not WHAT — if a reader could infer it from types and names, cut it. Carve-outs where prose is warranted: doc comments on public APIs; type-lossy seams where the signature can't express the contract (anonymous `String`/`Int` parameters, unencoded error semantics, idempotency assumptions); short orientation labels in long functions (`// Phase 2: reconcile`).
+- Order files top-to-bottom F#-style: every definition references only things defined above it. Exceptions only for circular dependencies.
+- Comments explain WHY, not WHAT — if a reader could infer it from types and names, cut it. Carve-outs where prose is warranted: doc comments on public APIs; type-lossy seams where the signature can't express the contract; short orientation labels in long functions.
 
 ## Documentation for agents
 
