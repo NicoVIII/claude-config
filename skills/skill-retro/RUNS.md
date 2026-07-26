@@ -16,3 +16,4 @@
 2026-07-25 · claude-config · friction: ratio projection reported a wrong number; one-skill rule and ladder-restart hold each hit their second no-op
 2026-07-25 · claude-config · minor: the accretion step edited to run after Apply was left filed under Propose
 2026-07-26 · claude-config · minor: escalation ladder had no rung for stating a command inline; ratio truncation had to be verified by hand to rule out a bug
+2026-07-26 · claude-config · friction: ladder had no rung for fixing the artifact behind an instruction, and no home for a ruled-out rung
