@@ -1,6 +1,6 @@
 # Working in this repo
 
-This is the live `~/.claude` config — edits to skills take effect in running Claude Code sessions immediately.
+This is the live `~/.claude` config — edits to skills take effect in running Claude Code sessions immediately. That immediacy is why the live directory is versioned in place rather than a clean repo being synced in, and its price is a working tree holding runtime state, secrets, and foreign checkouts: the allowlist `.gitignore`, the `git ls-files` file lists, and the hand-named test suites all descend from that one decision — weaken none of them without revisiting it.
 
 Nothing here auto-loads. `~/.claude/CLAUDE.md` is global user memory, loaded into every session in every project, so only universal personal preferences belong in it and it cannot import these notes without taxing every project. Agent-facing repo knowledge therefore lives in `references/`, and the skills that need a convention point at the file by path.
 
