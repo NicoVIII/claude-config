@@ -1,4 +1,5 @@
-/// Where the config tree keeps what runlog reads, and the only door to the log.
+/// Where the config tree keeps what skill-refiner reads, and the only door to
+/// the log.
 module Layout
 
 open System
@@ -30,7 +31,8 @@ let skillDir (skill: string) =
 
 /// Checked like `skillDir` above, and for the same reason: an unreadable path
 /// returned as if it were fine surfaces as a FileNotFoundException in the
-/// caller, which is not a RunlogFailure and so escapes Program.fs's handler.
+/// caller, which is not a SkillRefinerFailure and so escapes Program.fs's
+/// handler.
 let skillFile (skill: string) =
     let path = Path.Combine(skillDir skill, "SKILL.md")
 
@@ -48,25 +50,41 @@ let wordCount (text: string) =
 
 let skillWords (skill: string) = skillFile skill |> File.ReadAllText |> wordCount
 
-let private runsFile (skill: string) = Path.Combine(skillDir skill, "RUNS.md")
+let private historyFile (skill: string) =
+    Path.Combine(skillDir skill, "HISTORY.md")
 
 /// Both readers select their entries through here, so neither can hold its own
-/// idea of what an entry is.
-let entries (skill: string) : Entry list =
-    let path = runsFile skill
+/// idea of what an entry is. A skill with no log yet reads as an empty history
+/// rather than an error — that is 🚧 WIP, not a fault.
+let history (skill: string) : History =
+    let path = historyFile skill
 
     if File.Exists path then
-        File.ReadAllLines path |> Array.toList |> List.choose parseLine
+        File.ReadAllText path |> parseHistory
     else
-        []
+        { Creation = None; Entries = [] }
 
-let appendEntry (skill: string) (entry: Entry) =
-    let path = runsFile skill
+/// Seeding the origin baseline. It must be the first line, so this refuses once
+/// the log exists — a late or repeated creation is a shape the reader would
+/// reject anyway, and refusing here says so while the mistake is still one
+/// command old.
+let createHistory (skill: string) (entry: Entry<CreationEvent>) =
+    let path = historyFile skill
 
+    if File.Exists path then
+        fail "HISTORY.md already exists — creation is logged once, before anything else"
+
+    File.WriteAllText(path, $"{heading}\n\n{renderCreationEntry entry}\n")
+
+let appendChange (skill: string) (entry: Entry<ChangeEvent>) =
+    let path = historyFile skill
+
+    // No `created` line was logged (a skill predating creation seeding): the log
+    // simply starts without an origin baseline rather than assuming one.
     if not (File.Exists path) then
-        File.WriteAllText(path, "# Run log\n\n")
+        File.WriteAllText(path, $"{heading}\n\n")
 
-    File.AppendAllText(path, render entry + "\n")
+    File.AppendAllText(path, renderChangeEntry entry + "\n")
 
 /// The README's rating, for comparison only. It is a claim, not evidence: where
 /// the two disagree, the log wins. The skill is matched as the literal link

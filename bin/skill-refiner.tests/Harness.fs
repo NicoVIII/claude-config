@@ -1,12 +1,12 @@
 /// Setup shared by the CLI tests, so each test body reads as arrange/act/assert
-/// over runlog's behaviour rather than over temp-directory plumbing.
+/// over skill-refiner's behaviour rather than over temp-directory plumbing.
 ///
-/// runlog resolves its config root by walking up from its own binary until it
-/// finds a directory holding both skills/ and README.md. A test therefore
-/// cannot point it at a scratch directory from outside — the binary has to sit
-/// inside one. Each test gets a throwaway root with runlog deployed into it,
-/// which has the side benefit of exercising the root walk rather than bypassing
-/// it.
+/// skill-refiner resolves its config root by walking up from its own binary
+/// until it finds a directory holding both skills/ and README.md. A test
+/// therefore cannot point it at a scratch directory from outside — the binary
+/// has to sit inside one. Each test gets a throwaway root with the tool deployed
+/// into it, which has the side benefit of exercising the root walk rather than
+/// bypassing it.
 module Harness
 
 open System
@@ -18,16 +18,19 @@ type Result =
       Stdout: string
       Stderr: string }
 
-/// `SessionRepo` is not incidental: `runlog log` names the run's repo by running
-/// git in the working directory, so without a repo to invoke it from, every log
-/// test would fail on that instead of on what it means to test.
+/// `SessionRepo` is not incidental: `log` names the run's repo by running git in
+/// the working directory, so without a repo to invoke it from, every log test
+/// would fail on that instead of on what it means to test.
 type Root = { Dir: string; SessionRepo: string }
 
-/// Everything runlog needs once detached from its build output. The apphost is
-/// deliberately left out and the assembly invoked through `dotnet`, which keeps
-/// the harness clear of executable-bit and `.exe`-naming concerns.
+/// Everything skill-refiner needs once detached from its build output. The
+/// apphost is deliberately left out and the assembly invoked through `dotnet`,
+/// which keeps the harness clear of executable-bit and `.exe`-naming concerns.
 let private deployment =
-    [ "runlog.dll"; "runlog.deps.json"; "runlog.runtimeconfig.json"; "FSharp.Core.dll" ]
+    [ "skill-refiner.dll"
+      "skill-refiner.deps.json"
+      "skill-refiner.runtimeconfig.json"
+      "FSharp.Core.dll" ]
 
 /// What `log` will record: the basename of a repo with no origin remote.
 let sessionRepoName = "demo-repo"
@@ -55,7 +58,7 @@ let private exec (fileName: string) (workingDir: string) (args: string list) =
       Stderr = stderr.Result }
 
 let private create () =
-    let dir = Path.Combine(Path.GetTempPath(), $"runlog-tests-{Guid.NewGuid():N}")
+    let dir = Path.Combine(Path.GetTempPath(), $"skill-refiner-tests-{Guid.NewGuid():N}")
     let bin = Path.Combine(dir, "bin")
     Directory.CreateDirectory bin |> ignore
     Directory.CreateDirectory(Path.Combine(dir, "skills")) |> ignore
@@ -104,47 +107,30 @@ let skill (name: string) (content: string) (root: Root) =
 /// A skill directory with no SKILL.md — the shape `ratio` used to crash on.
 let bareSkill (name: string) (root: Root) = skillDir root name |> ignore
 
-/// Writes RUNS.md from (repo, verdict) pairs, dating them a day apart so the
-/// order the readers see is the order given.
-let loggedIn (name: string) (entries: (string * string) list) (root: Root) =
+/// Writes HISTORY.md from (repo, words, event) triples, dating them a day apart
+/// so the order the readers see is the order given.
+let history (name: string) (entries: (string * int * string) list) (root: Root) =
     let start = DateOnly(2026, 1, 1)
 
-    let line index (repo, verdict) =
+    let line index (repo, words, event) =
         let date = start.AddDays(index).ToString "yyyy-MM-dd"
-        $"{date} · {repo} · {verdict}"
+        $"{date} · {repo} · {words} words · {event}"
 
     let body = entries |> List.mapi line |> String.concat "\n"
-    File.WriteAllText(Path.Combine(skillDir root name, "RUNS.md"), $"# Run log\n\n{body}\n")
+    File.WriteAllText(Path.Combine(skillDir root name, "HISTORY.md"), $"# Skill History\n\n{body}\n")
 
-/// The common case: entries differing only in verdict.
-let logged (name: string) (verdicts: string list) (root: Root) =
-    root |> loggedIn name (verdicts |> List.map (fun verdict -> "repo-a", verdict))
+/// The maturity case: entries differing only in event, all one repo and one
+/// size, since neither figures in the ladder.
+let logged (name: string) (events: string list) (root: Root) =
+    root |> history name (events |> List.map (fun event -> "repo-a", 100, event))
 
-/// Commits the skill as it currently stands, giving `ratio` a first commit to
-/// read back. The root becomes a repo only on demand: the tests that assert on
-/// a *missing* first commit depend on it not being one, so making every root a
-/// repo would silently defeat them. Identity and signing are forced on the
-/// command line — the suite must not depend on the running user's git config.
-let committed (name: string) (root: Root) =
-    let git args = exec "git" root.Dir args |> ignore
+/// The 🛡️ Battle-tested case, where which repo a run happened in is the point.
+let loggedIn (name: string) (entries: (string * string) list) (root: Root) =
+    root |> history name (entries |> List.map (fun (repo, event) -> repo, 100, event))
 
-    if not (Directory.Exists(Path.Combine(root.Dir, ".git"))) then
-        git [ "init"; "--quiet" ]
-
-    // Only the skill file: `add .` would descend into the nested session repo.
-    git [ "add"; Path.Combine("skills", name, "SKILL.md") ]
-
-    git
-        [ "-c"
-          "user.email=test@example.com"
-          "-c"
-          "user.name=test"
-          "-c"
-          "commit.gpgsign=false"
-          "commit"
-          "--quiet"
-          "-m"
-          $"add {name}" ]
+/// The ratio case, where the recorded sizes are the point.
+let loggedSized (name: string) (entries: (int * string) list) (root: Root) =
+    root |> history name (entries |> List.map (fun (words, event) -> "repo-a", words, event))
 
 /// Adds the skill's row to the README maturity table — the claim `maturity`
 /// compares its log-derived rating against.
@@ -155,12 +141,11 @@ let listed (name: string) (maturity: string) (root: Root) =
     )
 
 /// Invokes the CLI the way a skill does: from inside the session repo.
-let runlog (args: string list) (root: Root) =
-    exec "dotnet" root.SessionRepo (Path.Combine(root.Dir, "bin", "runlog.dll") :: args)
+let skillRefiner (args: string list) (root: Root) =
+    exec "dotnet" root.SessionRepo (Path.Combine(root.Dir, "bin", "skill-refiner.dll") :: args)
 
-/// The run log as it stands, for assertions about what a run appended — or did
-/// not append.
-let runsFile (name: string) (root: Root) =
-    let path = Path.Combine(root.Dir, "skills", name, "RUNS.md")
+/// The log as it stands, for assertions about what a run appended — or did not.
+let historyFile (name: string) (root: Root) =
+    let path = Path.Combine(root.Dir, "skills", name, "HISTORY.md")
 
     if File.Exists path then Some(File.ReadAllText path) else None

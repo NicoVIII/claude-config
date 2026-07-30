@@ -29,7 +29,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 - The frontmatter `description`: phrases I would actually say, ending with a first-person "Use when …" clause — and nothing about how the skill works. `skill-conventions.md` carries the rule and the length signal; don't restate them here.
 - Write the body for the suggested execution model, which may be weaker than you: spell out commands, orderings, and edge cases rather than compressing.
-- Size the draft against what exists (`wc -w ~/.claude/skills/*/SKILL.md`) — the counterweight to the bullet above. Landing above the current longest is a signal to cut before committing, not after: until a `/skill-compact` records a baseline, `runlog ratio` measures growth from the first commit, so an overweight first draft raises its own trigger permanently instead of ever reporting as accretion.
+- Size the draft against what exists (`wc -w ~/.claude/skills/*/SKILL.md`) — the counterweight to the bullet above. Landing above the current longest is a signal to cut before committing, not after: the size you land on is logged as the skill's origin baseline, and until a `/skill-compact` records a new one, `ratio` measures all growth from it — so an overweight first draft raises its own trigger permanently instead of ever reporting as accretion.
 - State scope and stop conditions explicitly — what the skill does *not* do, and when to stop and report instead of continuing.
 - Attribution: if the skill writes anywhere others read on my behalf — GitHub comments, reviews, issues, wholesale prose — its instructions must require ending that output with a short agent marker (e.g. "— written by an agent"). Media that already carry authorship (commits via `Co-Authored-By`, PR footers, merges) need no marker; code never gets one. `verify-bump` and `merge-dependabot` show the shape.
 - Suggest an execution model: Sonnet for mechanical, procedural runs; Opus for judgment-heavy ones. Other tiers need explicit justification — a skill worth writing is rarely a Haiku task, and Fable as a routine run model defeats the cost point of the column.
@@ -38,7 +38,8 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 Write the SKILL.md straight to its final path, `cat` it for review, and edit in place until I'm happy — never retype it into the reply, so a long skill is never typed twice. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
 
-- End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`. Don't create a `RUNS.md`; `runlog log` writes it at the first `/skill-retro`, and `maturity`/`ratio` both read a missing one correctly.
+- End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`.
+- Open the skill's log once the text is final: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> log creation`. It records the size you settled on as the origin baseline every later `ratio` is read against, and it must be the log's first line — a skill whose first entry is a retro has no floor to measure against, and the command refuses to add one later. Never write `HISTORY.md` by hand.
 - Add the README maturity-table row, starting at 🚧 WIP; if the skill pairs with existing ones, extend the Workflows section.
 - Commit in `~/.claude` — the message explains why the skill exists, not what it contains.
 

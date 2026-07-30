@@ -21,8 +21,8 @@ fork it and make it yours.
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
 
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
-from each skill's run log by `/skill-retro`; the promotion bars live in
-[`bin/runlog`](bin/runlog/Maturity.fs).
+from each skill's history log by `/skill-retro`; the promotion bars live in
+[`bin/skill-refiner`](bin/skill-refiner/Maturity.fs).
 
 "Suggested model" is the model to *run* a skill with. Writing or refining a
 skill is different — switch to the most capable model first; the threshold and
@@ -53,7 +53,7 @@ Some skills are meant to run in sequence:
   trigger, run `/skill-compact` on it as a separate pass.
 - **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
   ordinary sessions rather than a skill, so nothing announces its growth
-  (`runlog ratio` only measures skills). Check it by hand with
+  (`skill-refiner`'s ratio only measures skills). Check it by hand with
   `wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it has drifted
   well past ~500 words.
 
@@ -90,7 +90,7 @@ to keep.
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
   it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer
   (`prioritize`'s gather step, `merge-dependabot`'s survey step and the shared
-  `bin/runlog` are F# programs — the last makes it a prerequisite of the
+  `bin/skill-refiner` are F# programs — the last makes it a prerequisite of the
   skill-authoring workflow, not just of one skill), and `rg` (ripgrep).
 - To work *on* this repo you also need [`just`](https://just.systems) and
   [`lefthook`](https://lefthook.dev); run `lefthook install` once to activate
@@ -138,19 +138,21 @@ flowchart LR
 
 Second, **skills are maintained like code**: every run leaves evidence, the
 evidence drives edits, and growth is measured so accretion has a counter-force.
-`/skill-retro` turns a run's observed friction into edits and logs a verdict to
-the skill's `RUNS.md`; `bin/runlog` rates maturity from that log and reports
-growth since the last compaction; `/skill-compact` is the separate pass that
+`/skill-retro` turns a run's observed friction into edits and logs both how the
+run went and what the edit did to the skill's `HISTORY.md`; `bin/skill-refiner`
+rates maturity from that log and reports growth since the last size anybody
+settled on deliberately; `/skill-compact` is the separate pass that
 shrinks — separate because removing text in the same pass that fixes friction
 is how the friction always wins.
 
 ```mermaid
 flowchart TD
     AUTHOR["/author-skill<br/>capture a session's workflow"] --> RUN["skill run, in any repo"]
+    AUTHOR -->|"log creation: origin baseline"| LOG["HISTORY.md"]
     RUN --> RETRO["/skill-retro<br/>observed friction → skill edits"]
-    RETRO -->|"runlog log: verdict"| LOG["RUNS.md"]
-    LOG -->|"runlog maturity"| TABLE["README maturity table"]
-    RETRO -->|"runlog ratio past trigger"| COMPACT["/skill-compact<br/>shrink, record new baseline"]
+    RETRO -->|"log retro, then log fix"| LOG
+    LOG -->|"skill-refiner maturity"| TABLE["README maturity table"]
+    RETRO -->|"skill-refiner ratio past trigger"| COMPACT["/skill-compact<br/>shrink, record new baseline"]
     COMPACT --> LOG
     RETRO --> RUN
 ```

@@ -22,7 +22,7 @@ typecheck:
 # index would also match a suite in a foreign checkout that happened to be
 # tracked here, and there are few enough of these to name.
 test:
-    dotnet run --project bin/runlog.tests
+    dotnet run --project bin/skill-refiner.tests
     dotnet run --project skills/merge-dependabot/survey.tests
 
 # Lint and format-check every shell script in the repo.

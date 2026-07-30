@@ -44,8 +44,8 @@ fallback on a pipeline exit status that `head` made zero unconditionally, so
 the branch had never once run. Write `${braces}`, `[[ ]]`, and no bare
 pipelines whose exit status you mean to test, and it passes first try.
 
-Judge by the contract, not by whether the code looks short: `runlog` read as
-three tidy shell scripts and was one four-case taxonomy with two readers that
+Judge by the contract, not by whether the code looks short: `skill-refiner` read
+as three tidy shell scripts and was one four-case taxonomy with two readers that
 disagreed twice (a8531b1, f803d2a).
 
 ## Where it lives

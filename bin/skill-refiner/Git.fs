@@ -1,4 +1,6 @@
-/// Shelling out to git, the only external tool runlog needs.
+/// Shelling out to git, the only external tool skill-refiner needs — and it
+/// needs it for one field: the repo a run happened in. Nothing that reads the
+/// log consults git, because the log records every size it needs.
 module Git
 
 open System.Diagnostics
