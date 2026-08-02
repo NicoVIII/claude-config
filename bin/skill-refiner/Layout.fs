@@ -68,13 +68,22 @@ let history (skill: string) : History =
 /// the log exists — a late or repeated creation is a shape the reader would
 /// reject anyway, and refusing here says so while the mistake is still one
 /// command old.
+/// The caller is an agent reading through dotnet's first-run banner, where a
+/// silent success is indistinguishable from a swallowed failure. Echoing the
+/// written line is the confirmation it would otherwise spend a round trip on —
+/// and it puts the derived repo in view, which is the field a caller who ran
+/// this after a `cd` gets wrong without ever seeing it.
+let private announce (path: string) (line: string) = printfn $"logged to {path}:\n  {line}"
+
 let createHistory (skill: string) (entry: Entry<CreationEvent>) =
     let path = historyFile skill
 
     if File.Exists path then
         fail "HISTORY.md already exists — creation is logged once, before anything else"
 
-    File.WriteAllText(path, $"{heading}\n\n{renderCreationEntry entry}\n")
+    let line = renderCreationEntry entry
+    File.WriteAllText(path, $"{heading}\n\n{line}\n")
+    announce path line
 
 let appendChange (skill: string) (entry: Entry<ChangeEvent>) =
     let path = historyFile skill
@@ -84,7 +93,9 @@ let appendChange (skill: string) (entry: Entry<ChangeEvent>) =
     if not (File.Exists path) then
         File.WriteAllText(path, $"{heading}\n\n")
 
-    File.AppendAllText(path, renderChangeEntry entry + "\n")
+    let line = renderChangeEntry entry
+    File.AppendAllText(path, line + "\n")
+    announce path line
 
 /// The README's rating, for comparison only. It is a claim, not evidence: where
 /// the two disagree, the log wins. The skill is matched as the literal link

@@ -16,7 +16,7 @@ Remove — no text survives:
 Move out — the text survives, but not here:
 
 3. **Move mechanics into a script** beside the SKILL.md when the prose only
-   makes a model reproduce a fixed pipeline — [`helpers.md`](helpers.md)
+   makes a model reproduce a fixed pipeline — [`references/helpers.md`](helpers.md)
    carries that signal and the shell-or-F# rules — cutting the prose to an
    invocation.
 4. **Move text into `references/`** — *only* if some runs need it and others

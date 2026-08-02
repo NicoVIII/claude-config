@@ -21,6 +21,7 @@ Walk the run and collect observed friction only:
 - Corrections the user made mid-run
 - Trigger mismatch: the skill fired when it shouldn't have, or had to be invoked manually when its description should have caught the request
 - What the run left behind — when it wrote to a shared script, log, or README table, run that file's readers before making any edits and check they still agree. The transcript won't show a counter the run quietly corrupted.
+- What the run paid to read — output pulled wholesale where a flag or grep would have trimmed it, measured with `wc -c` rather than estimated. A cost the skill pays on every run counts as friction even when the run reached a good result.
 - Anything the run's feedback footer surfaced
 
 ## Propose
