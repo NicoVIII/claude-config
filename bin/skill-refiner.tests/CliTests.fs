@@ -328,6 +328,30 @@ let private maturityTests =
                   Expect.stringContains result.Stdout "across 2 repos" "the repo count comes from the clean runs")
           }
 
+          test "drops the repo spread when no run is strictly clean" {
+              withRoot (fun root ->
+                  // Arrange — three repos on record, but the trailing fix leaves
+                  // no spotless run for the spread to describe
+                  root |> skill "demo" (words 100)
+
+                  root
+                  |> loggedIn
+                      "demo"
+                      [ "repo-a", "retro clean"
+                        "repo-b", "retro minor: tweak"
+                        "repo-c", "fix small: stale path corrected" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "0 strictly clean" "the fix ends the spotless streak"
+
+                  Expect.isFalse
+                      (result.Stdout.Contains "repos)")
+                      "a zero spread reads as a count of the whole log, so it goes unsaid")
+          }
+
           test "reports the README's claim beside the rating the log supports" {
               withRoot (fun root ->
                   // Arrange — the README overclaims against runs that back a

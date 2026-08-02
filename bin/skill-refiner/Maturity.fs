@@ -129,6 +129,16 @@ let private rate counts =
 
 let private plural count singular many = if count = 1 then singular else many
 
+/// The repo spread qualifies the strictly clean runs and reaches no further, so
+/// with none of those it can only read zero — which a reader takes for a count
+/// of the whole log, and every skill whose last entry is a fix shows it.
+let private spotlessClause counts =
+    if counts.Spotless = 0 then
+        "0 strictly clean"
+    else
+        let repos = plural counts.Repos "repo" "repos"
+        $"%d{counts.Spotless} strictly clean, across %d{counts.Repos} {repos}"
+
 /// A log with no runs in it cannot argue with the README. Both a skill nobody
 /// has run yet and one whose evidence was discarded (e976e0c deleted the run
 /// logs) rate 🚧 WIP, and printing that rung beside a higher claim reads as a
@@ -150,13 +160,11 @@ let run (skill: string) =
     printfn "%s" (claimLine skill claimed counts rating)
 
     printfn
-        "  %d %s; %d clean-or-minor since the last major retro or big fix (%d strictly clean, across %d %s)"
+        "  %d %s; %d clean-or-minor since the last major retro or big fix (%s)"
         counts.Runs
         (plural counts.Runs "run" "runs")
         counts.Streak
-        counts.Spotless
-        counts.Repos
-        (plural counts.Repos "repo" "repos")
+        (spotlessClause counts)
 
     // An unbacked claim is not a contradicted one, so a runless log proposes no
     // edit either — `claimLine` has already said to leave the row alone.
