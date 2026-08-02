@@ -2,12 +2,12 @@
 pre-commit:
   jobs:
     # Most commits here touch only skills and markdown; the glob keeps those
-    # instant and pays the build cost only when F# actually changed.
-    - name: typecheck
+    # instant and pays the build/test cost only when F# actually changed.
+    - name: fsharp
       glob:
         - "*.fs"
         - "*.fsproj"
-      run: just check
+      run: just typecheck test
 
     # Split out rather than folded into the glob above so a shell-only commit
     # lints in milliseconds instead of waiting on a full dotnet build.
