@@ -29,8 +29,6 @@ Present each finding as a concrete edit to the SKILL.md — quote current text, 
 
 Write edits for the skill's suggested model in the README maturity table (`~/.claude/README.md`), not for the model doing the retro — the retro may run on a stronger model (switch via `/model`; session context survives), so do not compress instructions the target model would need spelled out.
 
-Also assess maturity: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> maturity` rates the skill from its `HISTORY.md`, which is the only evidence — where its rating and the README's disagree, the log wins. A log holding no runs is the exception: it has nothing to disagree with, so leave that row alone and propose nothing, whatever it claims. Suggest the change in the README table: crossing up into 🟢 Usable removes the feedback footer; dropping back below it restores it verbatim from `~/.claude/references/skill-footer.md`.
-
 ## Apply
 
 Ask which edits to apply in plain prose, taking a free-form pick ("all", "1 and 3", "2 but reword X") — the decision needs the quoted diffs in view, and answers often carry modifications; if `AskUserQuestion` is used anyway, its option slots must never become the only place the findings live. Then make the edits, update the README maturity table if it changed, and commit. Record declined findings and the reason in the commit message — otherwise a later retro re-derives the same friction and re-proposes what I already turned down.
@@ -38,6 +36,8 @@ Ask which edits to apply in plain prose, taking a free-form pick ("all", "1 and 
 Log the reviewed run as two entries, one before the edits and one after — every command below is `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> log …`, and both entries go in the same commit as the skill edits. A retro commit touching only SKILL.md means this step was skipped.
 
 **Before editing**, grade the run, so its entry records the size the run actually ran against: `log retro clean`, `log retro minor '<one line>'`, or `log retro major '<one line>'`. Grade by the damage done, not by what caused it: `clean` — nothing was left to pin down; `minor` — issues that didn't much hinder a good result (a guessed format, a stale reference, a correction absorbed without derailing, an unstated case you resolved correctly); `major` — big issues, up to a wrong outcome or an aborted run. When unsure, take the worse grade. Write the entry even when the run was clean.
+
+With that entry written, assess maturity: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> maturity` rates the skill from its `HISTORY.md`, which is the only evidence — where its rating and the README's disagree, the log wins. Update the README table: crossing up into 🟢 Usable removes the feedback footer; dropping back below it restores it verbatim from `~/.claude/references/skill-footer.md`.
 
 **After the edits**, record what they did: `log fix small '<one line>'` or `log fix big '<one line>'`. Big means the runs before this edit no longer vouch for the skill — a mechanism replaced, a step added or removed, a contract changed; small means the procedure is intact and only its wording moved. A big fix resets the maturity streak, so this is the one place that judgement gets recorded, and stating it now beats a later reader inferring it from a diff. A run that needed no edits logs no fix.
 
