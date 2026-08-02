@@ -13,7 +13,7 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 - Commit proactively after each independently meaningful change — don't wait to be asked. The full check suite must pass before every commit; no exceptions for lint or formatting.
 - When a follow-up refines the change just committed (corrections, tweaks, "do it this way"), amend that commit instead of stacking a new one — but only commits made this session, and only if `git branch -r --contains HEAD` is empty (never rewrite pushed history). A distinct capability or unrelated concern gets its own commit even in the same files; ambiguous mid-iteration cases default to amend. Adding paragraphs to a just-committed artifact is iteration, not a new concern.
 - Before committing in a repo you don't know, infer the workflow from history rather than defaulting to a branch. Ask only when the signal is genuinely mixed.
-- Commit messages explain WHY — reasoning, trade-offs, non-obvious constraints — not WHAT; the diff carries the what.
+- Commit messages explain WHY — reasoning, trade-offs, non-obvious constraints — not WHAT; the diff carries the what. Never conventional commits (`feat:`, `fix:`, `chore(scope):`) — a history full of them isn't consent, only an explicit project instruction is. A plain `area:` prefix is not a conventional commit.
 - Never push, and don't ask about pushing — I push manually.
 
 ## Code style
