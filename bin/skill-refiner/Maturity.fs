@@ -94,12 +94,25 @@ let private rate counts =
 
 let private plural count singular many = if count = 1 then singular else many
 
+/// A log with no runs in it cannot argue with the README. Both a skill nobody
+/// has run yet and one whose evidence was discarded (e976e0c deleted the run
+/// logs) rate 🚧 WIP, and printing that rung beside a higher claim reads as a
+/// demotion the reader is meant to propose — which is how six untouched rows
+/// came to generate the same rejected proposal at every retro. Absence of
+/// evidence is not evidence: the claim is unbacked, not contradicted, so the
+/// rung is left unsaid here and the next bar below says what would back it.
+let private claimLine (skill: string) (claimed: string) (counts: Counts) rating =
+    if counts.Runs = 0 then
+        $"{skill}: log holds no runs — README says {claimed}; nothing backs that yet and nothing contradicts it, so leave the row alone"
+    else
+        $"{skill}: log supports {label rating} — README says {claimed}"
+
 let run (skill: string) =
     let counts = (Layout.history skill).Entries |> count
     let rating = rate counts
     let claimed = Layout.claimedRating skill |> Option.defaultValue "unlisted"
 
-    printfn $"{skill}: log supports {label rating} — README says {claimed}"
+    printfn "%s" (claimLine skill claimed counts rating)
 
     printfn
         "  %d %s; %d clean-or-minor since the last major retro or big fix (%d strictly clean, across %d %s)"

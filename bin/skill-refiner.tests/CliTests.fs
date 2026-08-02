@@ -190,11 +190,11 @@ let private logTests =
 let private maturityTests =
     testList
         "maturity"
-        [ test "rates a log with no runs in it at the lowest rung" {
+        [ test "counts neither a creation, an edit nor a compaction as a run" {
               withRoot (fun root ->
-                  // Arrange — a creation baseline, an edit and a compaction all
-                  // share the log without being runs. Counting one as a run is
-                  // the bug a8531b1 had to patch out of the shell version.
+                  // Arrange — all three share the log without being runs.
+                  // Counting one as a run is the bug a8531b1 had to patch out of
+                  // the shell version.
                   root |> skill "demo" (words 100)
 
                   root
@@ -205,8 +205,13 @@ let private maturityTests =
 
                   // Assert
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
-                  Expect.stringContains result.Stdout "🚧 WIP" "no runs means the lowest rung"
-                  Expect.stringContains result.Stdout "0 runs" "and none of the three is one")
+                  Expect.stringContains result.Stdout "log holds no runs" "none of the three is one"
+                  Expect.stringContains result.Stdout "0 runs" "and the count agrees"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "🧪 Experimental needs one run logged"
+                      "the bar to clear is still named")
           }
 
           test "counts only the runs since the last major retro" {
@@ -301,16 +306,37 @@ let private maturityTests =
 
           test "reports the README's claim beside the rating the log supports" {
               withRoot (fun root ->
-                  // Arrange — the README overclaims against an empty log
+                  // Arrange — the README overclaims against runs that back a
+                  // lower rung
                   root |> skill "demo" (words 100)
                   root |> listed "demo" "🟢 Usable"
+                  root |> logged "demo" [ "retro major: aborted" ]
 
                   // Act
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert — the log wins, but the disagreement is surfaced
-                  Expect.stringContains result.Stdout "log supports 🚧 WIP" "the log is the evidence"
+                  Expect.stringContains result.Stdout "log supports 🧪 Experimental" "the log is the evidence"
                   Expect.stringContains result.Stdout "README says 🟢 Usable" "the claim is quoted back")
+          }
+
+          test "does not read a claim as contradicted by a log with no runs" {
+              withRoot (fun root ->
+                  // Arrange — the shape e976e0c left behind: a row nobody
+                  // demoted, above a log whose run evidence was discarded. The
+                  // rung is absent from the output on purpose — printing it here
+                  // is what made every retro re-propose the same demotion.
+                  root |> skill "demo" (words 100)
+                  root |> listed "demo" "🧪 Experimental"
+                  root |> logged "demo" [ "created" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "README says 🧪 Experimental" "the claim is still quoted back"
+                  Expect.stringContains result.Stdout "leave the row alone" "with no runs it is unbacked, not wrong"
+                  Expect.isFalse (result.Stdout.Contains "log supports") "nothing is claimed against it")
           }
 
           test "says unlisted when the README has no row for the skill" {

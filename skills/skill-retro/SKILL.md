@@ -29,7 +29,7 @@ Present each finding as a concrete edit to the SKILL.md — quote current text, 
 
 Write edits for the skill's suggested model in the README maturity table (`~/.claude/README.md`), not for the model doing the retro — the retro may run on a stronger model (switch via `/model`; session context survives), so do not compress instructions the target model would need spelled out.
 
-Also assess maturity: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> maturity` rates the skill from its `HISTORY.md`, which is the only evidence — where its rating and the README's disagree, the log wins. Suggest the change in the README table: crossing up into 🟢 Usable removes the feedback footer; dropping back below it restores it verbatim from `~/.claude/references/skill-footer.md`.
+Also assess maturity: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> maturity` rates the skill from its `HISTORY.md`, which is the only evidence — where its rating and the README's disagree, the log wins. A log holding no runs is the exception: it has nothing to disagree with, so leave that row alone and propose nothing, whatever it claims. Suggest the change in the README table: crossing up into 🟢 Usable removes the feedback footer; dropping back below it restores it verbatim from `~/.claude/references/skill-footer.md`.
 
 ## Apply
 
