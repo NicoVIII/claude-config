@@ -17,7 +17,7 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 The reason to write the skill now, here, is that the knowledge is in this transcript. Collect from it:
 
 - Commands actually run, with the flags, output fields, and quirks discovered — exact error messages and workarounds included
-- Decisions made and why — these become the skill's rules
+- Decisions made, and why — the decision becomes a rule, the why becomes commit-message material
 - Corrections and clarifications from the user — these become explicit instructions
 - Where the workflow started and stopped — these become scope and stop conditions
 
@@ -29,7 +29,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 - The frontmatter `description`: phrases I would actually say, ending with a first-person "Use when …" clause — and nothing about how the skill works. `skill-conventions.md` carries the rule and the length signal; don't restate them here.
 - Write the body for the suggested execution model, which may be weaker than you: spell out commands, orderings, and edge cases rather than compressing.
-- Size the draft against what exists (`wc -w ~/.claude/skills/*/SKILL.md`) — the counterweight to the bullet above. Landing above the current longest is a signal to cut before committing, not after: the size you land on is logged as the skill's origin baseline, and until a `/skill-compact` records a new one, `ratio` measures all growth from it — so an overweight first draft raises its own trigger permanently instead of ever reporting as accretion.
+- Cut every sentence that justifies the skill to me rather than instructing its executor — motivation, war stories, why the gap exists; those go in the commit message. No word count catches this: a draft can sit well under the longest existing skill (`wc -w ~/.claude/skills/*/SKILL.md`) and still be half motivation. Cut before committing, not after — the size you land on is logged as the skill's origin baseline, and until a `/skill-compact` records a new one, `ratio` measures all growth from it, so an overweight first draft raises its own trigger permanently instead of ever reporting as accretion.
 - State scope and stop conditions explicitly — what the skill does *not* do, and when to stop and report instead of continuing.
 - Attribution: if the skill writes anywhere others read on my behalf — GitHub comments, reviews, issues, wholesale prose — its instructions must require ending that output with a short agent marker (e.g. "— written by an agent"). Media that already carry authorship (commits via `Co-Authored-By`, PR footers, merges) need no marker; code never gets one. `verify-bump` and `merge-dependabot` show the shape.
 - Suggest an execution model: Sonnet for mechanical, procedural runs; Opus for judgment-heavy ones. Other tiers need explicit justification — a skill worth writing is rarely a Haiku task, and Fable as a routine run model defeats the cost point of the column.
