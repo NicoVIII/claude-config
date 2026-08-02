@@ -34,11 +34,11 @@ Write edits for the skill's suggested model in the README maturity table (`~/.cl
 
 Ask which edits to apply in plain prose, taking a free-form pick ("all", "1 and 3", "2 but reword X"); if `AskUserQuestion` is used anyway, its option slots must never become the only place the findings live. Record declined findings and the reason in the commit message.
 
-Log the reviewed run as two entries, one before the edits and one after — every command below is `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> log …`, and both entries go in the same commit as the skill edits. A retro commit touching only SKILL.md means this step was skipped.
+Log the reviewed run as two entries, one before the edits and one after — every command below is `~/.claude/bin/skill-refiner.sh <skill> log …`, and both entries go in the same commit as the skill edits. A retro commit touching only SKILL.md means this step was skipped.
 
 **Before editing**, grade the run: `log retro clean`, `log retro minor '<one line>'`, or `log retro major '<one line>'`. Grade by the damage done, not by what caused it: `clean` — nothing was left to pin down; `minor` — issues that didn't much hinder a good result (a guessed format, a stale reference, a correction absorbed without derailing, an unstated case you resolved correctly); `major` — big issues, up to a wrong outcome or an aborted run. When unsure, take the worse grade. Write the entry even when the run was clean.
 
-With that entry written, assess maturity: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> maturity` rates the skill from its `HISTORY.md` and names the README edit that follows. Make the edit it names.
+With that entry written, assess maturity: `~/.claude/bin/skill-refiner.sh <skill> maturity` rates the skill from its `HISTORY.md` and names the README edit that follows. Make the edit it names.
 
 **After the edits**, record what they did: `log fix small '<one line>'` or `log fix big '<one line>'`. Big means the runs before this edit no longer vouch for the skill — a mechanism replaced, a step added or removed, a contract changed; small means the procedure is intact and only its wording moved. A big fix resets the maturity streak. A run that needed no edits logs no fix.
 

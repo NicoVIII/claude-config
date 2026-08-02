@@ -39,7 +39,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 Write the SKILL.md straight to its final path, `cat` it for review, and edit in place until I'm happy — never retype it into the reply, so a long skill is never typed twice. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
 
 - End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`.
-- Open the skill's log once the text is final: `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> log creation`. It records the size you settled on as the origin baseline every later `ratio` is read against, and it must be the log's first line — a skill whose first entry is a retro has no floor to measure against, and the command refuses to add one later. Never write `HISTORY.md` by hand.
+- Open the skill's log once the text is final: `~/.claude/bin/skill-refiner.sh <skill> log creation`. It records the size you settled on as the origin baseline every later `ratio` is read against, and it must be the log's first line — a skill whose first entry is a retro has no floor to measure against, and the command refuses to add one later. Never write `HISTORY.md` by hand.
 - Add the README maturity-table row, starting at 🚧 WIP; if the skill pairs with existing ones, extend the Workflows section.
 - Commit in `~/.claude` — the message explains why the skill exists, not what it contains.
 
