@@ -31,7 +31,7 @@ Write edits for the skill's suggested model in the README maturity table (`~/.cl
 
 ## Apply
 
-Ask which edits to apply in plain prose, taking a free-form pick ("all", "1 and 3", "2 but reword X") — the decision needs the quoted diffs in view, and answers often carry modifications; if `AskUserQuestion` is used anyway, its option slots must never become the only place the findings live. Then make the edits, update the README maturity table if it changed, and commit. Record declined findings and the reason in the commit message — otherwise a later retro re-derives the same friction and re-proposes what I already turned down.
+Ask which edits to apply in plain prose, taking a free-form pick ("all", "1 and 3", "2 but reword X") — the decision needs the quoted diffs in view, and answers often carry modifications; if `AskUserQuestion` is used anyway, its option slots must never become the only place the findings live. Record declined findings and the reason in the commit message — otherwise a later retro re-derives the same friction and re-proposes what I already turned down.
 
 Log the reviewed run as two entries, one before the edits and one after — every command below is `dotnet run --project ~/.claude/bin/skill-refiner -- <skill> log …`, and both entries go in the same commit as the skill edits. A retro commit touching only SKILL.md means this step was skipped.
 
