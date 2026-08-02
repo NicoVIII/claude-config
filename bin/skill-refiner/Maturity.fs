@@ -32,6 +32,41 @@ let private nextBar rating =
     | Usable -> Some "🛡️ Battle-tested needs ~5 strictly clean runs across 2–3 repos"
     | BattleTested -> None
 
+/// Which side of 🟢 Usable a rating sits on. The feedback footer is carried
+/// below it and dropped from there up, so only a crossing edits the SKILL.md.
+let private carriesFooter rating =
+    match rating with
+    | Wip
+    | Experimental -> true
+    | Usable
+    | BattleTested -> false
+
+/// The README's cell read back as a rung, or None for one this does not
+/// recognise — an unlisted skill, or a cell somebody hand-wrote.
+let private ratingOf (claimed: string) =
+    [ Wip; Experimental; Usable; BattleTested ]
+    |> List.tryFind (fun rating -> label rating = claimed)
+
+/// The edit a disagreement implies, printed rather than re-derived by every
+/// caller: the log wins, so a claim it contradicts is a row to update, and the
+/// footer follows the 🟢 Usable boundary the two ratings sit either side of. A
+/// claim that is not a rung says nothing about which side it was on, so the
+/// footer half stays unsaid there.
+let private readmeEdit (claimed: string) rating =
+    if label rating = claimed then
+        None
+    else
+        let footer =
+            match ratingOf claimed with
+            | Some before when carriesFooter before && not (carriesFooter rating) ->
+                ", and remove the feedback footer from its SKILL.md"
+            | Some before when not (carriesFooter before) && carriesFooter rating ->
+                ", and restore the feedback footer verbatim from references/skill-footer.md"
+            | Some _
+            | None -> ""
+
+        Some $"  update the README row to {label rating}{footer}"
+
 type private Counts =
     { Runs: int
       /// Runs since the last major retro or big fix. A minor counts toward
@@ -122,5 +157,10 @@ let run (skill: string) =
         counts.Spotless
         counts.Repos
         (plural counts.Repos "repo" "repos")
+
+    // An unbacked claim is not a contradicted one, so a runless log proposes no
+    // edit either — `claimLine` has already said to leave the row alone.
+    if counts.Runs > 0 then
+        readmeEdit claimed rating |> Option.iter (printfn "%s")
 
     rating |> nextBar |> Option.iter (fun bar -> printfn $"  {bar}")

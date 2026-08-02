@@ -30,11 +30,23 @@ let private changeEvent (args: string list) =
             $"{binaryName} <skill> log compacted <clause>\n  e.g. {binaryName} grilling log compacted 'merged the two retraction rules'"
     | _ -> usage $"{binaryName} <skill> log <creation | retro … | fix … | compacted <clause>>"
 
+/// A fix is the one event logged after the SKILL.md changed size, so the
+/// accretion report follows it here rather than costing the caller a second
+/// invocation — and a number that can only arrive after the edit is a number
+/// nobody projects before one. A compaction reports its own result through the
+/// baseline it sets, and a retro is logged before any edit at all.
 let private log (skill: string) (args: string list) =
     match args with
     | [ "creation" ] -> Log.creation skill
     | "creation" :: _ -> usage $"{binaryName} <skill> log creation"
-    | args -> changeEvent args |> Log.change skill
+    | args ->
+        let event = changeEvent args
+        Log.change skill event
+
+        match event with
+        | Fix _ -> Ratio.run skill
+        | Retro _
+        | Compacted _ -> ()
 
 /// Rejects a typo'd skill name before anything else runs, so the failure names
 /// the real mistake rather than surfacing as "not inside a git repo" — the

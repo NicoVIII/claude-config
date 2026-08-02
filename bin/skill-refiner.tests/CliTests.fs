@@ -131,6 +131,30 @@ let private logTests =
                       "the size is recorded when it is observed, not retyped")
           }
 
+          test "reports accretion off the back of the fix, and only the fix" {
+              withRoot (fun root ->
+                  // Arrange — a fix is logged after the edit landed, so it is the
+                  // one event that can report what the edit did to the size. The
+                  // retro is logged before any edit, so a report there would be a
+                  // projection.
+                  root |> skill "demo" (words 120)
+                  root |> loggedSized "demo" [ 100, "created" ]
+
+                  // Act
+                  let fix = root |> skillRefiner [ "demo"; "log"; "fix"; "small"; "trimmed the ladder" ]
+                  let retro = root |> skillRefiner [ "demo"; "log"; "retro"; "clean" ]
+
+                  // Assert
+                  Expect.equal fix.ExitCode 0 $"should succeed, said: {fix.Stderr}"
+
+                  Expect.stringContains
+                      fix.Stdout
+                      "1.2x its baseline of 100"
+                      "the fix carries the accretion report, so nobody runs ratio separately"
+
+                  Expect.isFalse (retro.Stdout.Contains "trigger") "the retro reports no ratio")
+          }
+
           test "refuses to log a run for a skill with no SKILL.md to measure" {
               withRoot (fun root ->
                   // Arrange
@@ -317,7 +341,50 @@ let private maturityTests =
 
                   // Assert — the log wins, but the disagreement is surfaced
                   Expect.stringContains result.Stdout "log supports 🧪 Experimental" "the log is the evidence"
-                  Expect.stringContains result.Stdout "README says 🟢 Usable" "the claim is quoted back")
+                  Expect.stringContains result.Stdout "README says 🟢 Usable" "the claim is quoted back"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "update the README row to 🧪 Experimental"
+                      "and the edit it implies is named, not left to be derived"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "restore the feedback footer"
+                      "dropping back below 🟢 Usable puts the footer back")
+          }
+
+          test "names the footer edit when the log carries a skill up into Usable" {
+              withRoot (fun root ->
+                  // Arrange — three clean runs against a row nobody promoted yet
+                  root |> skill "demo" (words 100)
+                  root |> listed "demo" "🧪 Experimental"
+                  root |> logged "demo" [ "retro clean"; "retro clean"; "retro clean" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "update the README row to 🟢 Usable" "the row moves up"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "remove the feedback footer"
+                      "and a Usable skill is a daily driver where the footer is noise")
+          }
+
+          test "proposes no edit where the row already says what the log supports" {
+              withRoot (fun root ->
+                  // Arrange — one clean run, and a row that already agrees
+                  root |> skill "demo" (words 100)
+                  root |> listed "demo" "🧪 Experimental"
+                  root |> logged "demo" [ "retro clean" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.isFalse (result.Stdout.Contains "update the README row") "there is nothing to change")
           }
 
           test "does not read a claim as contradicted by a log with no runs" {
