@@ -29,7 +29,7 @@ Personal momentum and quick wins are tiebreakers, not drivers.
 
 ## Present
 
-A prioritized shortlist (top 5–8), each with a one-line WHY: who is waiting or what is broken, and for how long. Then at most one line per remaining cluster of repos. No padding.
+A prioritized shortlist (at most 5), each with a one-line WHY: who is waiting or what is broken, and for how long. Then at most one line per remaining cluster of repos. No padding.
 
 Bot-authored PRs (Dependabot etc.) are never weight 1 — cluster them ("8 green Dependabot bumps") unless one is failing CI or carries a security fix.
 
