@@ -9,7 +9,7 @@ Scope is the current repo only. `prioritize` finds *which* repos have bumps wait
 
 ## Gather
 
-Run `dotnet run --project ~/.claude/skills/merge-dependabot/survey` — an F# program. It prints the repo's merge method, then a labelled block per open Dependabot PR: `LEVEL` (worst member wins across a grouped PR; a pre-1.0 minor counts as major), `CI`, `MERGE`, `FILES`, a `bump:` line per dependency, `superseded-by:` where another open PR takes the same dependency further, and `notes:` links. No open PRs → it says so, and you stop.
+Run `dotnet run --project ~/.claude/skills/merge-dependabot/scripts/survey` — an F# program. It prints the repo's merge method, then a labelled block per open Dependabot PR: `LEVEL` (worst member wins across a grouped PR; a pre-1.0 minor counts as major), `CI`, `MERGE`, `FILES`, a `bump:` line per dependency, `superseded-by:` where another open PR takes the same dependency further, and `notes:` links. No open PRs → it says so, and you stop.
 
 If it fails, fix the cause — don't fall back to hand-rolled `gh` queries, since the point is that every run classifies on the same facts.
 

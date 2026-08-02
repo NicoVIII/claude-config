@@ -3,20 +3,23 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <!-- Domain.fs names the survey's vocabulary as unions and Render.fs holds
+    <!-- Domain.fs names the digest's vocabulary as unions and Render.fs holds
          the only mapping back to text, which buys nothing unless a case with
          nowhere to render is an error. As a warning it survives `just check`,
          the pre-commit hook and CI, then throws MatchFailureException mid-run —
-         after the merge-method line has already printed, so a partial survey
-         reaches stdout, which is the one thing bin/gh is written to prevent. -->
+         after repoTable has already printed, so a partial digest reaches stdout,
+         which is the one thing Gh.fs is written to prevent. -->
     <WarningsAsErrors>FS0025</WarningsAsErrors>
     <!-- No PackageReference by design: System.Text.Json decodes gh's output
          strictly on its own once RespectRequiredConstructorParameters is set,
-         and Process/Regex/Async cover the rest. -->
+         and Process/Async cover the rest. -->
   </PropertyGroup>
 
+  <!-- bin/gh holds the abort-loudly invariant this and merge-dependabot's
+       survey both depend on; it moved out of here when the second reader
+       appeared. -->
   <ItemGroup>
-    <ProjectReference Include="../../../bin/gh/gh.fsproj" />
+    <ProjectReference Include="../../../../bin/gh/gh.fsproj" />
   </ItemGroup>
 
   <!-- Compile order is the architecture: every file may reference only files
@@ -24,7 +27,6 @@
   <ItemGroup>
     <Compile Include="Wire.fs" />
     <Compile Include="Domain.fs" />
-    <Compile Include="Bumps.fs" />
     <Compile Include="Signals.fs" />
     <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />

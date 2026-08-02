@@ -7,7 +7,7 @@ Help me decide what to work on next across my GitHub repositories.
 
 ## Gather
 
-Run `dotnet run --project ~/.claude/skills/prioritize/gather` — an F# program. ~10s, plus a few seconds the first time it builds.
+Run `dotnet run --project ~/.claude/skills/prioritize/scripts/gather` — an F# program. ~10s, plus a few seconds the first time it builds.
 
 It prints one row per non-archived, non-fork repo I own — open PR count, open issue count, default-branch CI, alert severities, last push — then an ATTENTION block holding only what needs a judgement call: PRs failing CI, human-authored PRs, issues opened by someone else (with who spoke last), and PRs awaiting my review in repos I don't own. The counts are complete; the ATTENTION block is the shortlist's raw material.
 
@@ -15,7 +15,7 @@ If it fails, fix the cause — don't fall back to hand-rolled `gh` queries, sinc
 
 Drill down only where the ranking actually turns on it:
 
-- **Several PRs in one repo failing the same check** — sample one with `~/.claude/skills/prioritize/failing-log.sh <repo> <pr>` to tell a real blocker (e.g. a config migration) from flakiness; the answer shapes the WHY line.
+- **Several PRs in one repo failing the same check** — sample one with `~/.claude/skills/prioritize/scripts/failing-log.sh <repo> <pr>` to tell a real blocker (e.g. a config migration) from flakiness; the answer shapes the WHY line.
 - **An ATTENTION row whose title doesn't say enough to place it** — `gh issue view <n> -R <repo>` or `gh pr view <n> -R <repo>`.
 
 ## Rank

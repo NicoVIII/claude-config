@@ -23,7 +23,7 @@ typecheck:
 # tracked here, and there are few enough of these to name.
 test:
     dotnet run --project bin/skill-refiner.tests
-    dotnet run --project skills/merge-dependabot/survey.tests
+    dotnet run --project skills/merge-dependabot/scripts/survey.tests
 
 # Lint and format-check every shell script in the repo.
 #

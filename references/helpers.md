@@ -6,7 +6,8 @@ whether one should be a shell script or an F# project.
 ## When a skill should ship one
 
 A skill may ship an executable helper beside its `SKILL.md` when a step is a
-fixed tool pipeline with no judgement in it (`prioritize/gather/`, eec9963).
+fixed tool pipeline with no judgement in it (`prioritize/scripts/gather/`,
+eec9963).
 
 The signal to reach for one is SKILL.md prose that exists only to make a model
 reproduce exact flags and error strings: that text reloads into context every
@@ -53,3 +54,17 @@ disagreed twice (a8531b1, f803d2a).
 A helper no single skill owns — two skills call it, or it reads state living in
 every skill directory — goes in `bin/` rather than under whichever skill needed
 it first.
+
+One the skill does own goes in `skills/<skill>/scripts/`, the directory the
+[Agent Skills spec](https://agentskills.io/specification) reserves for
+executable code, so the skill folder stays a self-contained bundle another
+agent can read. Its test project is a sibling there rather than left at the
+skill root — the spec calls `scripts/` code the agent runs, which a test suite
+isn't, but splitting the pair across two levels costs more than the loose
+reading. `bin/` is deliberately outside that layout: it belongs to no skill, so
+no per-skill directory is the right home for it, and the spec says nothing
+about a repo holding many skills.
+
+Adding one under `scripts/` puts a `.fsproj` a level deeper than `skills/*/*` —
+the depth `.github/dependabot.yml` has to list, and a glob matching nothing
+there fails silently.

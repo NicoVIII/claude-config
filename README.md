@@ -105,8 +105,12 @@ to keep.
 
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
 - `references/` — guardrails for working on this repo and on its skills; nothing auto-loads them, so the skills that need one point at it by path
-- `skills/` — slash-command skills for Claude Code, see the table above
-- `bin/` — helpers shared by several skills, rather than owned by one
+- `skills/` — slash-command skills for Claude Code, see the table above; each
+  follows the [Agent Skills](https://agentskills.io/specification) layout, so a
+  skill folder — `SKILL.md` plus its `scripts/` — is portable to any agent that
+  reads the standard
+- `bin/` — helpers shared by several skills, rather than owned by one, and so
+  belonging to no skill folder
 
 ## Concept
 

@@ -23,15 +23,17 @@ updates:
         patterns: ["*"]
         update-types: [major]
 
-  # Globs rather than `/`: the projects live two levels down and Dependabot only
-  # reads manifests in the directories it is pointed at. `*` is the documented
-  # wildcard; `**` is not, and a glob that silently matches nothing would leave
-  # NuGet unwatched with no error to notice. These two patterns cover the whole
-  # current layout — a project nested deeper would need its level added here.
+  # Globs rather than `/`: Dependabot only reads manifests in the directories it
+  # is pointed at, and the projects sit at two different depths — shared helpers
+  # under `bin/`, skill-owned ones under the `scripts/` directory the Agent
+  # Skills layout puts inside each skill. `*` is the documented wildcard; `**`
+  # is not, and a glob that silently matches nothing would leave NuGet unwatched
+  # with no error to notice, so each depth is spelled out. A project nested
+  # deeper would need its level added here.
   - package-ecosystem: nuget
     directories:
       - /bin/*
-      - /skills/*/*
+      - /skills/*/scripts/*
     schedule:
       interval: weekly
     groups:
