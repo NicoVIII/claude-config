@@ -8,7 +8,7 @@
          nowhere to render is an error. As a warning it survives `just check`,
          the pre-commit hook and CI, then throws MatchFailureException mid-run —
          after the merge-method line has already printed, so a partial survey
-         reaches stdout, which is the one thing bin/gh is written to prevent. -->
+         reaches stdout, which is the one thing lib/gh is written to prevent. -->
     <WarningsAsErrors>FS0025</WarningsAsErrors>
     <!-- No PackageReference by design: System.Text.Json decodes gh's output
          strictly on its own once RespectRequiredConstructorParameters is set,
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../../../bin/gh/gh.fsproj" />
+    <ProjectReference Include="../../../../lib/gh/gh.fsproj" />
   </ItemGroup>
 
   <!-- Compile order is the architecture: every file may reference only files

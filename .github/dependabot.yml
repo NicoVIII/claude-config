@@ -24,15 +24,16 @@ updates:
         update-types: [major]
 
   # Globs rather than `/`: Dependabot only reads manifests in the directories it
-  # is pointed at, and the projects sit at two different depths — shared helpers
-  # under `bin/`, skill-owned ones under the `scripts/` directory the Agent
-  # Skills layout puts inside each skill. `*` is the documented wildcard; `**`
-  # is not, and a glob that silently matches nothing would leave NuGet unwatched
-  # with no error to notice, so each depth is spelled out. A project nested
-  # deeper would need its level added here.
+  # is pointed at, and the projects sit at two different depths — shared ones
+  # under `bin/` and `lib/`, skill-owned ones under the `scripts/` directory the
+  # Agent Skills layout puts inside each skill. `*` is the documented wildcard;
+  # `**` is not, and a glob that silently matches nothing would leave NuGet
+  # unwatched with no error to notice, so each depth is spelled out. A project
+  # nested deeper would need its level added here.
   - package-ecosystem: nuget
     directories:
       - /bin/*
+      - /lib/*
       - /skills/*/scripts/*
     schedule:
       interval: weekly

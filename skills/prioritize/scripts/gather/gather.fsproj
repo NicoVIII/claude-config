@@ -15,11 +15,11 @@
          and Process/Async cover the rest. -->
   </PropertyGroup>
 
-  <!-- bin/gh holds the abort-loudly invariant this and merge-dependabot's
+  <!-- lib/gh holds the abort-loudly invariant this and merge-dependabot's
        survey both depend on; it moved out of here when the second reader
        appeared. -->
   <ItemGroup>
-    <ProjectReference Include="../../../../bin/gh/gh.fsproj" />
+    <ProjectReference Include="../../../../lib/gh/gh.fsproj" />
   </ItemGroup>
 
   <!-- Compile order is the architecture: every file may reference only files

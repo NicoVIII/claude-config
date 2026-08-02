@@ -109,8 +109,10 @@ to keep.
   follows the [Agent Skills](https://agentskills.io/specification) layout, so a
   skill folder — `SKILL.md` plus its `scripts/` — is portable to any agent that
   reads the standard
-- `bin/` — helpers shared by several skills, rather than owned by one, and so
-  belonging to no skill folder
+- `bin/` — runnable helpers shared by several skills, rather than owned by one,
+  and so belonging to no skill folder
+- `lib/` — the same, minus an entry point: code the helpers reference but
+  nobody runs directly
 
 ## Concept
 
@@ -133,7 +135,7 @@ flowchart LR
     end
     subgraph demand ["read or run only when pointed at"]
         REF["references/*.md"]
-        BIN["bin/ and per-skill helpers"]
+        BIN["bin/, lib/ and per-skill helpers"]
     end
     DESC -->|"trigger phrase matches"| BODY
     BODY -->|"reads by path"| REF

@@ -16,10 +16,14 @@
 !/skills
 
 !/bin
+!/lib
 
-# `!/skills` and `!/bin` un-ignore everything beneath them, build output
-# included. These tighten the allowlist back up; they are not an exception to it.
+# `!/skills`, `!/bin` and `!/lib` un-ignore everything beneath them, build
+# output included. These tighten the allowlist back up; they are not an
+# exception to it.
 /skills/**/obj/
 /skills/**/bin/
 /bin/**/obj/
 /bin/**/bin/
+/lib/**/obj/
+/lib/**/bin/
