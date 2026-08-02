@@ -18,6 +18,7 @@ fork it and make it yours.
 | [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
 | [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🧪 Experimental |
+| [`upgrade-toolchain`](skills/upgrade-toolchain/SKILL.md) | Move a pinned toolchain version across every place a repo pins it. | Sonnet | 🚧 WIP |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
 
 Maturity: 🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested — judged
@@ -41,6 +42,11 @@ Some skills are meant to run in sequence:
   at it; `/add-dependabot` then watches what that toolchain depends on. Run in
   that order: the devcontainer decides which ecosystems exist to watch. The PRs
   it produces are what Session triage above clears.
+- **Keeping the toolchain current** — Dependabot never bumps the versions
+  `/add-devcontainer` pinned: it updates a feature's tag, not the `version`
+  inside it, and cannot see a CI env var or a Dockerfile `ARG` at all. So those
+  pins move by hand — `/upgrade-toolchain` moves all of them together and
+  verifies the result.
 - **Capturing a workflow as a skill** — when a session in any project reveals a
   repeatable workflow, run `/author-skill` while the context is fresh — the
   transcript holds the commands, quirks, and decisions the skill should encode.
