@@ -22,7 +22,7 @@ from good news is worse than no result.
 
 ## Shell or an F# project
 
-A helper that owns a **contract** — output it decodes, a format with a second
+A helper that owns a **contract** — a format it parses, a format with a second
 reader, or a closed taxonomy — is an F# project, so that changing the contract
 is an error at every site that has to decide about it:
 
@@ -34,8 +34,9 @@ is an error at every site that has to decide about it:
 - Split so each file answers one question, and let the compile order carry the
   dependencies.
 
-Only a helper performing a single mechanical action nobody parses is a shell
-script.
+Only a helper performing a single mechanical action, parsing nothing, is a
+shell script. Length argues one way only: one long enough to need sections is
+an F# project whatever it does.
 
 A shell one has to pass `just shell` — `shellcheck -o all -S style` and
 `shfmt -d`. Every optional shellcheck check is on, not just the default
