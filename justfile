@@ -1,6 +1,27 @@
 default:
     @just --list
 
+# Copy the tracked permission allowlist into the untracked user settings.
+#
+# Claude Code reads exactly one user-scope file, `settings.json`, and that file
+# is not tracked: it also holds `theme`, `tui` and `effortLevel`, which the
+# `/config` menu rewrites and which are machine preferences rather than config
+# worth versioning. Splitting them means `permissions.json` can be reviewed in
+# a diff while the volatile keys stay out of the history entirely.
+#
+# `.permissions` is replaced, not merged, so deleting a rule here deletes it
+# locally too — the tracked file is the whole truth about permissions. That is
+# only safe because "always allow" writes to a project's settings.local.json
+# rather than up here, so nothing lands in the user scope except by hand.
+sync-permissions:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    [[ -f settings.json ]] || echo '{}' > settings.json
+    tmp=$(mktemp)
+    jq --slurpfile p permissions.json '.permissions = $p[0].permissions' \
+        settings.json > "${tmp}"
+    mv "${tmp}" settings.json
+
 # Typecheck every F# project in the repo.
 #
 # The project list comes from the git index rather than a glob: ~/.claude is

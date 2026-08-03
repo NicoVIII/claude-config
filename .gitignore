@@ -12,6 +12,7 @@
 !/justfile
 !/lefthook.yml
 !/LICENSE
+!/permissions.json
 !/README.md
 !/references
 !/skills

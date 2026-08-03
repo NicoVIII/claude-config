@@ -106,8 +106,15 @@ to keep.
   [`lefthook`](https://lefthook.dev); run `lefthook install` once to activate
   the pre-commit typecheck. `just check` runs it by hand. Neither is needed to
   merely use the skills.
-- Add your `settings.json` manually — it is gitignored and not tracked.
+- Add your `settings.json` manually — it is gitignored and not tracked, because
+  it holds machine preferences (`theme`, `tui`, `effortLevel`) that the
+  `/config` menu rewrites. The permission allowlist is the one part worth
+  versioning, so it lives in `permissions.json`; `just sync-permissions` copies
+  it in, replacing whatever `.permissions` is there. Re-run it after editing.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
+- `.claude/settings.json` is committed and applies only while working *in* this
+  repo: it allows `just check` and the `dotnet run` behind it, so the checks
+  below do not prompt.
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
   into every Claude Code session — review it and replace what isn't yours.
 

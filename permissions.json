@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh run view *)",
+      "Bash(gh run list *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh repo view *)",
+      "Bash(gh repo list *)",
+      "Bash(gh auth status)",
+      "Bash(gh search *)",
+      "Bash(~/.claude/skills/prioritize/scripts/failing-log.sh *)",
+      "Bash(bash ~/.claude/skills/prioritize/scripts/failing-log.sh *)",
+      "Bash(~/.claude/bin/skill-refiner.sh *)",
+      "Bash(bun pm view *)",
+      "Bash(dotnet --version)",
+      "Read(~/skills/**)"
+    ]
+  }
+}
