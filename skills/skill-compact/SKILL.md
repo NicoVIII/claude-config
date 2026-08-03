@@ -13,7 +13,7 @@ The pass must end with **fewer words in the SKILL.md than it started** — that 
 
 ## Find candidates
 
-Read the SKILL.md against its `HISTORY.md` and `git log -p` for its directory: every rule was added for a reason, and the commit that added it states the reason. Rank by:
+Read the SKILL.md against its `HISTORY.md` and its directory's commit messages (`git log --format='%h %s%n%b'`): every rule was added for a reason, and the commit that added it states the reason — the message, so pull a patch for one commit only when its message doesn't identify the text it added. Rank by:
 
 - **Sentences that justify a rule rather than instruct its executor** — motivation, war stories, why a gap exists; the test `author-skill` applies when drafting (12e09b7). This is where the words are, and a low ratio is no evidence against it (75bd76e).
 - **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. The ladder's script rung turns it into one. A mechanism the git log shows patched more than twice is the same signal.
@@ -22,7 +22,7 @@ Read the SKILL.md against its `HISTORY.md` and `git log -p` for its directory: e
 - **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
 - **Several rules that are one principle** — coverage survives, the words don't.
 
-Don't decide alone — no run can show a rule was unnecessary. Present each candidate with its evidence (what it was added for, what the log shows since) in prose, and take a free-form pick ("all", "1 and 3", "merge 2 into 4") — the evidence *is* the decision, and `AskUserQuestion`'s option slots hold neither it nor candidates that depend on each other. Quote a candidate as the measured size of its block, never as what it saves. Nor project where the pass lands — the final ratio, the word count, or which baseline it would clear.
+Don't decide alone — no run can show a rule was unnecessary. Present each candidate with its evidence (what it was added for, what the log shows since) in prose, and take a free-form pick ("all", "1 and 3", "merge 2 into 4") — the evidence *is* the decision, and `AskUserQuestion`'s option slots hold neither it nor candidates that depend on each other. Quote a candidate as the measured word count of the text it would touch — the clause, not the bullet holding it — never as what it saves. Nor project where the pass lands — the final ratio, the word count, or which baseline it would clear.
 
 ## Ladder
 
