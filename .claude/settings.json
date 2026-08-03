@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(just check)",
+      "Bash(just check *)",
+      "Bash(dotnet run)",
+      "Bash(dotnet run *)"
+    ]
+  }
+}

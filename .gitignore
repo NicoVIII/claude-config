@@ -3,6 +3,7 @@
 # state files can never be committed by accident; tracking something new is a
 # deliberate opt-in below.
 /*
+!/.claude
 !/.devcontainer
 !/.github
 !/.gitignore
@@ -27,3 +28,12 @@
 /bin/**/bin/
 /lib/**/obj/
 /lib/**/bin/
+
+# Same tightening for `!/.claude`. That directory is this repo's *project*
+# scope — the repo root doubles as `~/.claude`, so user-scope settings.json
+# sits at the root and stays untracked, while the permissions a contributor
+# needs to run `just check` here live one level down and ship with the repo.
+# settings.local.json is personal by definition, so re-ignoring everything and
+# naming the one tracked file keeps it out even if it reappears.
+/.claude/*
+!/.claude/settings.json
