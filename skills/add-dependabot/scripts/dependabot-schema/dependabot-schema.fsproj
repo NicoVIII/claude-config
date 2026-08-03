@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Domain.fs names every way a config can be wrong and Render.fs holds the
+         only mapping back to text. A finding case with nowhere to render would
+         otherwise throw MatchFailureException mid-report — after earlier
+         findings have printed, so a partial verdict reaches stdout while the
+         last line still claims to be the count. -->
+    <WarningsAsErrors>FS0025</WarningsAsErrors>
+    <!-- The one PackageReference in this repo: .NET has no YAML parser in the
+         BCL, and the alternative was shelling out to python3 with PyYAML, an
+         undeclarable runtime dependency that is already absent on machines
+         here. System.Text.Json and HttpClient cover the schema itself. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="18.1.0" />
+  </ItemGroup>
+
+  <!-- Compile order is the architecture: every file may reference only files
+       above it, so the dependency direction is checked by the compiler. -->
+  <ItemGroup>
+    <Compile Include="Domain.fs" />
+    <Compile Include="Schema.fs" />
+    <Compile Include="Config.fs" />
+    <Compile Include="Check.fs" />
+    <Compile Include="Render.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
