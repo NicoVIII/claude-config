@@ -65,9 +65,12 @@ let history (skill: string) : History =
         { Creation = None; Entries = [] }
 
 /// Seeding the origin baseline. It must be the first line, so this refuses once
-/// the log exists — a late or repeated creation is a shape the reader would
-/// reject anyway, and refusing here says so while the mistake is still one
-/// command old.
+/// a change has been logged against it — a late creation is a shape the reader
+/// would reject anyway. Re-seeding a log that is still nothing but a creation
+/// line is safe and deliberately allowed: no retro or fix has read that
+/// baseline yet, and the alternative is a number frozen before the author
+/// settled on the text (12e09b7's interrupt, and again in the run that seeded
+/// `groom`).
 /// The caller is an agent reading through dotnet's first-run banner, where a
 /// silent success is indistinguishable from a swallowed failure. Echoing the
 /// written line is the confirmation it would otherwise spend a round trip on —
@@ -78,8 +81,8 @@ let private announce (path: string) (line: string) = printfn $"logged to {path}:
 let createHistory (skill: string) (entry: Entry<CreationEvent>) =
     let path = historyFile skill
 
-    if File.Exists path then
-        fail "HISTORY.md already exists — creation is logged once, before anything else"
+    if File.Exists path && not (history skill).Entries.IsEmpty then
+        fail "HISTORY.md already has changes logged — the origin baseline is fixed"
 
     let line = renderCreationEntry entry
     File.WriteAllText(path, $"{heading}\n\n{line}\n")

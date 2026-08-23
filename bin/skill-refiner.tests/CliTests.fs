@@ -37,20 +37,39 @@ let private logTests =
                       "and the first line is the size the log begins at")
           }
 
-          test "refuses a second creation rather than writing a second origin" {
+          test "re-seeds a creation-only log, so a baseline set before the text settled can be corrected" {
               withRoot (fun root ->
-                  // Arrange — creation is the first line or nowhere, so a later
-                  // one is a shape the reader would reject anyway
+                  // Arrange — seeded early, then the draft is trimmed
                   root |> skill "demo" (words 42)
                   root |> skillRefiner [ "demo"; "log"; "creation" ] |> ignore
+                  root |> skill "demo" (words 30)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.equal
+                      (root |> historyFile "demo")
+                      (Some $"# Skill History\n\n{today} · {sessionRepoName} · 30 words · created\n")
+                      "and the origin baseline is the trimmed size, logged once")
+          }
+
+          test "refuses a creation once a change has been logged against the baseline" {
+              withRoot (fun root ->
+                  // Arrange — a retro has now read that baseline, so it is load-bearing
+                  root |> skill "demo" (words 42)
+                  root |> skillRefiner [ "demo"; "log"; "creation" ] |> ignore
+                  root |> skillRefiner [ "demo"; "log"; "retro"; "clean" ] |> ignore
                   let before = root |> historyFile "demo"
 
                   // Act
                   let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
 
                   // Assert
-                  Expect.equal result.ExitCode 1 "the second creation should be refused"
-                  Expect.stringContains result.Stderr "already exists" "the message says why"
+                  Expect.equal result.ExitCode 1 "the late creation should be refused"
+                  Expect.stringContains result.Stderr "already has changes logged" "the message says why"
                   Expect.equal (root |> historyFile "demo") before "and the log is untouched")
           }
 

@@ -7,7 +7,7 @@ Create a new global skill in `~/.claude/skills/<name>/SKILL.md`, capturing the w
 
 ## Before writing
 
-- **Read the conventions at their source** — nothing auto-loads them, wherever this skill runs: `~/.claude/references/skill-conventions.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences. Follow what they say now; don't rely on a remembered copy.
+- **Read the conventions at their source** — nothing auto-loads them, wherever this skill runs: `~/.claude/references/skill-conventions.md` (skill guardrails) and both the Skills and the Workflows section of `~/.claude/README.md` — sibling sections, not one, holding the maturity table and the documented skill sequences; `awk '/^## Skills/,/^## Setup/' ~/.claude/README.md` is exactly those two and half the file. Follow what they say now; don't rely on a remembered copy.
 - **Model check.** `skill-conventions.md` names the model to author with — the only statement of that threshold, so don't restate it here. If you are on a weaker one, say so and suggest switching via `/model` before continuing; session context survives. If I decline, proceed and record the exception in the commit message — otherwise the next retro cannot tell a deliberate call from an oversight.
 - **Confirm it's global.** If the workflow only makes sense in the current repo, ask whether it belongs in that repo's `.claude/skills` instead — where it follows that repo's conventions, not these.
 - **Earn it before mining.** Say why the skill should exist, and be willing to answer no — the case is strongest when a capable agent would get this *wrong* by default, or when an existing skill declares the gap and hands off to nothing. If a docs link would do, say so and stop.
@@ -39,7 +39,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 Write the SKILL.md straight to its final path, `cat` it for review, and edit in place until I'm happy — never retype it into the reply, so a long skill is never typed twice. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the `~/.claude` repo — a separate git repository from the current project, so use `git -C ~/.claude`:
 
 - End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`.
-- Open the skill's log once the text is final: `~/.claude/bin/skill-refiner.sh <skill> log creation`. It records the size you settled on as the origin baseline every later `ratio` is read against, and it must be the log's first line — a skill whose first entry is a retro has no floor to measure against, and the command refuses to add one later. Never write `HISTORY.md` by hand.
+- Open the skill's log: `~/.claude/bin/skill-refiner.sh <skill> log creation`. It records the current size as the origin baseline every later `ratio` is read against; re-run it after each further edit, until the first retro or fix freezes it. Never write `HISTORY.md` by hand.
 - Add the README maturity-table row, starting at 🚧 WIP; if the skill pairs with existing ones, extend the Workflows section.
 - Commit in `~/.claude` — the message explains why the skill exists, not what it contains.
 
