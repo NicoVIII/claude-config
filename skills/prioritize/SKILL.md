@@ -1,6 +1,6 @@
 ---
 name: prioritize
-description: Prioritize work across my GitHub repositories — scan open PRs, issues, CI and security alerts, rank what to tackle first, discuss trade-offs. Use when I ask what to work on next, want my backlog triaged, or mention prioritizing my repos.
+description: Prioritize work across all my GitHub repositories — scan open PRs, issues, CI and security alerts, rank what to tackle first, discuss trade-offs. Read-only. Use when I ask what to work on next, which repo needs attention, or mention prioritizing my repos — not for cleaning up one repo's backlog, which is `groom`.
 ---
 
 Help me decide what to work on next across my GitHub repositories.

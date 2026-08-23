@@ -13,6 +13,7 @@ fork it and make it yours.
 | [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
 | [`claude-md-compact`](skills/claude-md-compact/SKILL.md) | Shrink `CLAUDE.md` when global preferences have accreted. | Opus | 🧪 Experimental |
 | [`grilling`](skills/grilling/SKILL.md) | Stress-test a plan or idea through relentless questioning. | Opus | 🧪 Experimental |
+| [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🚧 WIP |
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`pick-model`](skills/pick-model/SKILL.md) | Pick the cheapest Claude model that still fits the task. | Sonnet | 🧪 Experimental |
 | [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
@@ -37,7 +38,10 @@ Some skills are meant to run in sequence:
 - **Session triage** — `/prioritize` scans your repos and decides what to work
   on. When it surfaces dependency bumps, `cd` into that repo and run
   `/merge-dependabot` to clear the ones CI actually verifies; for a flagged
-  bump you still want to land, follow up with `/verify-bump <n>`.
+  bump you still want to land, follow up with `/verify-bump <n>`. When it
+  points at a repo whose issue list has outgrown what you can hold in your
+  head, `/groom` clears the dead and duplicated issues there — it never ranks
+  anything, so the two stay disjoint.
 - **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
   at it; `/add-dependabot` then watches what that toolchain depends on. Run in
   that order: the devcontainer decides which ecosystems exist to watch. The PRs
