@@ -40,4 +40,8 @@ matched=$(grep -iE 'error|failed' <<<"${log}" || true)
 if [[ -z ${matched} ]]; then
 	matched=${log}
 fi
-head -30 <<<"${matched}"
+# gh prefixes every line with job, step and an ISO timestamp. The timestamp
+# answers nothing "real blocker or flake?" asks, and the step column reads
+# "UNKNOWN STEP" whenever gh cannot resolve it — together a third of the bytes.
+head -30 <<<"${matched}" |
+	sed -E -e 's/\tUNKNOWN STEP\t/\t/' -e 's/\t[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z /\t/'

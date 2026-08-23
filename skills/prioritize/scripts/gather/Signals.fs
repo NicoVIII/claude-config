@@ -105,8 +105,12 @@ let private ci (repo: string) (branch: Wire.BranchRef option) =
         match runs with
         | [] -> NoRuns
         | run :: _ ->
+            // gh reports a running workflow as an empty conclusion rather than a
+            // null one, so matching None alone leaves the column blank and the
+            // reader unable to tell "still running" from "no data".
             match run.conclusion with
-            | None -> InProgress
+            | None
+            | Some "" -> InProgress
             | Some conclusion -> Concluded conclusion
 
 /// Severities rather than a bare count: one critical outranks a pile of lows. A
