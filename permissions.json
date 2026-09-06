@@ -15,6 +15,9 @@
       "Bash(~/.claude/skills/prioritize/scripts/failing-log.sh *)",
       "Bash(bash ~/.claude/skills/prioritize/scripts/failing-log.sh *)",
       "Bash(~/.claude/bin/skill-refiner.sh *)",
+      "Bash(~/.claude/skills/prioritize/scripts/gather.sh)",
+      "Bash(~/.claude/skills/merge-dependabot/scripts/survey.sh)",
+      "Bash(~/.claude/skills/add-dependabot/scripts/dependabot-schema.sh *)",
       "Bash(bun pm view *)",
       "Bash(dotnet --version)",
       "Read(~/skills/**)"

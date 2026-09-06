@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# The path the skill-authoring skills name for skill-refiner. See
+# The path add-dependabot names for both its schema checks. See
 # bin/dotnet-tool.sh for why the tools are reached this way, and not through
 # `dotnet run`.
 set -euo pipefail
 
 here=$(dirname "${BASH_SOURCE[0]}")
-exec "${here}/dotnet-tool.sh" "${here}/skill-refiner" "$@"
+exec "${here}/../../../bin/dotnet-tool.sh" "${here}/dependabot-schema" "$@"

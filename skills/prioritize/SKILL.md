@@ -7,7 +7,7 @@ Help me decide what to work on next across my GitHub repositories.
 
 ## Gather
 
-Run `dotnet run --project ~/.claude/skills/prioritize/scripts/gather` — an F# program. ~10s, plus a few seconds the first time it builds.
+Run `~/.claude/skills/prioritize/scripts/gather.sh`. ~10s, plus a few seconds the first time it builds.
 
 It prints one row per non-archived, non-fork repo I own — open PR count, open issue count, default-branch CI, alert severities, last push — then an ATTENTION block holding only what needs a judgement call: PRs failing CI, human-authored PRs, issues opened by someone else (with who spoke last), and PRs awaiting my review in repos I don't own. The counts are complete; the ATTENTION block is the shortlist's raw material.
 

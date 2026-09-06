@@ -130,7 +130,7 @@ to keep.
 - `skills/` — slash-command skills for Claude Code, see the table above; each
   follows the [Agent Skills](https://agentskills.io/specification) layout, so a
   skill folder — `SKILL.md` plus its `scripts/` — is portable to any agent that
-  reads the standard
+  reads the standard, except where an F# helper reaches out to `bin/` or `lib/`
 - `bin/` — runnable helpers shared by several skills, rather than owned by one,
   and so belonging to no skill folder
 - `lib/` — the same, minus an entry point: code the helpers reference but

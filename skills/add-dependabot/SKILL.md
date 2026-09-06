@@ -18,7 +18,7 @@ Map each manifest to an ecosystem and record the **directory holding it** — De
 Confirm every string against the schema's own enum rather than memory — the list changes, and a wrong string fails silently:
 
 ```bash
-dotnet run --project ~/.claude/skills/add-dependabot/scripts/dependabot-schema -- ecosystems
+~/.claude/skills/add-dependabot/scripts/dependabot-schema.sh ecosystems
 ```
 
 Report the inventory before writing, and name anything you are deliberately leaving out.
@@ -58,7 +58,7 @@ Do not let the config imply coverage it does not have. The recurring case: for `
 There is no local Dependabot linter, so check the file against the published schema — YAML syntax, every key and ecosystem string, the two requirements hidden in its `allOf` (a `schedule`, and exactly one of `directory`/`directories`), and any `**` glob:
 
 ```bash
-dotnet run --project ~/.claude/skills/add-dependabot/scripts/dependabot-schema -- check .github/dependabot.yml
+~/.claude/skills/add-dependabot/scripts/dependabot-schema.sh check .github/dependabot.yml
 ```
 
 It exits non-zero having listed its findings, and a clean run still does not prove Dependabot accepts the file. Say so, and tell the user where the real verdict appears: the repo's **Insights → Dependency graph → Dependabot** tab lists each config entry with its last-checked time and surfaces parse errors. *(Untested: not exercised in the session this skill came from — confirm the tab's wording before relying on it.)*

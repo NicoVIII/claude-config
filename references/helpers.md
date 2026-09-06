@@ -50,6 +50,16 @@ Judge by the contract, not by whether the code looks short: `skill-refiner` read
 as three tidy shell scripts and was one four-case taxonomy with two readers that
 disagreed twice (a8531b1, f803d2a).
 
+## How a skill names it
+
+A SKILL.md names a wrapper path, never the runtime behind it — an F# project is
+reached through a `<tool>.sh` beside it that delegates to
+[`bin/dotnet-tool.sh`](../bin/dotnet-tool.sh). That keeps the invocation one
+path when a tool moves, grows or is rewritten in another language, instead of a
+command repeated across skill prose. `dotnet run --project` is wrong regardless:
+it builds in the caller's cwd, and the IncrementalClean that follows breaks the
+*next* run from anywhere else (75bd76e).
+
 ## Where it lives
 
 A helper no single skill owns — two skills call it, or it reads state living in
