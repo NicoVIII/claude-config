@@ -16,8 +16,8 @@
        above it, so the dependency direction is checked by the compiler. -->
   <ItemGroup>
     <Compile Include="Domain.fs" />
-    <Compile Include="Layout.fs" />
     <Compile Include="Git.fs" />
+    <Compile Include="Layout.fs" />
     <Compile Include="Log.fs" />
     <Compile Include="Maturity.fs" />
     <Compile Include="Ratio.fs" />

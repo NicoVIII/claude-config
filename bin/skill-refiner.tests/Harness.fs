@@ -109,7 +109,7 @@ let bareSkill (name: string) (root: Root) = skillDir root name |> ignore
 
 /// Writes HISTORY.md from (repo, words, event) triples, dating them a day apart
 /// so the order the readers see is the order given.
-let history (name: string) (entries: (string * int * string) list) (root: Root) =
+let private historyIn (dir: string) (entries: (string * int * string) list) =
     let start = DateOnly(2026, 1, 1)
 
     let line index (repo, words, event) =
@@ -117,7 +117,10 @@ let history (name: string) (entries: (string * int * string) list) (root: Root) 
         $"{date} · {repo} · {words} words · {event}"
 
     let body = entries |> List.mapi line |> String.concat "\n"
-    File.WriteAllText(Path.Combine(skillDir root name, "HISTORY.md"), $"# Skill History\n\n{body}\n")
+    File.WriteAllText(Path.Combine(dir, "HISTORY.md"), $"# Skill History\n\n{body}\n")
+
+let history (name: string) (entries: (string * int * string) list) (root: Root) =
+    historyIn (skillDir root name) entries
 
 /// The maturity case: entries differing only in event, all one repo and one
 /// size, since neither figures in the ladder.
@@ -139,6 +142,35 @@ let listed (name: string) (maturity: string) (root: Root) =
         Path.Combine(root.Dir, "README.md"),
         $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n"
     )
+
+/// The session repo's own tree, `.claude/skills` — where a name resolves before
+/// the config root's `skills/`, so a test that puts the same name in both is
+/// testing the order.
+let private projectSkillDir (root: Root) (name: string) =
+    let dir = Path.Combine(root.SessionRepo, ".claude", "skills", name)
+    Directory.CreateDirectory dir |> ignore
+    dir
+
+let projectSkill (name: string) (content: string) (root: Root) =
+    File.WriteAllText(Path.Combine(projectSkillDir root name, "SKILL.md"), content)
+
+let projectLogged (name: string) (events: string list) (root: Root) =
+    historyIn (projectSkillDir root name) (events |> List.map (fun event -> "repo-a", 100, event))
+
+/// A project that keeps a maturity table of its own, in `.claude/README.md`.
+/// Absent this, a project skill is rated by its log alone.
+let projectListed (name: string) (maturity: string) (root: Root) =
+    let readme = Path.Combine(root.SessionRepo, ".claude", "README.md")
+
+    if not (File.Exists readme) then
+        File.WriteAllText(readme, "| Skill | Summary | Suggested model | Maturity |\n| --- | --- | --- | --- |\n")
+
+    File.AppendAllText(readme, $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n")
+
+let projectHistoryFile (name: string) (root: Root) =
+    let path = Path.Combine(root.SessionRepo, ".claude", "skills", name, "HISTORY.md")
+
+    if File.Exists path then Some(File.ReadAllText path) else None
 
 /// Invokes the CLI the way a skill does: from inside the session repo.
 let skillRefiner (args: string list) (root: Root) =

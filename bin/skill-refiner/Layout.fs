@@ -1,14 +1,28 @@
-/// Where the config tree keeps what skill-refiner reads, and the only door to
-/// the log.
+/// Where a skill tree keeps what skill-refiner reads, and the only door to the
+/// log.
+///
+/// Two trees hold skills: the config repo this binary ships in, and the
+/// `.claude/` of whatever repo the session runs in. A skill lives beside its
+/// HISTORY.md in either, and everything here resolves through `skillDir`, so
+/// the two are told apart in exactly one place.
 module Layout
 
 open System
 open System.IO
 open Domain
 
+/// The README's row for a skill, when a tree keeps a maturity table at all.
+type Claim =
+    /// The table's cell, verbatim.
+    | Claimed of string
+    /// A README beside `skills/`, but no row for this skill.
+    | Unlisted
+    /// No README beside `skills/` — a tree that rates by log alone.
+    | NoTable
+
 /// Walked up from the binary rather than assumed to be ~/.claude: the README
 /// invites forking this repo, and a fork may sit anywhere.
-let root () =
+let private configRoot () =
     let isRoot (dir: DirectoryInfo) =
         Directory.Exists(Path.Combine(dir.FullName, "skills"))
         && File.Exists(Path.Combine(dir.FullName, "README.md"))
@@ -21,13 +35,39 @@ let root () =
 
     search (Some(DirectoryInfo AppContext.BaseDirectory))
 
+/// The session repo's own tree, `.claude/` under its toplevel — the same repo
+/// `Log` names the run after, found the same way. None outside a repo, which
+/// is not an error here: the config tree may still hold the skill.
+let private projectRoot () =
+    Git.run (Directory.GetCurrentDirectory()) [ "rev-parse"; "--show-toplevel" ]
+    |> Option.map (fun toplevel -> Path.Combine(toplevel, ".claude"))
+
+let private isPath (skill: string) =
+    skill.Contains '/' || skill.Contains Path.DirectorySeparatorChar
+
+/// A name resolves to the session repo's skill before the config tree's, the
+/// way a project skill shadows a global one of the same name for the agent
+/// running it. A path names the directory outright and skips the lookup, which
+/// is how the shadowed one is reached.
 let skillDir (skill: string) =
-    let dir = Path.Combine(root (), "skills", skill)
+    if isPath skill then
+        let dir = Path.GetFullPath skill
 
-    if not (Directory.Exists dir) then
-        fail $"no skill named '{skill}'"
+        if not (Directory.Exists dir) then
+            fail $"no skill directory at '{skill}'"
 
-    dir
+        dir
+    else
+        let candidate root = Path.Combine(root, "skills", skill)
+
+        let trees =
+            [ projectRoot () |> Option.map candidate
+              Some(candidate (configRoot ())) ]
+            |> List.choose id
+
+        match trees |> List.tryFind Directory.Exists with
+        | Some dir -> dir
+        | None -> fail $"no skill named '{skill}'"
 
 /// Checked like `skillDir` above, and for the same reason: an unreadable path
 /// returned as if it were fine surfaces as a FileNotFoundException in the
@@ -101,17 +141,27 @@ let appendChange (skill: string) (entry: Entry<ChangeEvent>) =
     announce path line
 
 /// The README's rating, for comparison only. It is a claim, not evidence: where
-/// the two disagree, the log wins. The skill is matched as the literal link
-/// text, so one skill's row cannot match another whose name extends it.
-let claimedRating (skill: string) : string option =
-    let link = $"[`{skill}`]("
+/// the two disagree, the log wins. The README is the one beside the skill's own
+/// `skills/` directory — the config repo's, or a project's `.claude/README.md`
+/// — and a tree that keeps none is not lying, it simply makes no claim. The
+/// skill is matched as the literal link text, so one skill's row cannot match
+/// another whose name extends it.
+let claimedRating (skill: string) : Claim =
+    let dir = skillDir skill
+    let readme = Path.Combine(dir, "..", "..", "README.md") |> Path.GetFullPath
+    let link = $"[`{DirectoryInfo(dir).Name}`]("
 
-    Path.Combine(root (), "README.md")
-    |> File.ReadAllLines
-    |> Array.tryPick (fun line ->
-        let cells = line.Split '|'
+    if not (File.Exists readme) then
+        NoTable
+    else
+        readme
+        |> File.ReadAllLines
+        |> Array.tryPick (fun line ->
+            let cells = line.Split '|'
 
-        if cells.Length >= 5 && cells[1].Contains link then
-            Some(cells[4].Trim())
-        else
-            None)
+            if cells.Length >= 5 && cells[1].Contains link then
+                Some(cells[4].Trim())
+            else
+                None)
+        |> Option.map Claimed
+        |> Option.defaultValue Unlisted

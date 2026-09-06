@@ -65,7 +65,7 @@ let main argv =
         | _ :: command :: _ when not (List.contains command commands) ->
             fail $"unknown command '{command}' (expected log, maturity or ratio)"
         | _ ->
-            usage $"{binaryName} <skill> <log|maturity|ratio> [args]\n  e.g. {binaryName} grilling maturity"
+            usage $"{binaryName} <skill | path/to/skill> <log|maturity|ratio> [args]\n  e.g. {binaryName} grilling maturity"
 
         0
     with

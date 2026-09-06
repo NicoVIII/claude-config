@@ -660,6 +660,96 @@ let private ratioTests =
                   Expect.stringContains result.Stderr "no SKILL.md" "the message says what is missing")
           } ]
 
+/// The two trees a skill can live in: the config root the binary ships in, and
+/// the session repo's `.claude/`. Everything else in the suite exercises the
+/// former; these pin how the latter is found and told apart.
+let private treeTests =
+    testList
+        "trees"
+        [ test "resolves a name to the session repo's .claude/skills before the config tree's" {
+              withRoot (fun root ->
+                  // Arrange — the same name in both trees, at sizes that tell
+                  // them apart in the entry written
+                  root |> skill "demo" (words 42)
+                  root |> projectSkill "demo" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> projectHistoryFile "demo" |> Option.defaultValue "")
+                      "· 7 words · created"
+                      "the project skill took the entry"
+
+                  Expect.isNone (root |> historyFile "demo") "and the config tree's skill of that name was left alone")
+          }
+
+          test "a path names the skill directory outright, reaching a shadowed one" {
+              withRoot (fun root ->
+                  // Arrange — the project shadows the name, and the caller means
+                  // the config tree's skill anyway
+                  root |> skill "demo" (words 42)
+                  root |> projectSkill "demo" (words 7)
+
+                  // Act — relative to the session repo the CLI runs from
+                  let result = root |> skillRefiner [ "../skills/demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> historyFile "demo" |> Option.defaultValue "")
+                      "· 42 words · created"
+                      "the path bypassed the lookup"
+
+                  Expect.isNone (root |> projectHistoryFile "demo") "and the project skill was not touched")
+          }
+
+          test "rates a project skill by its log alone when the project keeps no README table" {
+              withRoot (fun root ->
+                  // Arrange — one run logged, and only the config root has a
+                  // README, which must not be consulted for a project skill
+                  root |> projectSkill "demo" (words 100)
+                  root |> projectLogged "demo" [ "retro clean" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "log supports 🧪 Experimental" "the log still rates it"
+                  Expect.stringContains result.Stdout "no README table" "and the absence of a table is said, not read as unlisted"
+                  Expect.isFalse (result.Stdout.Contains "update the README row") "there is no row to update"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "carries the feedback footer"
+                      "so the footer the rating calls for is stated outright")
+          }
+
+          test "compares a project skill against the project's own .claude/README.md when it keeps one" {
+              withRoot (fun root ->
+                  // Arrange — the project's table overclaims
+                  root |> projectSkill "demo" (words 100)
+                  root |> projectLogged "demo" [ "retro clean" ]
+                  root |> projectListed "demo" "🟢 Usable"
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "README says 🟢 Usable" "the project's claim is quoted back"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "update the README row to 🧪 Experimental"
+                      "and the row edit is proposed against it")
+          } ]
+
 let private dispatchTests =
     testList
         "dispatch"
@@ -700,4 +790,4 @@ let private dispatchTests =
           } ]
 
 let tests =
-    testList "cli" [ logTests; maturityTests; ratioTests; dispatchTests ]
+    testList "cli" [ logTests; maturityTests; ratioTests; treeTests; dispatchTests ]
