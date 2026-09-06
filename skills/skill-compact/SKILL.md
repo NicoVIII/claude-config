@@ -19,7 +19,7 @@ Read the SKILL.md against its `HISTORY.md` and its directory's commit messages (
 - **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. The ladder's script rung turns it into one. A mechanism the git log shows patched more than twice is the same signal.
 - **A fact this SKILL.md restates from elsewhere** — a `references/` file, the README, another skill; `git log` shows one copy corrected while the others drifted. Give the fact one home; the explanation goes with it.
 - **Special cases that never recurred** — a clause added for one run's mishap, with nothing resembling it in the log since.
-- **Rules the skill's suggested model would follow unprompted** — check the README table for which model that is; write for it, not for the model doing the compaction.
+- **Rules the skill's suggested model would follow unprompted** — check the maturity table beside the skill's `skills/` directory for which model that is (`~/.claude/README.md`, or a project's `.claude/README.md`; with no row, the model `~/.claude/references/skill-conventions.md` names); write for it, not for the model doing the compaction.
 - **Several rules that are one principle** — coverage survives, the words don't.
 
 Don't decide alone — no run can show a rule was unnecessary. Present each candidate with its evidence (what it was added for, what the log shows since) in prose, and take a free-form pick ("all", "1 and 3", "merge 2 into 4") — the evidence *is* the decision, and `AskUserQuestion`'s option slots hold neither it nor candidates that depend on each other. Quote a candidate as the measured word count of the text it would touch — the clause, not the bullet holding it — never as what it saves. Nor project where the pass lands — the final ratio, the word count, or which baseline it would clear.
@@ -32,7 +32,7 @@ Take the strongest rung of `~/.claude/references/prose-ladder.md` that fits each
 
 Leave the earlier entries of `HISTORY.md` alone — the baselines already there are the only record of whether the floor is rising.
 
-Record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together.
+Record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together, in the repo that holds the skill — a project skill commits into its own repo, not `~/.claude`.
 
 ---
 

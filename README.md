@@ -54,13 +54,18 @@ Some skills are meant to run in sequence:
 - **Capturing a workflow as a skill** — when a session in any project reveals a
   repeatable workflow, run `/author-skill` while the context is fresh — the
   transcript holds the commands, quirks, and decisions the skill should encode.
-  Later runs feed `/skill-retro` as usual.
+  A workflow that only makes sense in that project lands in its own
+  `.claude/skills` instead of here. Later runs feed `/skill-retro` as usual.
 - **Refining a skill after use** — after running any skill below 🟢 Usable, run
   `/skill-retro` in the same session to turn the friction you hit into concrete
   skill edits (this is what the skills' feedback footer feeds); past 🟢 Usable,
   run it on demand. `/skill-retro` only ever adds, so it also reports how far
   the skill has grown past its baseline — when it says the skill is over the
-  trigger, run `/skill-compact` on it as a separate pass.
+  trigger, run `/skill-compact` on it as a separate pass. All of this works on
+  a repo's own `.claude/skills` too: run the same commands from inside that
+  repo, and the log and edits land beside the project skill, so they ship with
+  it and reach whoever else works there. A project rates its skills by log
+  alone unless it keeps a maturity table of its own in `.claude/README.md`.
 - **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
   ordinary sessions rather than a skill, so nothing announces its growth
   (`skill-refiner`'s ratio only measures skills). Check it by hand with

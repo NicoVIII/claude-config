@@ -5,3 +5,4 @@
 2026-08-02 · claude-config · 1078 words · fix big: replaced the size-vs-longest comparison with a composition test: cut sentences that justify rather than instruct
 2026-08-23 · claude-config · 1060 words · retro minor: log creation froze the origin baseline before the review loop closed — second sighting of the 2026-08-02 interrupt; also unpatched: no guidance for a new skill colliding with an existing skill trigger description
 2026-08-23 · claude-config · 1049 words · fix big: Let log creation re-seed a creation-only log, so the baseline follows the review loop instead of freezing ahead of it
+2026-09-06 · claude-config · 1189 words · fix big: the confirm-it-is-global handoff became a pick-the-tree step, so a project skill is created and logged in its own repo instead of being handed off
