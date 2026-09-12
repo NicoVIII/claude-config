@@ -130,7 +130,9 @@ to keep.
 - `skills/` — slash-command skills for Claude Code, see the table above; each
   follows the [Agent Skills](https://agentskills.io/specification) layout, so a
   skill folder — `SKILL.md` plus its `scripts/` — is portable to any agent that
-  reads the standard, except where an F# helper reaches out to `bin/` or `lib/`
+  reads the standard, except where an F# helper reaches out to `bin/` or `lib/`;
+  the `HISTORY.md` beside it is this config's own addition, see
+  [The history log](#the-history-log)
 - `bin/` — runnable helpers shared by several skills, rather than owned by one,
   and so belonging to no skill folder
 - `lib/` — the same, minus an entry point: code the helpers reference but
@@ -184,6 +186,35 @@ flowchart TD
     COMPACT --> LOG
     RETRO --> RUN
 ```
+
+### The history log
+
+The `HISTORY.md` beside a `SKILL.md` is that evidence, appended to by the
+skills above and by nothing else. One line per event:
+
+```
+2026-08-03 · claude-config · 1233 words · fix big: failure branch now …
+```
+
+— the date, the repo the run happened in, the SKILL.md's size at that moment,
+and what happened: `created`, `retro clean|minor|major`, `fix small|big`, or
+`compacted`. Three readers depend on that shape, which is why the file is
+written only through `~/.claude/bin/skill-refiner.sh <skill> log …` and never by
+hand, and why earlier lines are never rewritten:
+
+- `skill-refiner maturity` rates the skill from the run grades since the last
+  major retro or big fix — and, for 🛡️ Battle-tested, from how many repos they
+  came from, which is what the repo field is for.
+- `skill-refiner ratio` measures growth against the last deliberate size
+  (`created` or `compacted`), so the word counts have to be a gap-free series.
+- the next `/skill-retro` searches the clauses for a mechanism that already
+  failed once, and treats a repeat as evidence against the mechanism rather
+  than its wording — hence clauses that name the mechanism, not the symptom.
+
+All three run out of this repo, so a project skill's log needs a clone of it (or
+your fork) in `~/.claude` plus the .NET SDK. The log itself commits into the
+project repo and travels with the skill; without this config a collaborator can
+still read it, but it degrades to a changelog nothing rates.
 
 Credits: [`grilling`](skills/grilling/SKILL.md) is based on
 <https://github.com/mattpocock/skills> (MIT License). Attributions live here
