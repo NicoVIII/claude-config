@@ -46,8 +46,13 @@ let private entry (skill: string) (event: 'event) : Entry<'event> =
       Words = Layout.skillWords skill
       Event = event }
 
+/// Seeding hangs off every write rather than off creation alone: a project
+/// skill written by hand, or copied in from elsewhere, first reaches this
+/// helper through a retro.
 let creation (skill: string) =
     entry skill CreationEvent |> Layout.createHistory skill
+    Explainer.seedIfForeign skill
 
 let change (skill: string) (event: ChangeEvent) =
     entry skill event |> Layout.appendChange skill
+    Explainer.seedIfForeign skill

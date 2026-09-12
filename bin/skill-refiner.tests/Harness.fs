@@ -167,6 +167,22 @@ let projectListed (name: string) (maturity: string) (root: Root) =
 
     File.AppendAllText(readme, $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n")
 
+/// The same path inside the config tree, which the repo's own README covers
+/// and where a file of this name would read as the maturity table.
+let configSkillsReadme (root: Root) =
+    let path = Path.Combine(root.Dir, "skills", "README.md")
+
+    if File.Exists path then Some(File.ReadAllText path) else None
+
+/// The explainer seeded beside a project's skills, if one was written.
+let projectSkillsReadme (root: Root) =
+    let path = Path.Combine(root.SessionRepo, ".claude", "skills", "README.md")
+
+    if File.Exists path then Some(File.ReadAllText path) else None
+
+let writeProjectSkillsReadme (content: string) (root: Root) =
+    File.WriteAllText(Path.Combine(root.SessionRepo, ".claude", "skills", "README.md"), content)
+
 let projectHistoryFile (name: string) (root: Root) =
     let path = Path.Combine(root.SessionRepo, ".claude", "skills", name, "HISTORY.md")
 

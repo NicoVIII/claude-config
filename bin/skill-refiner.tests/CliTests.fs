@@ -748,6 +748,82 @@ let private treeTests =
                       result.Stdout
                       "update the README row to 🧪 Experimental"
                       "and the row edit is proposed against it")
+          }
+
+          test "explains the log it leaves in a project, in a README beside the project's skills" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> projectSkill "demo" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  let seeded = root |> projectSkillsReadme |> Option.defaultValue ""
+
+                  Expect.stringContains seeded "HISTORY.md" "the explainer covers the file the run left behind"
+
+                  Expect.stringContains
+                      seeded
+                      "github.com/NicoVIII/claude-config"
+                      "and says where the convention came from, which nobody in that repo can look up"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "commit it with the skill"
+                      "the seeded file is untracked there, so the caller is told to commit it")
+          }
+
+          test "seeds nothing for a skill of this config's own tree, which the repo README covers" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> skill "demo" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.isFalse (result.Stdout.Contains "seeded") "nothing was planted"
+
+                  Expect.isNone
+                      (root |> configSkillsReadme)
+                      "and no README appeared inside the config tree's skills/, where it would read as a table")
+          }
+
+          test "leaves a project's own explanation of its skills alone" {
+              withRoot (fun root ->
+                  // Arrange — a tree that already says something about its skills
+                  root |> projectSkill "demo" (words 7)
+                  root |> writeProjectSkillsReadme "# Our skills\n\nRead before touching one.\n"
+
+                  // Act — twice, since the second write is the one that would overwrite
+                  root |> skillRefiner [ "demo"; "log"; "creation" ] |> ignore
+                  let result = root |> skillRefiner [ "demo"; "log"; "retro"; "clean" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.equal
+                      (root |> projectSkillsReadme)
+                      (Some "# Our skills\n\nRead before touching one.\n")
+                      "the project's own text survived"
+
+                  Expect.isFalse (result.Stdout.Contains "seeded") "and nothing claimed to have planted one")
+          }
+
+          test "seeds the explainer for a project skill whose first entry is a retro, not a creation" {
+              withRoot (fun root ->
+                  // Arrange — a skill written by hand, never logged as created
+                  root |> projectSkill "demo" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "retro"; "clean" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.isSome (root |> projectSkillsReadme) "the explainer does not depend on how the log began")
           } ]
 
 let private dispatchTests =

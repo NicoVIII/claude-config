@@ -214,7 +214,11 @@ hand, and why earlier lines are never rewritten:
 All three run out of this repo, so a project skill's log needs a clone of it (or
 your fork) in `~/.claude` plus the .NET SDK. The log itself commits into the
 project repo and travels with the skill; without this config a collaborator can
-still read it, but it degrades to a changelog nothing rates.
+still read it, but it degrades to a changelog nothing rates. Since nobody there
+has read this section, the first entry logged into a project tree seeds a
+`.claude/skills/README.md` beside it saying the same thing for that audience —
+[`bin/skill-refiner/ProjectSkillsReadme.md`](bin/skill-refiner/ProjectSkillsReadme.md)
+is the text, planted once and never overwritten.
 
 Credits: [`grilling`](skills/grilling/SKILL.md) is based on
 <https://github.com/mattpocock/skills> (MIT License). Attributions live here

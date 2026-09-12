@@ -69,6 +69,17 @@ let skillDir (skill: string) =
         | Some dir -> dir
         | None -> fail $"no skill named '{skill}'"
 
+/// The `skills/` directory a skill resolved in, when it is not this config's
+/// own — i.e. a tree whose readers have never seen this repo's README, and so
+/// the one case where the log needs an explainer planted beside it. Compared as
+/// paths rather than asked of `projectRoot`, so a directory named outright is
+/// judged by where it is and not by how it was reached.
+let foreignSkillsDir (skill: string) =
+    let holder = Path.Combine(skillDir skill, "..") |> Path.GetFullPath
+    let ours = Path.Combine(configRoot (), "skills") |> Path.GetFullPath
+
+    if holder = ours then None else Some holder
+
 /// Checked like `skillDir` above, and for the same reason: an unreadable path
 /// returned as if it were fine surfaces as a FileNotFoundException in the
 /// caller, which is not a SkillRefinerFailure and so escapes Program.fs's

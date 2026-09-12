@@ -12,12 +12,21 @@
          covers the one external tool. -->
   </PropertyGroup>
 
+  <!-- Travels inside the dll so seeding a project's README cannot fail on a
+       path outside the binary. LogicalName is pinned because the default is
+       built from the project name, and a hyphen in it makes that name easy to
+       get wrong from the reading side. -->
+  <ItemGroup>
+    <EmbeddedResource Include="ProjectSkillsReadme.md" LogicalName="ProjectSkillsReadme.md" />
+  </ItemGroup>
+
   <!-- Compile order is the architecture: every file may reference only files
        above it, so the dependency direction is checked by the compiler. -->
   <ItemGroup>
     <Compile Include="Domain.fs" />
     <Compile Include="Git.fs" />
     <Compile Include="Layout.fs" />
+    <Compile Include="Explainer.fs" />
     <Compile Include="Log.fs" />
     <Compile Include="Maturity.fs" />
     <Compile Include="Ratio.fs" />
