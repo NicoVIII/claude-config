@@ -47,35 +47,37 @@ let private ratingOf (claimed: string) =
     [ Wip; Experimental; Usable; BattleTested ]
     |> List.tryFind (fun rating -> label rating = claimed)
 
+/// What the SKILL.md is supposed to end with at this rating, for the cases
+/// where no row records which side of 🟢 Usable it used to sit on — so the
+/// caller checks the file itself rather than inferring from a claim.
+let private footerCall rating =
+    if carriesFooter rating then "the feedback footer" else "no feedback footer"
+
 /// The edit a disagreement implies, printed rather than re-derived by every
 /// caller: the log wins, so a claim it contradicts is a row to update, and the
-/// footer follows the 🟢 Usable boundary the two ratings sit either side of. A
-/// claim that is not a rung says nothing about which side it was on, so the
-/// footer half stays unsaid there. A tree with no table has no row to update,
-/// and the SKILL.md is the only record of which side it used to be on — so the
-/// footer the rating calls for is stated outright for the caller to check.
+/// footer follows the 🟢 Usable boundary the two ratings sit either side of. An
+/// unlisted skill has no row to move and a cell nobody wrote cannot be a
+/// transition, so it gets the row written instead — with the two columns the
+/// log cannot supply, which is the whole reason a seeded table starts empty. A
+/// tree with no table has no row at all, and only the footer to check.
 let private readmeEdit (claim: Layout.Claim) rating =
-    let rowEdit (claimed: string) =
-        if label rating = claimed then
-            None
-        else
-            let footer =
-                match ratingOf claimed with
-                | Some before when carriesFooter before && not (carriesFooter rating) ->
-                    ", and remove the feedback footer from its SKILL.md"
-                | Some before when not (carriesFooter before) && carriesFooter rating ->
-                    ", and restore the feedback footer verbatim from references/skill-footer.md"
-                | Some _
-                | None -> ""
-
-            Some $"  update the README row to {label rating}{footer}"
-
     match claim with
-    | Layout.Claimed claimed -> rowEdit claimed
-    | Layout.Unlisted -> rowEdit "unlisted"
-    | Layout.NoTable ->
-        let footer = if carriesFooter rating then "the feedback footer" else "no feedback footer"
-        Some $"  at this rating the SKILL.md carries {footer}"
+    | Layout.Claimed claimed when label rating = claimed -> None
+    | Layout.Claimed claimed ->
+        let footer =
+            match ratingOf claimed with
+            | Some before when carriesFooter before && not (carriesFooter rating) ->
+                ", and remove the feedback footer from its SKILL.md"
+            | Some before when not (carriesFooter before) && carriesFooter rating ->
+                ", and restore the feedback footer verbatim from references/skill-footer.md"
+            | Some _
+            | None -> ""
+
+        Some $"  update the README row to {label rating}{footer}"
+    | Layout.Unlisted ->
+        Some
+            $"  add a README row at {label rating}, with the skill's summary and the model to run it with; at this rating the SKILL.md carries {footerCall rating}"
+    | Layout.NoTable -> Some $"  at this rating the SKILL.md carries {footerCall rating}"
 
 type private Counts =
     { Runs: int
@@ -161,10 +163,11 @@ let private claimLine (skill: string) (claim: Layout.Claim) (counts: Counts) rat
         match claim with
         | Layout.Claimed cell -> $"README says {cell}"
         | Layout.Unlisted -> "README says unlisted"
-        | Layout.NoTable -> "no README table beside its skills/"
+        | Layout.NoTable -> "no README table where its skills live"
 
     match claim, counts.Runs with
     | Layout.NoTable, 0 -> $"{skill}: log holds no runs — nothing rates it yet; {said}"
+    | Layout.Unlisted, 0 -> $"{skill}: log holds no runs — {said}, and 🚧 WIP is where an unrun skill belongs"
     | _, 0 -> $"{skill}: log holds no runs — {said}; nothing backs that yet and nothing contradicts it, so leave the row alone"
     | _ -> $"{skill}: log supports {label rating} — {said}"
 
@@ -183,8 +186,11 @@ let run (skill: string) =
         (spotlessClause counts)
 
     // An unbacked claim is not a contradicted one, so a runless log proposes no
-    // edit either — `claimLine` has already said to leave the row alone.
-    if counts.Runs > 0 then
+    // edit either — `claimLine` has already said to leave the row alone. A
+    // missing row is the exception: there is no claim to protect, and 🚧 WIP is
+    // the rung that asks for no evidence, so a skill created but never run is
+    // still a row to write.
+    if counts.Runs > 0 || claim = Layout.Unlisted then
         readmeEdit claim rating |> Option.iter (printfn "%s")
 
     rating |> nextBar |> Option.iter (fun bar -> printfn $"  {bar}")

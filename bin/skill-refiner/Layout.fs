@@ -15,9 +15,9 @@ open Domain
 type Claim =
     /// The table's cell, verbatim.
     | Claimed of string
-    /// A README beside `skills/`, but no row for this skill.
+    /// A README where the table lives, but no row for this skill.
     | Unlisted
-    /// No README beside `skills/` — a tree that rates by log alone.
+    /// No README there at all — a tree that rates by log alone.
     | NoTable
 
 /// Walked up from the binary rather than assumed to be ~/.claude: the README
@@ -151,16 +151,23 @@ let appendChange (skill: string) (entry: Entry<ChangeEvent>) =
     File.AppendAllText(path, line + "\n")
     announce path line
 
+/// Where a tree keeps its maturity table: beside `skills/` in this config,
+/// whose README is the repo's front page, and *inside* it in a project — the
+/// same file the log's explainer is seeded into, so seeding creates the table
+/// and a project ends up with one document about its skills rather than two.
+let private tableFile (skill: string) =
+    match foreignSkillsDir skill with
+    | Some holder -> Path.Combine(holder, "README.md")
+    | None -> Path.Combine(skillDir skill, "..", "..", "README.md") |> Path.GetFullPath
+
 /// The README's rating, for comparison only. It is a claim, not evidence: where
-/// the two disagree, the log wins. The README is the one beside the skill's own
-/// `skills/` directory — the config repo's, or a project's `.claude/README.md`
-/// — and a tree that keeps none is not lying, it simply makes no claim. The
-/// skill is matched as the literal link text, so one skill's row cannot match
-/// another whose name extends it.
+/// the two disagree, the log wins. A tree whose table has no row for the skill
+/// is not lying, and one with no table at all makes no claim. The skill is
+/// matched as the literal link text, so one skill's row cannot match another
+/// whose name extends it.
 let claimedRating (skill: string) : Claim =
-    let dir = skillDir skill
-    let readme = Path.Combine(dir, "..", "..", "README.md") |> Path.GetFullPath
-    let link = $"[`{DirectoryInfo(dir).Name}`]("
+    let readme = tableFile skill
+    let link = $"[`{DirectoryInfo(skillDir skill).Name}`]("
 
     if not (File.Exists readme) then
         NoTable

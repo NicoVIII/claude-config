@@ -458,7 +458,13 @@ let private maturityTests =
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "README says unlisted" "a missing row is not an error")
+                  Expect.stringContains result.Stdout "README says unlisted" "a missing row is not an error"
+
+                  // A runless log withholds an edit against a row that exists,
+                  // since it neither backs nor contradicts it. A missing row
+                  // has nothing to protect, and 🚧 WIP asks for no evidence.
+                  Expect.stringContains result.Stdout "add a README row at 🚧 WIP" "so the row is still asked for"
+                  Expect.isFalse (result.Stdout.Contains "leave the row alone") "and not withheld as unbacked")
           }
 
           test "aborts on a log line no reader can parse" {
@@ -730,7 +736,7 @@ let private treeTests =
                       "so the footer the rating calls for is stated outright")
           }
 
-          test "compares a project skill against the project's own .claude/README.md when it keeps one" {
+          test "compares a project skill against the table in the README beside its skills" {
               withRoot (fun root ->
                   // Arrange — the project's table overclaims
                   root |> projectSkill "demo" (words 100)
@@ -773,6 +779,37 @@ let private treeTests =
                       result.Stdout
                       "commit it with the skill"
                       "the seeded file is untracked there, so the caller is told to commit it")
+          }
+
+          test "seeds a maturity table the rating reader then asks to fill in" {
+              withRoot (fun root ->
+                  // Arrange — a logged run in a project that has never had a
+                  // table, so the one it is rated against is the seeded one
+                  root |> projectSkill "demo" (words 100)
+                  root |> skillRefiner [ "demo"; "log"; "retro"; "clean" ] |> ignore
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> projectSkillsReadme |> Option.defaultValue "")
+                      "| Skill | Summary | Suggested model | Maturity |"
+                      "seeding leaves a table to list the skill in"
+
+                  Expect.isFalse (result.Stdout.Contains "no README table") "which the rating reader finds"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "add a README row at 🧪 Experimental"
+                      "and asks for the row the log cannot write itself"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "the model to run it with"
+                      "naming the column nothing else in the loop records")
           }
 
           test "seeds nothing for a skill of this config's own tree, which the repo README covers" {

@@ -20,7 +20,7 @@ These beat the ladder:
 
 - **Start high when failure is hard to detect.** The ladder assumes a cheap model's failure is visible, so escalating fixes it. If a subtle error would survive review (security-sensitive changes, tricky concurrency, irreversible operations), start at Opus or above.
 - **Write-once-run-many text starts at the top.** Skills, prompts, and agent-facing docs steer every future run; authoring them wants Fable (`~/.claude/references/skill-conventions.md` encodes the same rule for skills).
-- **Repo skills are pre-decided.** `grep <skill> ~/.claude/README.md` — the "Suggested model" column of that maturity table is the answer; don't re-derive it.
+- **Repo skills are pre-decided.** `grep <skill> ~/.claude/README.md .claude/skills/README.md` — the "Suggested model" column of whichever maturity table lists it is the answer; don't re-derive it. A project's own skills are in the second file and shadow a global skill of the same name.
 - **Split multi-phase work.** For larger features: plan on Opus, execute on Sonnet. If the `/model` menu offers a plan/execute hybrid, that's the mechanism.
 
 ## Mid-session signals

@@ -157,15 +157,17 @@ let projectSkill (name: string) (content: string) (root: Root) =
 let projectLogged (name: string) (events: string list) (root: Root) =
     historyIn (projectSkillDir root name) (events |> List.map (fun event -> "repo-a", 100, event))
 
-/// A project that keeps a maturity table of its own, in `.claude/README.md`.
-/// Absent this, a project skill is rated by its log alone.
+/// The project's maturity table, in the README seeding plants beside its
+/// skills. Absent this, a project skill is rated by its log alone. The links
+/// are relative to that file, so they carry no `skills/` segment — which is
+/// why the row is matched on link text rather than on a path.
 let projectListed (name: string) (maturity: string) (root: Root) =
-    let readme = Path.Combine(root.SessionRepo, ".claude", "README.md")
+    let readme = Path.Combine(root.SessionRepo, ".claude", "skills", "README.md")
 
     if not (File.Exists readme) then
         File.WriteAllText(readme, "| Skill | Summary | Suggested model | Maturity |\n| --- | --- | --- | --- |\n")
 
-    File.AppendAllText(readme, $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n")
+    File.AppendAllText(readme, $"| [`{name}`]({name}/SKILL.md) | summary | Sonnet | {maturity} |\n")
 
 /// The same path inside the config tree, which the repo's own README covers
 /// and where a file of this name would read as the maturity table.

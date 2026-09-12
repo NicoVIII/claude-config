@@ -5,6 +5,17 @@ when a request matches its `description`, in the
 [Agent Skills](https://agentskills.io/specification) format. Using one needs
 nothing beyond an agent that reads skills.
 
+| Skill | Summary | Suggested model | Maturity |
+| --- | --- | --- | --- |
+
+One row per skill, added when the skill is. **Suggested model** is the model to
+run it with — and the model its text is written for, so instructions are spelled
+out for that one rather than for whatever stronger model happens to be running;
+without a row, a skill is written for Sonnet. **Maturity** is
+🚧 WIP → 🧪 Experimental → 🟢 Usable → 🛡️ Battle-tested, derived rather than
+chosen: `skill-refiner <skill> maturity` rates the skill from its `HISTORY.md`
+and names the edit this table needs.
+
 `<name>/HISTORY.md` is not part of that format. It is an append-only log of the
 skill's upkeep, one line per event:
 

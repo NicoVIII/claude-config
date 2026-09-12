@@ -64,8 +64,9 @@ Some skills are meant to run in sequence:
   trigger, run `/skill-compact` on it as a separate pass. All of this works on
   a repo's own `.claude/skills` too: run the same commands from inside that
   repo, and the log and edits land beside the project skill, so they ship with
-  it and reach whoever else works there. A project rates its skills by log
-  alone unless it keeps a maturity table of its own in `.claude/README.md`.
+  it and reach whoever else works there — including that tree's own maturity
+  table, in `.claude/skills/README.md`, which the first log entry seeds empty
+  for the skills to be listed in.
 - **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
   ordinary sessions rather than a skill, so nothing announces its growth
   (`skill-refiner`'s ratio only measures skills). Check it by hand with
@@ -218,7 +219,11 @@ still read it, but it degrades to a changelog nothing rates. Since nobody there
 has read this section, the first entry logged into a project tree seeds a
 `.claude/skills/README.md` beside it saying the same thing for that audience —
 [`bin/skill-refiner/ProjectSkillsReadme.md`](bin/skill-refiner/ProjectSkillsReadme.md)
-is the text, planted once and never overwritten.
+is the text, planted once and never overwritten. It also carries that tree's
+maturity table, the counterpart of the one above and the only place a project
+skill's suggested model is recorded. It arrives with headers and no rows: the
+rating comes from the log, but the summary and the model do not, so
+`skill-refiner maturity` asks for the row rather than inventing one.
 
 Credits: [`grilling`](skills/grilling/SKILL.md) is based on
 <https://github.com/mattpocock/skills> (MIT License). Attributions live here
