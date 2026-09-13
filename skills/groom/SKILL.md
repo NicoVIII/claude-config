@@ -43,23 +43,23 @@ Present verdicts grouped by action, densely, and ask **once per group** — neve
 
 ```
 close · done (2)
-  #44 replace_collection atomicity — exec_all_atomically applied in a1b2c3d
-  #52 settings sort never read — wired up in src/settings.rs:88
+  #101 export is not atomic — wrapped in a transaction in a1b2c3d
+  #102 default sort never read — wired up in src/settings.rs:88
 close · duplicate (1)
-  #57 No mobile layout → #73 Responsive pass — same work; #57's tap-target minimum folds in
+  #103 No mobile layout → #104 Responsive pass — same work; #103's tap-target minimum folds in
 close · obsolete (1)
-  #40 wine installer — the Windows installer path was dropped in 2023
+  #105 wine installer — the Windows installer path was dropped in 2023
 body fix (1)
-  #21 "Alternative sources" — no acceptance criterion; propose: ...
+  #106 "Alternative sources" — no acceptance criterion; propose: ...
 ask (1)
-  #65 getShortcutTarget — lostmsu, their word last 29d ago; needs a reply, not a close
+  #107 getShortcutTarget — lostmsu, their word last 29d ago; needs a reply, not a close
 unreviewed (18)
 ```
 
 On approval:
 
 - `done` → `gh issue close <n> --reason completed --comment "<one line why> — written by an agent"`
-- `duplicate` → `gh issue close <n> --duplicate-of <survivor>`, which sets both the reason and the relation. Add `--comment` only where the survivor needs the absorbed scope spelled out, and edit the survivor's body only to add that scope.
+- `duplicate` → `gh issue close <n> --duplicate-of <survivor>`, which sets both the reason and the relation. Where the survivor lacks scope the duplicate had, `gh issue comment <survivor>` with that scope — not `--comment` on the close, which lands on the closed issue.
 - `obsolete` → `gh issue close <n> --reason "not planned" --comment "… — written by an agent"`
 - `vague` → `gh issue comment <n>` with the missing acceptance criterion, or `gh issue edit <n> --title` when only the title misleads. **Never** replace a body wholesale: the original text is the record of what I was thinking.
 - A plainly wrong label → `gh issue edit <n> --add-label`/`--remove-label`. Don't invent a labelling scheme.
@@ -68,7 +68,7 @@ Everything written to GitHub as prose ends with `— written by an agent`. Close
 
 For `ask` issues, draft the reply and let me approve the wording. Never post one inside a batch.
 
-Untested: no run has executed the writes above. The survey command, its fields, and both profiles come from a real scan; the verdict taxonomy, the ~15 cap, and the ≤40 body threshold are designed. Say which of them did not fit.
+Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and title/label edits. Say which of them did not fit.
 
 Stop once the approved batches are applied. Do not start fixing an issue you just kept, and do not open new issues for work you noticed on the way — tell me instead.
 
