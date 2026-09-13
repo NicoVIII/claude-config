@@ -5,7 +5,7 @@ description: File a GitHub issue in the current repo, or refine a rough one unti
 
 Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
 
-Untested: the approval step before `gh issue create`, the sweep-issue search, and a Refine run that ends in a rewritten body.
+Untested: the sweep-issue search, and a Refine run that ends in a rewritten body.
 
 ## Read the repo's conventions first
 
@@ -32,7 +32,7 @@ These vary per repo and override the defaults below:
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
-A dependency on another issue goes in the body as "Blocked by #n". *(Untested: whether `gh` can set GitHub's native blocked-by relation — check `gh issue edit --help` first.)*
+Record a dependency as GitHub's relation, not as body prose: `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue.
 
 ## Refine
 
