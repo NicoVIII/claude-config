@@ -58,13 +58,13 @@ unreviewed (18)
 
 On approval:
 
-- `done` → `gh issue close <n> --reason completed --comment "<one line why> — written by an agent"`
+- `done` → `gh issue close <n> --reason completed --comment $'<one line why>\n\n🤖 Written by code assistant'`
 - `duplicate` → `gh issue close <n> --duplicate-of <survivor>`, which sets both the reason and the relation. Where the survivor lacks scope the duplicate had, `gh issue comment <survivor>` with that scope — not `--comment` on the close, which lands on the closed issue.
-- `obsolete` → `gh issue close <n> --reason "not planned" --comment "… — written by an agent"`
+- `obsolete` → `gh issue close <n> --reason "not planned" --comment $'…\n\n🤖 Written by code assistant'`
 - `vague` → `gh issue comment <n>` with the missing acceptance criterion, or `gh issue edit <n> --title` when only the title misleads. **Never** replace a body wholesale: the original text is the record of what I was thinking.
 - A plainly wrong label → `gh issue edit <n> --add-label`/`--remove-label`. Don't invent a labelling scheme.
 
-Everything written to GitHub as prose ends with `— written by an agent`. Closes, labels, and title edits carry their own authorship and need no marker.
+Everything written to GitHub as prose ends with `🤖 Written by code assistant` on its own line. Closes, labels, and title edits carry their own authorship and need no marker.
 
 For `ask` issues, draft the reply and let me approve the wording. Never post one inside a batch.
 
