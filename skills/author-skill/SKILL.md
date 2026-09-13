@@ -36,7 +36,7 @@ Encode this observed knowledge, not generic advice. A skill earns its tokens by 
 
 ## Land it
 
-Write the SKILL.md straight to its final path, `cat` it for review, and edit in place until I'm happy — never retype it into the reply, so a long skill is never typed twice. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the repo that holds the skill — for a global one `~/.claude`, a separate git repository from the current project, so use `git -C ~/.claude`:
+Write the SKILL.md straight to its final path, then give me that path and a summary of each rule and the choices behind it — never retype the file into the reply, so a long skill is never typed twice. Edit in place until I'm happy. Nothing is persisted until the commit, and an unwanted draft is one `rm` away; it is live in new sessions while under review, which is the price of skipping a copy. Then, in the repo that holds the skill — for a global one `~/.claude`, a separate git repository from the current project, so use `git -C ~/.claude`:
 
 - End the SKILL.md with the feedback footer verbatim from `~/.claude/references/skill-footer.md`.
 - Open the skill's log: `~/.claude/bin/skill-refiner.sh <skill> log creation`. It records the current size as the origin baseline every later `ratio` is read against; re-run it after each further edit, until the first retro or fix freezes it. Never write `HISTORY.md` by hand. The name resolves to the session repo's `.claude/skills` before `~/.claude/skills` — check the echoed `logged to` path is the tree you meant, and pass the skill's directory path if not.
