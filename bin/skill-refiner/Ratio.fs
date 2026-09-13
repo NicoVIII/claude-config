@@ -35,8 +35,8 @@ open System
 open System.IO
 open Domain
 
-/// In tenths, i.e. 1.5x.
-let private trigger = 15
+/// In hundredths, i.e. 1.5x.
+let private trigger = 150
 
 /// A markdown list marker: the shape that opens a rule. The trailing space
 /// matters — without it a `---` frontmatter delimiter would count as one.
@@ -65,10 +65,11 @@ let private ruleCount (text: string) =
     text.Split '\n' |> Array.fold step (0, false) |> fst
 
 /// Truncated rather than rounded, so the printed figure and the trigger can
-/// never disagree: "1.5x" appears exactly when the trigger fires.
-let private tenthsOf (now: int) (reference: int) = now * 10 / reference
+/// never disagree: "1.50x" appears exactly when the trigger fires. Hundredths
+/// rather than tenths, so the truncation doesn't flatten 1.09x to "1.0x".
+let private hundredthsOf (now: int) (reference: int) = now * 100 / reference
 
-let private formatTenths tenths = $"{tenths / 10}.{tenths % 10}x"
+let private formatHundredths hundredths = $"{hundredths / 100}.{hundredths % 100:D2}x"
 
 /// What a datapoint says about the skill's size, as against what the trace
 /// merely prints. `Created` and `Compaction` are sizes somebody deliberately
@@ -209,7 +210,7 @@ let private floorLine (now: int) (anchors: Point list) =
             let since = lowest.Date.ToString "yyyy-MM-dd"
 
             Some
-                $"  {formatTenths (tenthsOf now lowest.Words)} its lowest baseline of {lowest.Words} ({since}) — the floor has risen {risen} words over {cycles} {cyclesWord} since"
+                $"  {formatHundredths (hundredthsOf now lowest.Words)} its lowest baseline of {lowest.Words} ({since}) — the floor has risen {risen} words over {cycles} {cyclesWord} since"
 
 /// No trigger — what rule count a skill legitimately needs depends on the job it
 /// does. It also needs no baseline, so it reports on a skill that has none.
@@ -229,15 +230,15 @@ let run (skill: string) =
     match selectBaseline points with
     | None -> printfn $"{skill}: {now} words, never logged — no baseline to compare against"
     | Some(words, origin) ->
-        let tenths = tenthsOf now words
+        let hundredths = hundredthsOf now words
 
         let verdict =
-            if tenths >= trigger then
+            if hundredths >= trigger then
                 "over the 1.5x trigger — run /skill-compact before this grows further"
             else
                 "under the 1.5x trigger"
 
-        printfn $"{skill}: {now} words, {formatTenths tenths} its baseline of {words} ({origin}) — {verdict}"
+        printfn $"{skill}: {now} words, {formatHundredths hundredths} its baseline of {words} ({origin}) — {verdict}"
 
     if not (List.isEmpty points) then
         printfn "  growth trace:"

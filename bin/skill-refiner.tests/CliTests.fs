@@ -168,7 +168,7 @@ let private logTests =
 
                   Expect.stringContains
                       fix.Stdout
-                      "1.2x its baseline of 100"
+                      "1.20x its baseline of 100"
                       "the fix carries the accretion report, so nobody runs ratio separately"
 
                   Expect.isFalse (retro.Stdout.Contains "trigger") "the retro reports no ratio")
@@ -497,7 +497,7 @@ let private ratioTests =
                   // Assert
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
                   Expect.stringContains result.Stdout "100 words" "the current size"
-                  Expect.stringContains result.Stdout "2.0x" "doubled since the baseline"
+                  Expect.stringContains result.Stdout "2.00x" "doubled since the baseline"
                   Expect.stringContains result.Stdout "last compaction" "and says where the baseline came from")
           }
 
@@ -513,7 +513,7 @@ let private ratioTests =
                   let result = root |> skillRefiner [ "demo"; "ratio" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "2.0x its baseline of 50 (creation)" "creation is the anchor")
+                  Expect.stringContains result.Stdout "2.00x its baseline of 50 (creation)" "creation is the anchor")
           }
 
           test "flags a skill over the growth trigger" {
@@ -563,7 +563,7 @@ let private ratioTests =
           test "reports the risen floor a headline against the last compaction hides" {
               withRoot (fun root ->
                   // Arrange — three cycles ending higher each time, so the
-                  // headline reads a reassuring 1.2x while the file is 3x the
+                  // headline reads a reassuring 1.20x while the file is 3x the
                   // smallest it was ever compacted to
                   root |> skill "demo" (words 120)
 
@@ -581,8 +581,8 @@ let private ratioTests =
 
                   // Assert
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
-                  Expect.stringContains result.Stdout "1.2x its baseline of 100" "the headline is unchanged"
-                  Expect.stringContains result.Stdout "3.0x its lowest baseline of 40" "and the floor is measured too"
+                  Expect.stringContains result.Stdout "1.20x its baseline of 100" "the headline is unchanged"
+                  Expect.stringContains result.Stdout "3.00x its lowest baseline of 40" "and the floor is measured too"
                   Expect.stringContains result.Stdout "2026-01-01" "naming the cycle it dates from"
                   Expect.stringContains result.Stdout "risen 60 words over 2 cycles" "with the drift spelled out")
           }
@@ -601,7 +601,7 @@ let private ratioTests =
 
                   // Assert
                   Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
-                  Expect.stringContains result.Stdout "1.5x its baseline of 80" "the headline still reports"
+                  Expect.stringContains result.Stdout "1.50x its baseline of 80" "the headline still reports"
                   Expect.isFalse (result.Stdout.Contains "lowest baseline") "but the floor line stays silent")
           }
 
