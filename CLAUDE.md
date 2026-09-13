@@ -27,6 +27,6 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 
 ## Documentation
 
-- After any refactoring or structural decision, ask: would an agent need this to place new code or content correctly? If yes, update that repo's agent instructions — usually an AGENTS.md — at the appropriate directory level.
+- Every change that alters how something is used, placed, or behaves gets a docs pass before its commit: find the docs describing the touched area — READMEs (humans: how to run/operate it), AGENTS.md (agents: only what can't be inferred, at the appropriate directory level), skills — and update each whose reader would now be wrong or missing something. A new user-facing option belongs in the README even when an agent-facing doc already covers it.
 - An AGENTS.md is in context only where a CLAUDE.md imports it — verify the import exists before putting anything there, or nothing will read it. Where imported, it and memory files load on every invocation, so every word has token cost: include only what can't be inferred from the code; no padding, no restating the obvious.
 - Docs people read — READMEs, release notes, feature descriptions — earn their length. Lead with what the reader has to act on, state each constraint once, and cut background they did not ask for; a doc nobody finishes is worse than a short one that omits something. Prefer trimming to a note that the long version lives elsewhere.
