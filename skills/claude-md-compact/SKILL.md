@@ -9,7 +9,7 @@ Reduce what loads into every session in every project, without losing a preferen
 
 `~/.claude/CLAUDE.md` only. Removal only — never add a rule in this pass; note what you spot and let a later session add it. `/skill-compact` keeps its passes separate for this reason, and CLAUDE.md has the same failure mode: additions made alongside a removal cancel it.
 
-The pass must end with **fewer words in CLAUDE.md than it started**. A rule moved into an imported AGENTS.md or a SKILL.md counts — those load in fewer sessions.
+The pass must never end with **more words in CLAUDE.md than it started**. A rule moved into an imported AGENTS.md or a SKILL.md counts as removed — those load in fewer sessions. When no candidate carries evidence, say so and commit nothing: a cut made only to have one is the failure this pass guards against.
 
 Compaction passes have no run log of their own. Git is the log:
 
@@ -26,7 +26,7 @@ git -C ~/.claude log --format=%h -- CLAUDE.md | tac | while read c; do
     "$(git -C ~/.claude log -1 --format=%s $c)"; done
 ```
 
-Don't build a ledger beside the file — that command reconstructs every baseline. Aim for ~500 words; it's an anchor for judgement, not a gate.
+Don't build a ledger beside the file — that command reconstructs every baseline.
 
 ## Check where a destination loads before proposing a move
 
@@ -64,7 +64,7 @@ A rule that was re-added is load-bearing — don't propose it a second time.
 
 ## Finish
 
-Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Run the repo's check suite, and commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else.
+Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. `~/.claude/references/repo.md` names the checks for what the commit stages; a markdown-only commit has none.
 
 ---
 
