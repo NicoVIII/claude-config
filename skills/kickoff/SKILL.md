@@ -19,7 +19,8 @@ Objective problems that stall everything else; no judgment calls here.
 ```sh
 default=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
 gh run list --branch "$default" --limit 10 --json workflowName,conclusion,createdAt,url
-gh pr list --state open --json number,title,author,isDraft,reviewDecision,statusCheckRollup,updatedAt
+gh pr list --state open --json number,title,author,isDraft,reviewDecision,statusCheckRollup,updatedAt \
+  --jq '.[] | {number,title,author:.author.login,isDraft,reviewDecision,updatedAt,checks:([.statusCheckRollup[].conclusion]|unique)}'
 gh api "repos/{owner}/{repo}/dependabot/alerts?state=open" --jq length
 ```
 
@@ -76,10 +77,6 @@ One line first: **start with X because Y (tier N)**. Then at most two
 runners-up, one line each, so I can veto without a re-run. Then stop: do not
 begin the work, do not open or edit issues, do not post anywhere — wait for my
 pick.
-
-Untested: the whole procedure is designed, not yet observed in a run — the
-commands, the tier order, the tier-2 severity gate, and the ≤40-body threshold
-(borrowed from `groom`). Say which of them did not fit.
 
 ---
 
