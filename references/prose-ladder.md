@@ -11,7 +11,10 @@ Remove — no text survives:
 1. **Fix the artifact the instruction works around**, so the instruction goes
    away instead of improving.
 2. **Delete the mechanism** — right when the fact has another home, or the
-   case it guards never recurred.
+   case it guards never recurred. A step that infers what the user wants (from
+   history, from other repos) is a fact without a home yet: propose asking for
+   the default once and recording it where it applies, instead of improving
+   the inference.
 
 Move out — the text survives, but not here:
 
