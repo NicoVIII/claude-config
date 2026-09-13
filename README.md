@@ -52,53 +52,53 @@ rationale live in
 
 ## Workflows
 
-Some skills are meant to run in sequence:
+Some skills are meant to run in sequence. These are starting points, not fixed
+pipelines — each skill also stands alone.
 
-- **Session triage** — `/prioritize` scans your repos and decides what to work
-  on. When it surfaces dependency bumps, `cd` into that repo and run
-  `/merge-dependabot` to clear the ones CI actually verifies; for a flagged
-  bump you still want to land, follow up with `/verify-bump <n>`. When it
-  points at a repo whose issue list has outgrown what you can hold in your
-  head, `/groom` clears the dead and duplicated issues there — it never ranks
-  anything, so the two stay disjoint. Once you settle into one repo, `/kickoff`
-  picks the single thing to start with there: blockers, then what's broken for
-  users, then the milestone, then the backlog — the within-repo counterpart of
-  `/prioritize`, and the ranking `/groom` deliberately isn't.
-  Issues that come out of the work go through `/file-issue`, which also
-  refines a rough one — scope check, then a grilling-style interview —
-  before anyone picks it up.
-- **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
-  at it; `/add-dependabot` then watches what that toolchain depends on. Run in
-  that order: the devcontainer decides which ecosystems exist to watch. The PRs
-  it produces are what Session triage above clears.
-- **Keeping the toolchain current** — Dependabot never bumps the versions
-  `/add-devcontainer` pinned: it updates a feature's tag, not the `version`
-  inside it, and cannot see a CI env var or a Dockerfile `ARG` at all. So those
-  pins move by hand — `/upgrade-toolchain` moves all of them together and
-  verifies the result.
-- **Capturing a workflow as a skill** — when a session in any project reveals a
-  repeatable workflow, run `/author-skill` while the context is fresh — the
-  transcript holds the commands, quirks, and decisions the skill should encode.
-  A workflow that only makes sense in that project lands in its own
-  `.claude/skills` instead of here. Later runs feed `/skill-retro` as usual.
-- **Refining a skill after use** — after running any skill below 🟢 Usable, run
-  `/skill-retro` in the same session to turn the friction you hit into concrete
-  skill edits (this is what the skills' feedback footer feeds); past 🟢 Usable,
-  run it on demand. `/skill-retro` only ever adds, so it also reports how far
-  the skill has grown past its baseline — when it says the skill is over the
-  trigger, run `/skill-compact` on it as a separate pass. All of this works on
-  a repo's own `.claude/skills` too: run the same commands from inside that
-  repo, and the log and edits land beside the project skill, so they ship with
-  it and reach whoever else works there — including that tree's own maturity
-  table, in `.claude/skills/README.md`, which the first log entry seeds empty
-  for the skills to be listed in.
-- **Trimming global preferences** — `CLAUDE.md` accretes the same way, but from
-  ordinary sessions rather than a skill, so nothing announces its growth
-  (`skill-refiner`'s ratio only measures skills). Check it by hand with
-  `wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it has drifted
-  well past ~500 words.
+**Setting a repo up** (once) — run `/add-devcontainer`, then
+`/add-dependabot`.
 
-These are starting points, not fixed pipelines — each skill also stands alone.
+**Working on repos** (every session)
+
+```mermaid
+flowchart LR
+  P["/prioritize"] --> MD["/merge-dependabot"] -- flagged --> VB["/verify-bump"]
+  P --> G["/groom"]
+  P --> K["/kickoff"]
+  K -. new issues .-> FI["/file-issue"]
+```
+
+- Start with `/prioritize`, then `cd` into the repo it points at:
+  - dependency bumps → `/merge-dependabot`; for a flagged bump you still want
+    to land, `/verify-bump <n>`
+  - an issue list you can no longer hold in your head → `/groom`
+  - choosing what to start on → `/kickoff`
+  - issues that come out of the work → `/file-issue`, which also refines a
+    rough one
+- Dependabot doesn't move the versions `/add-devcontainer` pinned; when a
+  toolchain is out of date, run `/upgrade-toolchain`.
+
+**Skills**
+
+```mermaid
+flowchart LR
+  AS["/author-skill"] --> R[run the skill] --> SR["/skill-retro"] --> R
+  SR -- over growth trigger --> SC["/skill-compact"] --> R
+```
+
+- **Capturing a workflow** — run `/author-skill` in the session that revealed
+  it, while the context is fresh. A workflow specific to one project lands in
+  that repo's `.claude/skills`.
+- **Refining after use** — below 🟢 Usable, run `/skill-retro` in the same
+  session after every run; past it, on demand. When it reports the skill over
+  the growth trigger, run `/skill-compact` as a separate pass.
+- **Project skills** work the same: run the commands from inside that repo, and
+  the log, edits, and maturity table (`.claude/skills/README.md`) land beside
+  the skill.
+
+**Global preferences** — nothing tracks `CLAUDE.md` growth for you. Check with
+`wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it is well past
+~500 words.
 
 ## Setup
 
