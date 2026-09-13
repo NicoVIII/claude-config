@@ -11,6 +11,7 @@ fork it and make it yours.
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
 | [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
+| [`kickoff`](skills/kickoff/SKILL.md) | Pick the one thing to start with in the repo you just entered. | Opus | 🚧 WIP |
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🚧 WIP |
@@ -58,7 +59,10 @@ Some skills are meant to run in sequence:
   bump you still want to land, follow up with `/verify-bump <n>`. When it
   points at a repo whose issue list has outgrown what you can hold in your
   head, `/groom` clears the dead and duplicated issues there — it never ranks
-  anything, so the two stay disjoint.
+  anything, so the two stay disjoint. Once you settle into one repo, `/kickoff`
+  picks the single thing to start with there: blockers, then what's broken for
+  users, then the milestone, then the backlog — the within-repo counterpart of
+  `/prioritize`, and the ranking `/groom` deliberately isn't.
 - **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
   at it; `/add-dependabot` then watches what that toolchain depends on. Run in
   that order: the devcontainer decides which ecosystems exist to watch. The PRs

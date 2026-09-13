@@ -1,0 +1,86 @@
+---
+name: kickoff
+description: Pick what to start with in the current repository — one concrete recommendation, not a ranked list. Use when I ask what to work on in this repo, what to pick up here, where to start after /prioritize pointed me at a repo, or say kickoff. Cross-repo triage is prioritize, not this.
+---
+
+Answer "I'm in this repo now — what do I start with?" with one concrete
+recommendation. Read-only: nothing here writes to GitHub or the repo.
+
+Scope is the repo you are `cd`'d into. Work the tiers in order and stop at the
+first that yields a candidate — read a lower tier only when everything above
+came up empty. The convention being read: issues are the backlog; an open
+milestone, where present, names the current focus. Both are optional signals —
+a repo using neither still gets an answer from the tiers that apply.
+
+## Tier 1 — blocked or bleeding
+
+Objective problems that stall everything else; no judgment calls here.
+
+```sh
+default=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
+gh run list --branch "$default" --limit 10 --json workflowName,conclusion,createdAt,url
+gh pr list --state open --json number,title,author,isDraft,reviewDecision,statusCheckRollup,updatedAt
+gh api "repos/{owner}/{repo}/dependabot/alerts?state=open" --jq length
+```
+
+- **Red CI** — judge the *latest* run per workflow; an old red superseded by a
+  green is history, not a blocker.
+- **Security alerts** — a 403/404 from the alerts endpoint means no access or
+  not enabled: say so in the report and move on, never treat it as zero.
+- **PRs waiting on you** — review requested from you, your own PR with changes
+  requested or red checks, or green-and-unmerged. A pile of Dependabot PRs is
+  one candidate — "run `/merge-dependabot`" — not one per bump.
+
+Severity order when several hit: red default-branch CI, then security alerts,
+then stalled PRs. Recommend the worst and stop.
+
+## Tier 2 — keep the lights on
+
+```sh
+gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt,updatedAt
+```
+
+Add `body` to that call when the repo has ≤40 open issues; above that, fetch
+bodies only for suspected defects via `gh issue view <n> --json body`.
+
+A defect is an issue describing broken shipped behavior — `bug` label where the
+repo uses one, otherwise inferred from the text (crash, error, wrong result,
+"worked before"). The gate for this tier: **a real user hits it in normal
+use**. Cosmetic glitches, edge cases behind a warning, and papercuts with a
+workaround drop to tier 4 — and when genuinely unsure, so does the issue: the
+milestone wins ties. Within the tier, rank by blast radius, then age.
+
+## Tier 3 — declared focus
+
+From the milestones on the issues above, or `gh api repos/{owner}/{repo}/milestones`
+when none carried one. Nearest due date wins; a single open milestone needs no
+due date; several open milestones with no due dates is a question — ask me
+which is current instead of guessing. Recommend the issue in the milestone that
+unblocks the most of the rest of it (cross-references in the bodies).
+
+## Tier 4 — ranked backlog
+
+Everything left, including the defects that failed the tier-2 gate. Rank:
+unblocks other issues, then defect over idea, then older first. Recommend the
+top.
+
+## Tier 5 — nothing to do
+
+Say so plainly. If the backlog is sizeable but produced no candidate you would
+defend, that is a legibility problem, not a ranking problem — suggest `/groom`
+and stop. Never invent work to have a recommendation.
+
+## Report
+
+One line first: **start with X because Y (tier N)**. Then at most two
+runners-up, one line each, so I can veto without a re-run. Then stop: do not
+begin the work, do not open or edit issues, do not post anywhere — wait for my
+pick.
+
+Untested: the whole procedure is designed, not yet observed in a run — the
+commands, the tier order, the tier-2 severity gate, and the ≤40-body threshold
+(borrowed from `groom`). Say which of them did not fit.
+
+---
+
+This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
