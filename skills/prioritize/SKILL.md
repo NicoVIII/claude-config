@@ -35,6 +35,8 @@ Bot-authored PRs (Dependabot etc.) are never weight 1 — cluster them ("8 green
 
 Claim only what the digest's columns say, and only about what it covers: dormant means the PUSHED column, not a skim of the backlog, and "nothing is waiting on you" is a claim about the repos I own plus review requests elsewhere, not about every repo I touch.
 
+When neither weight produces a candidate, don't stretch the digest into a ranking it can't support: say plainly that nothing is blocked or waiting, name at most one repo worth entering anyway — the PUSHED column (recent momentum) is the only signal the digest offers for that — and hand off to `/kickoff` to pick the work inside it.
+
 When two candidates genuinely compete for the top and the trade-off is mine to make (e.g. review debt vs. a broken build), ask via AskUserQuestion instead of assuming a ranking.
 
 Stop at the ranking. Do not offer to start fixing anything and do not begin work in any repo — I take the shortlist and open the target repository myself.
