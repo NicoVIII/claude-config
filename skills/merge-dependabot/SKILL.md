@@ -39,7 +39,7 @@ For each **flagged** PR, make it actionable — state the reason, then:
 - **needs rebase / pending / stale refresh:** the one-line note is enough.
 - **policy:** say which rule it hits and offer to close it (`gh pr close <n> --comment ...`); if it exposes a config gap — an ignore rule that should exist but doesn't — say so.
 
-Anything written to GitHub (comments, reviews) ends with "— written by an agent"; merges and branch deletions carry their own authorship and need no marker.
+Anything written to GitHub (comments, reviews) ends with `🤖 Written by code assistant` on its own line; merges, branch deletions, and bare `@dependabot` commands need no marker.
 
 Keep it dense — one verdict block per PR, no padding. Example:
 
