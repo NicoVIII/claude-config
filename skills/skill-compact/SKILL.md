@@ -1,6 +1,6 @@
 ---
 name: skill-compact
-description: Shrink a skill whose SKILL.md has accreted rules — merge, generalize, or move text out until the file is smaller than it started. Use when a skill has bloated, when /skill-retro reports it past its growth trigger, or when I say a skill has too much text.
+description: Shrink a skill whose SKILL.md has accreted rules — merge, generalize, or move text out without losing what it knows. Use when a skill has bloated, when /skill-retro reports it past its growth trigger, or when I say a skill has too much text.
 ---
 
 Reduce a skill's SKILL.md without losing what it knows.
@@ -9,7 +9,7 @@ Reduce a skill's SKILL.md without losing what it knows.
 
 One skill, named as argument. Start with `~/.claude/bin/skill-refiner.sh <skill> ratio`. Its last line splits the file into rules and words per rule: more words per rule points at the ladder's shrink rungs, more rules at its remove and move-out rungs. Its growth trace says when the words arrived and which entry's clause explains each rise — the fastest way to the passages worth reading first.
 
-The pass must end with **fewer words in the SKILL.md than it started** — that file is the whole measure. What bounds the pass is the candidates that carry evidence, not the ratio: ending still above the trigger is a fine outcome. Text the pass moves out costs nothing against it, into a new file or an existing one, provided a file the consuming run does load still points at it. Moving a fact obliges you to update its other readers in the same pass. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide.
+The pass must never end with **more words in the SKILL.md than it started** — that file is the whole measure. When no candidate carries evidence, say so and change nothing: a cut made only to have one is the failure this pass guards against. What bounds the pass is the candidates that carry evidence, not the ratio: ending still above the trigger is a fine outcome. Text the pass moves out costs nothing against it, into a new file or an existing one, provided a file the consuming run does load still points at it. Moving a fact obliges you to update its other readers in the same pass. Generalizing three rules into one principle inserts text and still counts. Adding a rule for something you noticed while reading does not — mention it and let a retro decide.
 
 ## Find candidates
 
@@ -32,7 +32,7 @@ Take the strongest rung of `~/.claude/references/prose-ladder.md` that fits each
 
 Leave the earlier entries of `HISTORY.md` alone — the baselines already there are the only record of whether the floor is rising.
 
-Record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together, in the repo that holds the skill — a project skill commits into its own repo, not `~/.claude`.
+When the pass changed the file, record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together, in the repo that holds the skill — a project skill commits into its own repo, not `~/.claude`.
 
 ---
 

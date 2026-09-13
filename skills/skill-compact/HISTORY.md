@@ -11,3 +11,4 @@
 2026-08-03 · claude-config · 710 words · retro major: the ladder script rung sent the pass to helpers.md, whose contract test reads as being about the helper own output, so a finished bash script was written and discarded before the user reverted it to F#; the rung also quoted a build as 136 words of prose with no warning; near-miss on the deferred just-check-before-staging finding, avoided only by habit
 2026-08-03 · claude-config · 710 words · fix small: the shell-or-F# test now names the formats a helper parses rather than its own output, and gives length as a one-way signal; repo.md states staging as an imperative
 2026-09-06 · claude-config · 745 words · fix small: model lookup and commit target now cover a project skill in the session repo .claude/skills
+2026-09-13 · claude-config · 773 words · fix big: floor is no-growth, not must-shrink; an empty pass changes nothing and logs no baseline
