@@ -45,8 +45,9 @@ then stalled PRs. Recommend the worst and stop.
 gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt,updatedAt
 ```
 
-Add `body` to that call when the repo has ≤40 open issues; above that, fetch
-bodies only for suspected defects via `gh issue view <n> --json body`.
+Never add `body` to that call. Fetch bodies only for suspected defects via
+`gh issue view <n> --json body`; for cross-references (tiers 3 and 4) run
+`gh issue list --state open --limit 200 --json number,body --jq '.[] | "\(.number): " + ([.body | scan("#[0-9]+")] | unique | join(" "))'`.
 
 A defect is an issue describing broken shipped behavior — `bug` label where the
 repo uses one, otherwise inferred from the text (crash, error, wrong result,
@@ -57,11 +58,10 @@ milestone wins ties. Within the tier, rank by blast radius, then age.
 
 ## Tier 3 — declared focus
 
-From the milestones on the issues above, or `gh api repos/{owner}/{repo}/milestones`
-when none carried one. Nearest due date wins; a single open milestone needs no
-due date; several open milestones with no due dates is a question — ask me
+From the milestones on the issues above. Nearest due date wins; a single open
+milestone needs no due date; several open milestones with no due dates is a question — ask me
 which is current instead of guessing. Recommend the issue in the milestone that
-unblocks the most of the rest of it (cross-references in the bodies).
+unblocks the most of the rest of it (the cross-references above).
 
 ## Tier 4 — ranked backlog
 
