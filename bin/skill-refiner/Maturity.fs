@@ -51,7 +51,10 @@ let private ratingOf (claimed: string) =
 /// where no row records which side of 🟢 Usable it used to sit on — so the
 /// caller checks the file itself rather than inferring from a claim.
 let private footerCall rating =
-    if carriesFooter rating then "the feedback footer" else "no feedback footer"
+    if carriesFooter rating then
+        "the feedback footer, verbatim from references/skill-footer.md"
+    else
+        "no feedback footer"
 
 /// The edit a disagreement implies, printed rather than re-derived by every
 /// caller: the log wins, so a claim it contradicts is a row to update, and the
@@ -76,7 +79,7 @@ let private readmeEdit (claim: Layout.Claim) rating =
         Some $"  update the README row to {label rating}{footer}"
     | Layout.Unlisted ->
         Some
-            $"  add a README row at {label rating}, with the skill's summary and the model to run it with; at this rating the SKILL.md carries {footerCall rating}"
+            $"  add a README row at {label rating}, with the skill's summary and a suggested model judged from what its most demanding mode needs (pick-model's tiers), not the unlisted-skill default; at this rating the SKILL.md carries {footerCall rating}"
     | Layout.NoTable -> Some $"  at this rating the SKILL.md carries {footerCall rating}"
 
 type private Counts =

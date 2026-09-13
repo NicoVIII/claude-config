@@ -808,7 +808,7 @@ let private treeTests =
 
                   Expect.stringContains
                       result.Stdout
-                      "the model to run it with"
+                      "a suggested model judged from what its most demanding mode needs"
                       "naming the column nothing else in the loop records")
           }
 
