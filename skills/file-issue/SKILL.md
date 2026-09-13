@@ -5,7 +5,7 @@ description: File a GitHub issue in the current repo, or refine a rough one unti
 
 Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
 
-Untested: the approval step before `gh issue create`, the sweep-issue search, and the whole Refine flow are designed, not yet run.
+Untested: the approval step before `gh issue create`, the sweep-issue search, and a Refine run that ends in a rewritten body.
 
 ## Read the repo's conventions first
 
@@ -38,13 +38,13 @@ A dependency on another issue goes in the body as "Blocked by #n". *(Untested: w
 
 For an issue that is plausible but not startable — a one-paragraph idea, no acceptance, decisions nobody made.
 
-1. `gh issue view <n> --json title,body,labels,comments,author`. If someone other than me authored or commented, say so before posting anything.
-2. **Scope check** against the scope doc and the repo's decision records (e.g. `docs/decisions/`): quote any non-goal, "someday, maybe", or settled decision it touches. If it is out of scope, stop and ask whether to close it as not planned or change the scope doc first.
+1. `gh issue view <n> --json title,body,labels,comments,author`. If someone other than me authored or commented, say so before editing or posting anything.
+2. **Scope check** against the scope doc and the repo's decision records (e.g. `docs/decisions/`): quote any non-goal, "someday, maybe", or settled decision it touches. If the scope doc doesn't plainly cover it, ask before any interview whether to close it as not planned, park it, or change the scope doc. **Park**: do step 3, skip steps 4–5, post one comment with the facts found and the decisions left open, close the issue as not planned, and commit a line linking it into the scope doc's "someday" section.
 3. **Look up the facts** — what exists in the code, what the dependency or platform supports. Don't ask me what the repo can answer.
 4. **List the open decisions**, then interview me on them following the `grilling` skill's rules: one question at a time, each with your recommended answer, dependencies resolved in order.
-5. Post the outcome as **one comment**: decisions made, then the acceptance section, then anything still open. Fix the title with `gh issue edit <n> --title` only if it misleads. **Never rewrite the body** — it is the record of the original thinking.
+5. **Rewrite the body** to File's step 3 bar — the decisions made folded in, the acceptance section, anything still open — so the issue reads cleanly when work starts instead of as a body plus a comment trail. Show it to me, then `gh issue edit <n> --body-file …`; GitHub's edit history keeps the original. Fix the title in the same call with `--title` only if it misleads.
 
-Stop after the comment is posted. Don't start implementing.
+Stop once the issue is updated. Don't start implementing.
 
 ## Attribution
 
