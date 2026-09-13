@@ -24,13 +24,17 @@ gh pr list --state open --json number,title,author,isDraft,reviewDecision,status
 gh api "repos/{owner}/{repo}/dependabot/alerts?state=open" --jq length
 ```
 
-- **Red CI** — judge the *latest* run per workflow; an old red superseded by a
+- **Red CI** — judge the latest *completed* run per workflow (an empty
+  `conclusion` means still running — skip it); an old red superseded by a
   green is history, not a blocker.
 - **Security alerts** — a 403/404 from the alerts endpoint means no access or
   not enabled: say so in the report and move on, never treat it as zero.
-- **PRs waiting on you** — review requested from you, your own PR with changes
-  requested or red checks, or green-and-unmerged. A pile of Dependabot PRs is
-  one candidate — "run `/merge-dependabot`" — not one per bump.
+- **PRs waiting on you** — review requested from you, or your own PR with
+  changes requested, red checks, or green-and-unmerged. Bot dependency bumps
+  are not PRs waiting on you: one or two open bumps are no candidate at any
+  tier, whatever their checks say. Only 3 or more open become one tier-1
+  candidate — "run `/merge-dependabot`" — so the pile is cleared before it
+  reaches Dependabot's open-PR limit and updates stop arriving.
 
 Severity order when several hit: red default-branch CI, then security alerts,
 then stalled PRs. Recommend the worst and stop.
