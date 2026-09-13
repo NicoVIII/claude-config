@@ -15,6 +15,7 @@ fork it and make it yours.
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🚧 WIP |
+| [`file-issue`](skills/file-issue/SKILL.md) | File an issue someone could start cold, or refine a rough one to that bar. | Opus | 🚧 WIP |
 
 ### Repo setup & toolchain
 
@@ -63,6 +64,9 @@ Some skills are meant to run in sequence:
   picks the single thing to start with there: blockers, then what's broken for
   users, then the milestone, then the backlog — the within-repo counterpart of
   `/prioritize`, and the ranking `/groom` deliberately isn't.
+  Issues that come out of the work go through `/file-issue`, which also
+  refines a rough one — scope check, then a grilling-style interview —
+  before anyone picks it up.
 - **Setting a repo up** — `/add-devcontainer` pins the toolchain and points CI
   at it; `/add-dependabot` then watches what that toolchain depends on. Run in
   that order: the devcontainer decides which ecosystems exist to watch. The PRs

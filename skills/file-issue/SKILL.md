@@ -1,0 +1,55 @@
+---
+name: file-issue
+description: File a GitHub issue in the current repo, or refine a rough one until someone could start it cold. Use when I say file an issue, open an issue for this, track this, write this up as an issue, or ask to refine, flesh out, or clarify an existing issue.
+---
+
+Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
+
+Untested: the approval step before `gh issue create`, the sweep-issue search, and the whole Refine flow are designed, not yet run.
+
+## Read the repo's conventions first
+
+These vary per repo and override the defaults below:
+
+- The issue section of `AGENTS.md` / `CLAUDE.md` at the repo root (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`): label taxonomy, milestone/Project policy, the scope document.
+- Labels that exist: `gh label list --json name -q '.[].name'`. Never create a label. With no stated taxonomy, apply an existing label only where one plainly fits, else none.
+- The scope document — the one the conventions name, else `docs/vision.md`, else the README's scope or non-goals section. No scope doc: skip the scope check and say so.
+
+## File
+
+1. **Triage before filing.** Stop and report instead of filing when:
+   - it is a trivial fix — make the fix instead, or say it is one;
+   - the scope doc lists it as a non-goal — name the line; file only if I still want it;
+   - it is a small nit — add it to the repo's open sweep issue (`gh issue list --search "sweep in:title"`) as a comment, or bundle it with other nits into one new sweep issue.
+2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms: one job often hides behind two wordings ("No mobile layout" vs "Responsive pass"). On a match, comment the new scope onto that issue instead of filing.
+3. **Write the body so someone could start it cold**, without this session:
+   - bug: repro steps, expected, actual;
+   - feature or enabler: goal, current state with file paths, scope, and an acceptance section saying when it is done;
+   - decisions you could not make: an explicit "Open questions" list, not buried in prose.
+4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
+5. **Labels** per the repo's taxonomy.
+6. Show me title, labels, and body; create with `gh issue create --title … --body-file … --label …` once I approve. If I asked you to file without review, file directly.
+
+Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
+
+A dependency on another issue goes in the body as "Blocked by #n". *(Untested: whether `gh` can set GitHub's native blocked-by relation — check `gh issue edit --help` first.)*
+
+## Refine
+
+For an issue that is plausible but not startable — a one-paragraph idea, no acceptance, decisions nobody made.
+
+1. `gh issue view <n> --json title,body,labels,comments,author`. If someone other than me authored or commented, say so before posting anything.
+2. **Scope check** against the scope doc and the repo's decision records (e.g. `docs/decisions/`): quote any non-goal, "someday, maybe", or settled decision it touches. If it is out of scope, stop and ask whether to close it as not planned or change the scope doc first.
+3. **Look up the facts** — what exists in the code, what the dependency or platform supports. Don't ask me what the repo can answer.
+4. **List the open decisions**, then interview me on them following the `grilling` skill's rules: one question at a time, each with your recommended answer, dependencies resolved in order.
+5. Post the outcome as **one comment**: decisions made, then the acceptance section, then anything still open. Fix the title with `gh issue edit <n> --title` only if it misleads. **Never rewrite the body** — it is the record of the original thinking.
+
+Stop after the comment is posted. Don't start implementing.
+
+## Attribution
+
+Every issue body and comment ends with `🤖 Written by code assistant` on its own line. Labels and title edits need no marker.
+
+---
+
+This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
