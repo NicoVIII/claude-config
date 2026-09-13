@@ -36,7 +36,7 @@ Destinations, by what needs the rule:
 
 - **A project's own AGENTS.md** — only that repo needs it.
 - **`~/.claude/references/repo.md`** — only for working on `~/.claude` itself; nothing loads it, so the rule needs a skill that already points there.
-- **A SKILL.md** — only one workflow needs it (`a3cd73c` moved the attribution norm into `author-skill` this way; still the only reduction in the file's history).
+- **A SKILL.md** — only one workflow needs it. Check the rule never applies outside that workflow: `a3cd73c` moved the attribution norm into `author-skill`, and `1122821` moved it back once issues filed on direct request went unmarked.
 - **Deletion** — nothing else needs it. Last resort, and the only irreversible one.
 
 ## Find candidates
