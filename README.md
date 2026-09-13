@@ -244,7 +244,9 @@ is the text, planted once and never overwritten. It also carries that tree's
 maturity table, the counterpart of the one above and the only place a project
 skill's suggested model is recorded. It arrives with headers and no rows: the
 rating comes from the log, but the summary and the model do not, so
-`skill-refiner maturity` asks for the row rather than inventing one.
+`skill-refiner maturity` asks for the row rather than inventing one. Seeding
+also names the skills already sitting in that tree: the empty table lists none
+of them, and nothing else in the loop reaches a skill that is never logged.
 
 Credits: [`grilling`](skills/grilling/SKILL.md) is based on
 <https://github.com/mattpocock/skills> (MIT License). Attributions live here

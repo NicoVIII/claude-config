@@ -781,6 +781,47 @@ let private treeTests =
                       "the seeded file is untracked there, so the caller is told to commit it")
           }
 
+          test "names the skills already beside the one it seeds a table for" {
+              withRoot (fun root ->
+                  // Arrange — two skills predating the one being logged, which
+                  // the table seeding plants has no rows for either
+                  root |> projectSkill "demo" (words 7)
+                  root |> projectSkill "triage" (words 7)
+                  root |> projectSkill "Archivist" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "2 other skills beside it, with no row yet: Archivist, triage"
+                      "nothing else in the loop reaches a skill that is never logged, and `demo` has its own maturity run"
+
+                  Expect.stringContains
+                      result.Stdout
+                      "rates each; its summary and suggested model are yours to judge"
+                      "and the rung is all maturity supplies, so the judged columns are not read off it")
+          }
+
+          test "says nothing about other skills when the one being logged is the only one there" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> projectSkill "demo" (words 7)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.isFalse
+                      (result.Stdout.Contains "no row yet")
+                      "a project's first skill leaves no backlog to work through")
+          }
+
           test "seeds a maturity table the rating reader then asks to fill in" {
               withRoot (fun root ->
                   // Arrange — a logged run in a project that has never had a

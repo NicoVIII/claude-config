@@ -170,7 +170,10 @@ let private claimLine (skill: string) (claim: Layout.Claim) (counts: Counts) rat
 
     match claim, counts.Runs with
     | Layout.NoTable, 0 -> $"{skill}: log holds no runs — nothing rates it yet; {said}"
-    | Layout.Unlisted, 0 -> $"{skill}: log holds no runs — {said}, and 🚧 WIP is where an unrun skill belongs"
+    // "nothing logged" rather than "never run": a skill seeding found already
+    // sitting in a project predates its log, so asserting it has not run invites
+    // the reader to correct the tool with a rung nothing backs.
+    | Layout.Unlisted, 0 -> $"{skill}: log holds no runs — {said}, and 🚧 WIP is where a skill with nothing logged belongs"
     | _, 0 -> $"{skill}: log holds no runs — {said}; nothing backs that yet and nothing contradicts it, so leave the row alone"
     | _ -> $"{skill}: log supports {label rating} — {said}"
 

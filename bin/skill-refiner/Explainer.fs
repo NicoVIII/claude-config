@@ -30,11 +30,31 @@ let private explainer () =
     use reader = new StreamReader(stream)
     reader.ReadToEnd()
 
+/// The skills already sitting beside the one being logged. A seeded table has
+/// no rows at all, so these are unlisted by construction rather than by a
+/// lookup — and seeding is the only moment that can produce a backlog of them:
+/// a skill added afterwards reaches its row through its own maturity run.
+let private otherSkillsIn (holder: string) (skill: string) =
+    let current = DirectoryInfo(Layout.skillDir skill).Name
+
+    Directory.GetDirectories holder
+    |> Array.map DirectoryInfo
+    |> Array.filter (fun dir -> dir.Name <> current && File.Exists(Path.Combine(dir.FullName, "SKILL.md")))
+    |> Array.map (fun dir -> dir.Name)
+    |> Array.sortBy (fun name -> name.ToLowerInvariant())
+    |> List.ofArray
+
 /// Never overwrites: a tree that already describes its skills has said it
 /// better than a template can, and the seeded copy is meant to be edited. The
 /// line names the file as something to commit — the seeded README is untracked
 /// in the project, and a caller that commits only the skill and its log leaves
 /// the explanation behind.
+///
+/// The backlog is named here rather than in the seeded README, which is written
+/// for a reader who has neither this binary nor a reason to maintain the table
+/// (9056afe). `maturity` is pointed at rather than paraphrased: it supplies the
+/// rung and nothing else, and the caller that mistakes it for the whole row
+/// writes the two judged columns from a default.
 let seedIfForeign (skill: string) =
     match Layout.foreignSkillsDir skill with
     | None -> ()
@@ -44,3 +64,11 @@ let seedIfForeign (skill: string) =
         if not (File.Exists path) then
             File.WriteAllText(path, explainer ())
             printfn $"  seeded {path} — commit it with the skill"
+
+            match otherSkillsIn dir skill with
+            | [] -> ()
+            | others ->
+                let noun = if others.Length = 1 then "skill" else "skills"
+
+                printfn $"""  {others.Length} other {noun} beside it, with no row yet: {String.concat ", " others}"""
+                printfn "    `skill-refiner <name> maturity` rates each; its summary and suggested model are yours to judge"
