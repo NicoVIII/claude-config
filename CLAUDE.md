@@ -16,6 +16,8 @@ Cross-project preferences, loaded into every session. Personal — never copy th
 - Before committing in a repo you don't know, infer the workflow from history rather than defaulting to a branch. Ask only when the signal is genuinely mixed.
 - Commit messages explain WHY — reasoning, trade-offs, non-obvious constraints — not WHAT; the diff carries the what. Never conventional commits (`feat:`, `fix:`, `chore(scope):`) — a history full of them isn't consent, only an explicit project instruction is. A plain `area:` prefix is not a conventional commit.
 - Never push, and don't ask about pushing — I push manually.
+- Landing a PR: squash when it has one commit or only throwaway messages (bot text, fixups); otherwise rebase-merge so the commits survive. Don't infer the method from how past PRs landed.
+- A fresh git worktree lacks gitignored build inputs (dependencies, generated code): provision it the way the repo's setup does before building, or missing modules read as breakage.
 
 ## Code style
 
