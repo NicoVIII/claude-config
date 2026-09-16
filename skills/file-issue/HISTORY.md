@@ -7,3 +7,4 @@
 2026-09-13 · tcg-card-collector · 827 words · fix small: dependencies recorded via gh blocked-by/blocking flags instead of body prose; approval step dropped from untested list
 2026-09-16 · tcg-card-collector · 827 words · retro minor: second sighting: "file X" vs "file without review" ambiguity cost a draft round trip on #99; approval inference replaced by a recorded default
 2026-09-16 · claude-config · 838 words · fix big: approval step: an asked-for issue is filed directly and shown after; draft first only for unseen open questions
+2026-09-16 · tcg-card-collector · 838 words · retro minor: open questions settled before filing on #100; step 6 draft path has no next step after showing (deferred, first sighting: draft-with-open-questions has no settle-or-file rule)
