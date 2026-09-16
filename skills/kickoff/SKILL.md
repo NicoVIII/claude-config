@@ -8,7 +8,8 @@ recommendation. Read-only: nothing here writes to GitHub or the repo.
 
 Scope is the repo you are `cd`'d into. Work the tiers in order and stop at the
 first that yields a candidate — read a lower tier only when everything above
-came up empty. The convention being read: issues are the backlog; an open
+came up empty, or to fill the runners-up when the winning tier has fewer than
+three candidates. The convention being read: issues are the backlog; an open
 milestone, where present, names the current focus. Both are optional signals —
 a repo using neither still gets an answer from the tiers that apply.
 

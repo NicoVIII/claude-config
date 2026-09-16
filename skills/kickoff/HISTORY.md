@@ -7,3 +7,5 @@
 2026-09-13 · tcg-card-collector · 701 words · fix big: bot bumps rank only as a pile of 3+ (not per PR, not as own PR); CI judged by latest completed run
 2026-09-13 · tcg-card-collector · 701 words · retro minor: tier-4 pick hinged on unstated hard-vs-soft blocker weighting (deferred: blocker weighting in tier 4 ranking); ≤40-issue body fetch pulled 38.7KB and forced a re-fetch; milestones API fallback skipped as dead
 2026-09-13 · tcg-card-collector · 714 words · fix big: issue bodies never fetched in bulk: defects via gh issue view, cross-references via a jq scan; drop dead milestones API fallback
+2026-09-16 · tcg-card-collector · 714 words · retro minor: runner-up rule contradicted the stop-at-first-tier rule (forced reading lower tiers); deferred: non-CI workflow runs (Dependabot Updates) counted as red CI, tier-3 tie-break for mutually cross-referencing issues
+2026-09-16 · tcg-card-collector · 728 words · fix small: runner-ups may read lower tiers when the winning tier has fewer than three candidates
