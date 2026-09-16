@@ -28,7 +28,7 @@ These vary per repo and override the defaults below:
    - decisions you could not make: an explicit "Open questions" list, not buried in prose.
 4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
 5. **Labels** per the repo's taxonomy.
-6. Show me title, labels, and body; create with `gh issue create --title … --body-file … --label …` once I approve. If I asked you to file without review, file directly.
+6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label …`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
