@@ -171,6 +171,10 @@ let private logTests =
                       "1.20x its baseline of 100"
                       "the fix carries the accretion report, so nobody runs ratio separately"
 
+                  Expect.isFalse
+                      (fix.Stdout.Contains "growth trace:")
+                      "the trace is ratio's, for /skill-compact; the fix reports only the headline"
+
                   Expect.isFalse (retro.Stdout.Contains "trigger") "the retro reports no ratio")
           }
 

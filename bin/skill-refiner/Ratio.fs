@@ -222,7 +222,7 @@ let private densityLine (text: string) =
     | 1 -> $"  1 rule of {words} words"
     | rules -> $"  {rules} rules at {words / rules} words each"
 
-let run (skill: string) =
+let private report (withTrace: bool) (skill: string) =
     let text = File.ReadAllText(Layout.skillFile skill)
     let now = Layout.wordCount text
     let points = Layout.history skill |> allPoints
@@ -240,9 +240,18 @@ let run (skill: string) =
 
         printfn $"{skill}: {now} words, {formatHundredths hundredths} its baseline of {words} ({origin}) — {verdict}"
 
-    if not (List.isEmpty points) then
+    if withTrace && not (List.isEmpty points) then
         printfn "  growth trace:"
         renderTrace points |> List.iter (printfn "%s")
 
     floorLine now (anchorPoints points) |> Option.iter (printfn "%s")
     printfn "%s" (densityLine text)
+
+/// The full report, trace included: what /skill-compact reads to find where the
+/// words arrived.
+let run (skill: string) = report true skill
+
+/// The report without the trace. A retro logging its fix passes these lines on
+/// without acting on them, so the trace, which grows with every entry, would be
+/// paid for and never read.
+let summary (skill: string) = report false skill

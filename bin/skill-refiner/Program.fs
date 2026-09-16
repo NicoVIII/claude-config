@@ -44,7 +44,7 @@ let private log (skill: string) (args: string list) =
         Log.change skill event
 
         match event with
-        | Fix _ -> Ratio.run skill
+        | Fix _ -> Ratio.summary skill
         | Retro _
         | Compacted _ -> ()
 

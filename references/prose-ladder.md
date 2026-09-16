@@ -32,6 +32,7 @@ Move out — the text survives, but not here:
 Shrink — fewer words in place:
 
 6. **Merge or generalize** several rules into one.
-7. **State the exact command inline** when it reads in one line.
+7. **State inline, in one line, what the pointed-at text decides** — the exact
+   command, or the case that settles most runs, keeping the pointer for the rest.
 8. **Reword** — the last resort and never the default: rewording is what
    accretes in the first place.
