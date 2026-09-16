@@ -43,3 +43,7 @@ With that entry written, assess maturity: `~/.claude/bin/skill-refiner.sh <skill
 **After the edits**, record what they did: `log fix small '<one line>'` or `log fix big '<one line>'`. Big means the runs before this edit no longer vouch for the skill — a mechanism replaced, a step added or removed, a contract changed; small means the procedure is intact and only its wording moved. Between the two — a step's command swapped, a destination added, a rule's scope widened — ask whether a correct run under the old text would already have done what the new text says. If it would, the edit only made that explicit: `small`. If it would not, earlier runs never exercised the new decision: `big`. Still unsure, take `big`. A big fix resets the maturity streak. A run that needed no edits logs no fix.
 
 The `log fix` entry reports accretion — pass its lines on without acting on them; acting on the ratio is `/skill-compact`'s separate pass.
+
+---
+
+This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.

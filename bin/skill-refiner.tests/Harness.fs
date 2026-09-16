@@ -143,6 +143,13 @@ let listed (name: string) (maturity: string) (root: Root) =
         $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n"
     )
 
+/// The same row with the bare name as link text, as a hand-written table spells it.
+let listedWithoutBackticks (name: string) (maturity: string) (root: Root) =
+    File.AppendAllText(
+        Path.Combine(root.Dir, "README.md"),
+        $"| [{name}](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n"
+    )
+
 /// The session repo's own tree, `.claude/skills` — where a name resolves before
 /// the config root's `skills/`, so a test that puts the same name in both is
 /// testing the order.

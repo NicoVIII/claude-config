@@ -467,6 +467,20 @@ let private maturityTests =
                   Expect.isFalse (result.Stdout.Contains "leave the row alone") "and not withheld as unbacked")
           }
 
+          test "reads a row whose link text has no backticks" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> skill "demo" (words 100)
+                  root |> listedWithoutBackticks "demo" "🧪 Experimental"
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "README says 🧪 Experimental" "the row is found"
+                  Expect.isFalse (result.Stdout.Contains "add a README row") "and no duplicate is asked for")
+          }
+
           test "aborts on a log line no reader can parse" {
               withRoot (fun root ->
                   // Arrange — a dated line with an unknown event. Skipping it

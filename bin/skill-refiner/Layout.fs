@@ -163,11 +163,12 @@ let private tableFile (skill: string) =
 /// The README's rating, for comparison only. It is a claim, not evidence: where
 /// the two disagree, the log wins. A tree whose table has no row for the skill
 /// is not lying, and one with no table at all makes no claim. The skill is
-/// matched as the literal link text, so one skill's row cannot match another
-/// whose name extends it.
+/// matched as the literal link text, with or without backticks, so one skill's
+/// row cannot match another whose name extends it.
 let claimedRating (skill: string) : Claim =
     let readme = tableFile skill
-    let link = $"[`{DirectoryInfo(skillDir skill).Name}`]("
+    let name = DirectoryInfo(skillDir skill).Name
+    let links = [ $"[`{name}`]("; $"[{name}](" ]
 
     if not (File.Exists readme) then
         NoTable
@@ -177,7 +178,7 @@ let claimedRating (skill: string) : Claim =
         |> Array.tryPick (fun line ->
             let cells = line.Split '|'
 
-            if cells.Length >= 5 && cells[1].Contains link then
+            if cells.Length >= 5 && links |> List.exists cells[1].Contains then
                 Some(cells[4].Trim())
             else
                 None)
