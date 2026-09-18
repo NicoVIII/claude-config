@@ -64,8 +64,9 @@ pipelines — each skill also stands alone.
 flowchart LR
   P["/prioritize"] --> MD["/merge-dependabot"] -- flagged --> VB["/verify-bump"]
   P --> G["/groom"]
-  P --> K["/kickoff"]
-  K -. new issues .-> FI["/file-issue"]
+  P --> K["/kickoff"] --> I["implement<br/>(no skill)"]
+  I -. new issues .-> FI["/file-issue"]
+  I -- landed --> P
 ```
 
 - Start with `/prioritize`, then `cd` into the repo it points at:
@@ -75,6 +76,14 @@ flowchart LR
   - choosing what to start on → `/kickoff`
   - issues that come out of the work → `/file-issue`, which also refines a
     rough one
+- Doing the work is the one step no skill drives, deliberately: `/kickoff` and
+  `/file-issue` both stop short of it, and `CLAUDE.md` already governs it in
+  every session — a skill would restate those rules at a cost per run.
+  Repo-specific mechanics (branching, how PRs land, which checks run) belong in
+  that repo's `AGENTS.md` or its own `.claude/skills`.
+- Issues noticed mid-work stay proposals until the run ends; once the change is
+  landed, re-enter at `/kickoff` for the next one, or `/prioritize` when you are
+  done in that repo.
 - Dependabot doesn't move the versions `/add-devcontainer` pinned; when a
   toolchain is out of date, run `/upgrade-toolchain`.
 
