@@ -54,17 +54,23 @@ Never add `body` to that call. Fetch bodies only for suspected defects via
 A defect is an issue describing broken shipped behavior — `bug` label where the
 repo uses one, otherwise inferred from the text (crash, error, wrong result,
 "worked before"). The gate for this tier: **a real user hits it in normal
-use**. Cosmetic glitches, edge cases behind a warning, and papercuts with a
-workaround drop to tier 4 — and when genuinely unsure, so does the issue: the
-milestone wins ties. Within the tier, rank by blast radius, then age.
+use**. Cosmetic glitches, papercuts with a workaround, and error paths the user
+only reaches once something else has failed drop to tier 4, wrong state left
+behind or not — and when genuinely unsure, so does the issue: the milestone wins
+ties. Within the tier, rank by blast radius, then age.
 
 ## Tier 3 — declared focus
 
-From the milestones on the issues above. Nearest due date wins — read it from
-the `dueOn` column, never from the milestones API; a single open milestone
-needs no due date; several open milestones with no due dates is a question — ask me
-which is current instead of guessing. Recommend the issue in the milestone that
-unblocks the most of the rest of it (the cross-references above).
+From the milestones on the issues above — that column is the whole set that
+matters: a milestone with no open issue holds no candidate. Nearest `dueOn`
+wins; one open milestone needs no due date; several with none is a question —
+ask me which is current instead of guessing.
+
+Rank by how much each issue unblocks: cross-references pointing at it from any
+open issue, in the milestone or not, minus any whose work has already landed —
+a milestone issue whose commits are in `git log` is done but unclosed, so say
+so. Break ties on blast radius, then age, as in tier 2; read the contenders'
+bodies, not just their titles.
 
 ## Tier 4 — ranked backlog
 
