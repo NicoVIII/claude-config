@@ -5,7 +5,7 @@ description: File a GitHub issue in the current repo, or refine a rough one unti
 
 Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
 
-Untested: writing to a sweep issue, and a Refine run that ends in a rewritten body.
+Untested: a Refine run that ends in a rewritten body — the rewrite rule replaced one the user overruled mid-run and has not been exercised since.
 
 ## Read the repo's conventions first
 
