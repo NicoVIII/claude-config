@@ -19,6 +19,10 @@ Personal — never copy them into project repos or force them on contributors. P
 - Landing a PR: squash when it has one commit or only throwaway messages (bot text, fixups); otherwise rebase-merge so the commits survive. Don't infer the method from how past PRs landed.
 - A fresh git worktree lacks gitignored build inputs (dependencies, generated code): provision it the way the repo's setup does before building, or missing modules read as breakage.
 
+## Issues
+
+- Finishing work that a tracked issue describes includes closing it — comment referencing the commit(s) and what was verified, don't leave it for me to notice and close. A partial fix says explicitly what's left and stays open.
+
 ## Code style
 
 - Before writing new code, exhaust reuse in this order: existing helper/pattern in the codebase → stdlib → native platform feature → already-installed dependency. Only then write it — and keep it minimal.
