@@ -9,8 +9,13 @@
 /// Demotion needs no separate rule: a major retro ends the trailing streak,
 /// which drops the log-derived rating on its own. A big fix does not: 🟢 Usable
 /// is a claim about outcomes, and the runs before a rewrite still had theirs.
-/// Fix size only reaches the top rung, which is a claim about text stability.
-/// Wired to Usable it made the rung unreachable — the deferral rule lands every
+/// Fix size only reaches the top rung, which is a claim about text stability:
+/// 🛡️ Battle-tested means the mechanism has not moved for five good runs in more
+/// than one repo, so a big fix drops a skill to 🟢 Usable and a major retro to
+/// 🧪 Experimental. It used to demand strictly clean runs against text nobody
+/// had touched, and no clean grade was ever logged in 44 runs — the retro's
+/// cost axis always finds a minor — so that bar was a lock, not a goal. Fix
+/// size wired to Usable had the same effect one rung down — the deferral rule lands every
 /// second-sighting rule as a step added, so a skill going through the loop
 /// took a big fix every other run, and 0 of 15 skills held Usable after ~45
 /// runs.
@@ -35,7 +40,7 @@ let private nextBar rating =
     match rating with
     | Wip -> Some "🧪 Experimental needs one run logged"
     | Experimental -> Some "🟢 Usable needs ~3 clean-or-minor runs since the last major retro"
-    | Usable -> Some "🛡️ Battle-tested needs ~5 strictly clean runs across 2–3 repos"
+    | Usable -> Some "🛡️ Battle-tested needs ~5 clean-or-minor runs since the last major retro or big fix, across 2+ repos"
     | BattleTested -> None
 
 /// Which side of 🟢 Usable a rating sits on. The feedback footer is carried
@@ -90,11 +95,11 @@ let private readmeEdit (claim: Layout.Claim) rating =
 
 type private Counts =
     { Runs: int
-      /// Runs since the last major retro. A minor counts toward 🟢 Usable but
-      /// not toward 🛡️ Battle-tested, and breaks neither; a fix of any size
-      /// breaks only the latter.
+      /// Runs since the last major retro.
       Streak: int
-      Spotless: int
+      /// Runs since the last major retro or big fix — the tail of `Streak` the
+      /// text has stood still for. A minor and a small fix break neither.
+      Stable: int
       Repos: int }
 
 /// A run happened: the skill was used, then reviewed. A fix records an edit and
@@ -109,7 +114,7 @@ let private isRun (entry: Entry<ChangeEvent>) =
 /// What leaves the 🟢 Usable streak standing: only a major retro ends it — the
 /// run went badly, and that is the one thing this rung is about. A fix of
 /// either size is transparent here, a compaction moves no rule, and whether a
-/// rewrite left the text unproven is the rung above's question.
+/// rewrite left the text unproven is `survivesStable`'s question.
 let private survivesStreak (entry: Entry<ChangeEvent>) =
     match entry.Event with
     | Retro Clean
@@ -119,15 +124,16 @@ let private survivesStreak (entry: Entry<ChangeEvent>) =
     | Fix(Big, _) -> true
     | Compacted _ -> true
 
-/// Stricter, and deliberately so: the top rung means five runs that went
-/// perfectly against text nobody has had to touch, so *any* fix ends this streak
-/// even though neither size touches the streak above.
-let private survivesSpotless (entry: Entry<ChangeEvent>) =
+/// Stricter by exactly one event: a big fix replaced a mechanism, so the runs
+/// before it never exercised what runs now. This is the only place fix size is
+/// read, and what the small/big judgement in `/skill-retro` exists for. A small
+/// fix moved wording, not procedure, and stays transparent.
+let private survivesStable (entry: Entry<ChangeEvent>) =
     match entry.Event with
-    | Retro Clean -> true
-    | Retro(Minor _)
+    | Retro Clean
+    | Retro(Minor _) -> true
     | Retro(Major _) -> false
-    | Fix(Small, _)
+    | Fix(Small, _) -> true
     | Fix(Big, _) -> false
     | Compacted _ -> true
 
@@ -136,30 +142,30 @@ let private survivesSpotless (entry: Entry<ChangeEvent>) =
 /// never reaches this: it is not a change at all.
 let private count (entries: Entry<ChangeEvent> list) =
     let newestFirst = List.rev entries
-    let spotless = newestFirst |> List.takeWhile survivesSpotless |> List.filter isRun
+    let stable = newestFirst |> List.takeWhile survivesStable |> List.filter isRun
 
     { Runs = entries |> List.filter isRun |> List.length
       Streak = newestFirst |> List.takeWhile survivesStreak |> List.filter isRun |> List.length
-      Spotless = List.length spotless
-      Repos = spotless |> List.map (fun entry -> entry.Repo) |> List.distinct |> List.length }
+      Stable = List.length stable
+      Repos = stable |> List.map (fun entry -> entry.Repo) |> List.distinct |> List.length }
 
 let private rate counts =
     if counts.Runs = 0 then Wip
-    elif counts.Spotless >= 5 && counts.Repos >= 2 then BattleTested
+    elif counts.Stable >= 5 && counts.Repos >= 2 then BattleTested
     elif counts.Streak >= 3 then Usable
     else Experimental
 
 let private plural count singular many = if count = 1 then singular else many
 
-/// The repo spread qualifies the strictly clean runs and reaches no further, so
-/// with none of those it can only read zero — which a reader takes for a count
-/// of the whole log, and every skill whose last entry is a fix shows it.
-let private spotlessClause counts =
-    if counts.Spotless = 0 then
-        "0 strictly clean"
+/// The repo spread qualifies the stable runs and reaches no further, so with
+/// none of those it can only read zero — which a reader takes for a count of
+/// the whole log, and every skill whose last entry is a big fix shows it.
+let private stableClause counts =
+    if counts.Stable = 0 then
+        "0 since the last big fix"
     else
         let repos = plural counts.Repos "repo" "repos"
-        $"%d{counts.Spotless} strictly clean, across %d{counts.Repos} {repos}"
+        $"%d{counts.Stable} since the last big fix, across %d{counts.Repos} {repos}"
 
 /// A log with no runs in it cannot argue with the README. Both a skill nobody
 /// has run yet and one whose evidence was discarded (e976e0c deleted the run
@@ -196,7 +202,7 @@ let run (skill: string) =
         counts.Runs
         (plural counts.Runs "run" "runs")
         counts.Streak
-        (spotlessClause counts)
+        (stableClause counts)
 
     // An unbacked claim is not a contradicted one, so a runless log proposes no
     // edit either — `claimLine` has already said to leave the row alone. A

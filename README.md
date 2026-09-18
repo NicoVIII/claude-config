@@ -89,9 +89,11 @@ flowchart LR
 - **Capturing a workflow** — run `/author-skill` in the session that revealed
   it, while the context is fresh. A workflow specific to one project lands in
   that repo's `.claude/skills`.
-- **Refining after use** — below 🟢 Usable, run `/skill-retro` in the same
-  session after every run; past it, on demand. When it reports the skill over
-  the growth trigger, run `/skill-compact` as a separate pass.
+- **Refining after use** — below 🛡️ Battle-tested, run `/skill-retro` in the
+  same session after every run; past it, on demand. A retro is the only thing
+  that logs a run, so a skill nobody retros never earns the top rung. When it
+  reports the skill over the growth trigger, run `/skill-compact` as a separate
+  pass.
 - **Project skills** work the same: run the commands from inside that repo, and
   the log, edits, and maturity table (`.claude/skills/README.md`) land beside
   the skill.
@@ -229,8 +231,8 @@ written only through `~/.claude/bin/skill-refiner.sh <skill> log …` and never 
 hand, and why earlier lines are never rewritten:
 
 - `skill-refiner maturity` rates the skill from the run grades since the last
-  major retro — and, for 🛡️ Battle-tested, from the fix-free clean runs and how
-  many repos they came from, which is what the repo field is for.
+  major retro — and, for 🛡️ Battle-tested, since the last big fix too, and from
+  how many repos those runs came from, which is what the repo field is for.
 - `skill-refiner ratio` measures growth against the last deliberate size
   (`created` or `compacted`), so the word counts have to be a gap-free series.
 - the next `/skill-retro` searches the clauses for a mechanism that already

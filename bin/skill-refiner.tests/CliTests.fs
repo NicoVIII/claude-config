@@ -275,15 +275,15 @@ let private maturityTests =
                   // Assert
                   Expect.stringContains result.Stdout "4 runs" "every run counts toward the total"
                   Expect.stringContains result.Stdout "2 clean-or-minor" "the streak restarts at the major"
-                  Expect.stringContains result.Stdout "1 strictly clean" "the minor is not strictly clean")
+                  Expect.stringContains result.Stdout "2 since the last big fix" "and so does the stable count")
           }
 
-          test "a big fix leaves the Usable streak standing and ends the spotless one" {
+          test "a big fix leaves the Usable streak standing and ends the stable one" {
               withRoot (fun root ->
                   // Arrange — the edit replaced a mechanism, so the runs before
                   // it no longer vouch for the text; they still vouch for the
                   // outcomes, which is all 🟢 Usable claims. Wiring fix size
-                  // to this streak kept every skill below Usable.
+                  // to that streak kept every skill below Usable.
                   root |> skill "demo" (words 100)
 
                   root
@@ -295,25 +295,25 @@ let private maturityTests =
                   // Assert
                   Expect.stringContains result.Stdout "3 runs" "the runs themselves are still on record"
                   Expect.stringContains result.Stdout "3 clean-or-minor" "and all three still count toward Usable"
-                  Expect.stringContains result.Stdout "1 strictly clean" "only the top rung starts over at the fix")
+                  Expect.stringContains result.Stdout "1 since the last big fix" "only the top rung starts over at the fix")
           }
 
-          test "a small fix leaves the streak standing and still ends the spotless one" {
+          test "a small fix is transparent to both streaks" {
               withRoot (fun root ->
-                  // Arrange — the top rung is stricter and wants five clean
-                  // runs against text nobody has had to touch, so even a
-                  // wording fix restarts it
+                  // Arrange — wording moved, the procedure did not, so the run
+                  // before the fix exercised the same mechanism as the run
+                  // after it. This is what the small/big judgement is for.
                   root |> skill "demo" (words 100)
 
                   root
-                  |> logged "demo" [ "retro clean"; "fix small: stale path corrected"; "retro clean" ]
+                  |> logged "demo" [ "retro clean"; "fix small: stale path corrected"; "retro minor: tweak" ]
 
                   // Act
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
                   Expect.stringContains result.Stdout "2 clean-or-minor" "the small fix is transparent to this streak"
-                  Expect.stringContains result.Stdout "1 strictly clean" "but not to the one above it")
+                  Expect.stringContains result.Stdout "2 since the last big fix" "and to the one above it")
           }
 
           test "reaches Usable at three clean-or-minor runs since the last reset" {
@@ -331,32 +331,37 @@ let private maturityTests =
                   Expect.stringContains result.Stdout "🟢 Usable" "three since the major clears the bar")
           }
 
-          test "reaches Battle-tested only on strictly clean runs across repos" {
+          test "reaches Battle-tested on five good runs against unmoved text across repos" {
               withRoot (fun root ->
-                  // Arrange — five clean runs spread over two repos
+                  // Arrange — five clean-or-minor runs spread over two repos,
+                  // with a wording fix in between: minors and small fixes are
+                  // the normal texture of a good run, and demanding strictly
+                  // clean runs against untouched text was a bar no skill ever
+                  // cleared
                   root |> skill "demo" (words 100)
 
                   root
                   |> loggedIn
                       "demo"
                       [ "repo-a", "retro clean"
-                        "repo-a", "retro clean"
-                        "repo-a", "retro clean"
+                        "repo-a", "retro minor: tweak"
+                        "repo-a", "fix small: stale path corrected"
+                        "repo-a", "retro minor: tweak"
                         "repo-b", "retro clean"
-                        "repo-b", "retro clean" ]
+                        "repo-b", "retro minor: tweak" ]
 
                   // Act
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "🛡️ Battle-tested" "five clean across two repos is the top rung"
-                  Expect.stringContains result.Stdout "across 2 repos" "the repo count comes from the clean runs")
+                  Expect.stringContains result.Stdout "🛡️ Battle-tested" "five good runs across two repos is the top rung"
+                  Expect.stringContains result.Stdout "across 2 repos" "the repo count comes from the stable runs")
           }
 
-          test "drops the repo spread when no run is strictly clean" {
+          test "drops the repo spread when no run has happened since the last big fix" {
               withRoot (fun root ->
-                  // Arrange — three repos on record, but the trailing fix leaves
-                  // no spotless run for the spread to describe
+                  // Arrange — three repos on record, but the trailing big fix
+                  // leaves no stable run for the spread to describe
                   root |> skill "demo" (words 100)
 
                   root
@@ -364,13 +369,13 @@ let private maturityTests =
                       "demo"
                       [ "repo-a", "retro clean"
                         "repo-b", "retro minor: tweak"
-                        "repo-c", "fix small: stale path corrected" ]
+                        "repo-c", "fix big: replaced the ladder" ]
 
                   // Act
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "0 strictly clean" "the fix ends the spotless streak"
+                  Expect.stringContains result.Stdout "0 since the last big fix" "the big fix ends the stable streak"
 
                   Expect.isFalse
                       (result.Stdout.Contains "repos)")
