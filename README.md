@@ -11,11 +11,11 @@ fork it and make it yours.
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
 | [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
-| [`kickoff`](skills/kickoff/SKILL.md) | Pick the one thing to start with in the repo you just entered. | Opus | 🧪 Experimental |
+| [`kickoff`](skills/kickoff/SKILL.md) | Pick the one thing to start with in the repo you just entered. | Opus | 🟢 Usable |
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
-| [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🧪 Experimental |
+| [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🟢 Usable |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🧪 Experimental |
-| [`file-issue`](skills/file-issue/SKILL.md) | File an issue someone could start cold, or refine a rough one to that bar. | Opus | 🧪 Experimental |
+| [`file-issue`](skills/file-issue/SKILL.md) | File an issue someone could start cold, or refine a rough one to that bar. | Opus | 🟢 Usable |
 
 ### Repo setup & toolchain
 
@@ -30,7 +30,7 @@ fork it and make it yours.
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
 | [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
-| [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🧪 Experimental |
+| [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🟢 Usable |
 | [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
 
 ### Session helpers
@@ -229,8 +229,8 @@ written only through `~/.claude/bin/skill-refiner.sh <skill> log …` and never 
 hand, and why earlier lines are never rewritten:
 
 - `skill-refiner maturity` rates the skill from the run grades since the last
-  major retro or big fix — and, for 🛡️ Battle-tested, from how many repos they
-  came from, which is what the repo field is for.
+  major retro — and, for 🛡️ Battle-tested, from the fix-free clean runs and how
+  many repos they came from, which is what the repo field is for.
 - `skill-refiner ratio` measures growth against the last deliberate size
   (`created` or `compacted`), so the word counts have to be a gap-free series.
 - the next `/skill-retro` searches the clauses for a mechanism that already

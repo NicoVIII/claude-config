@@ -49,7 +49,3 @@ Stop once the issue is updated. Don't start implementing.
 ## Attribution
 
 Every issue body and comment ends with `🤖 Written by code assistant` on its own line. Labels and title edits need no marker.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.

@@ -6,8 +6,14 @@
 /// invalidated the entries the count is based on — is now recorded when the
 /// rewrite happens, as a big fix, so the ladder can read it.
 ///
-/// Demotion needs no separate rule: a major retro or a big fix ends the trailing
-/// streak, which drops the log-derived rating on its own.
+/// Demotion needs no separate rule: a major retro ends the trailing streak,
+/// which drops the log-derived rating on its own. A big fix does not: 🟢 Usable
+/// is a claim about outcomes, and the runs before a rewrite still had theirs.
+/// Fix size only reaches the top rung, which is a claim about text stability.
+/// Wired to Usable it made the rung unreachable — the deferral rule lands every
+/// second-sighting rule as a step added, so a skill going through the loop
+/// took a big fix every other run, and 0 of 15 skills held Usable after ~45
+/// runs.
 module Maturity
 
 open Domain
@@ -28,7 +34,7 @@ let private label rating =
 let private nextBar rating =
     match rating with
     | Wip -> Some "🧪 Experimental needs one run logged"
-    | Experimental -> Some "🟢 Usable needs ~3 clean-or-minor runs since the last major retro or big fix"
+    | Experimental -> Some "🟢 Usable needs ~3 clean-or-minor runs since the last major retro"
     | Usable -> Some "🛡️ Battle-tested needs ~5 strictly clean runs across 2–3 repos"
     | BattleTested -> None
 
@@ -84,8 +90,9 @@ let private readmeEdit (claim: Layout.Claim) rating =
 
 type private Counts =
     { Runs: int
-      /// Runs since the last major retro or big fix. A minor counts toward
-      /// 🟢 Usable but not toward 🛡️ Battle-tested, and breaks neither.
+      /// Runs since the last major retro. A minor counts toward 🟢 Usable but
+      /// not toward 🛡️ Battle-tested, and breaks neither; a fix of any size
+      /// breaks only the latter.
       Streak: int
       Spotless: int
       Repos: int }
@@ -99,22 +106,22 @@ let private isRun (entry: Entry<ChangeEvent>) =
     | Fix _ -> false
     | Compacted _ -> false
 
-/// What leaves the 🟢 Usable streak standing. A big fix or a major retro ends it
-/// — the skill changed under the runs, or the run went badly, so what came
-/// before no longer vouches for what runs now. A small fix leaves the procedure
-/// intact, and a compaction moves no rule, so both are transparent here.
+/// What leaves the 🟢 Usable streak standing: only a major retro ends it — the
+/// run went badly, and that is the one thing this rung is about. A fix of
+/// either size is transparent here, a compaction moves no rule, and whether a
+/// rewrite left the text unproven is the rung above's question.
 let private survivesStreak (entry: Entry<ChangeEvent>) =
     match entry.Event with
     | Retro Clean
     | Retro(Minor _) -> true
     | Retro(Major _) -> false
-    | Fix(Small, _) -> true
-    | Fix(Big, _) -> false
+    | Fix(Small, _)
+    | Fix(Big, _) -> true
     | Compacted _ -> true
 
 /// Stricter, and deliberately so: the top rung means five runs that went
 /// perfectly against text nobody has had to touch, so *any* fix ends this streak
-/// even though a small one leaves the streak above standing.
+/// even though neither size touches the streak above.
 let private survivesSpotless (entry: Entry<ChangeEvent>) =
     match entry.Event with
     | Retro Clean -> true
@@ -185,7 +192,7 @@ let run (skill: string) =
     printfn "%s" (claimLine skill claim counts rating)
 
     printfn
-        "  %d %s; %d clean-or-minor since the last major retro or big fix (%s)"
+        "  %d %s; %d clean-or-minor since the last major retro (%s)"
         counts.Runs
         (plural counts.Runs "run" "runs")
         counts.Streak

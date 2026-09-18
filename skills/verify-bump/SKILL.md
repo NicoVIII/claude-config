@@ -55,7 +55,3 @@ Present a verdict with evidence: what ran, what it showed, and every judgment ca
 **Push & land** (a rebased or fixed branch): the local branch name is not the PR's, so spell the refspec out: `git push --force-with-lease=<headRefName>:<headRefOid> origin verify-bump-<n>:<headRefName>` (both from the Gather query) — the rebase rewrote history, and the lease pinned to the SHA you fetched refuses the push if anything landed on the branch meanwhile. If the lease rejects the push, the bump author moved the branch meanwhile: fetch the new head, diff it against your worktree, and re-run the checks on that head; if equivalent, drop your rebase and land that head with `--match-head-commit` set to it. If branch protection or a fork you can't write to rejects the push instead, say so and propose a superseding branch. After the push, `gh pr checks <n> --watch`, then merge with `--match-head-commit <pushed-sha>` so a branch that changed after green isn't landed unverified.
 
 Anything written to GitHub (comments) ends with `🤖 Written by code assistant` on its own line; merges and pushed commits carry their own authorship and need no marker.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.

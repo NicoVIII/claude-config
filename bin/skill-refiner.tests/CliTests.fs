@@ -278,11 +278,12 @@ let private maturityTests =
                   Expect.stringContains result.Stdout "1 strictly clean" "the minor is not strictly clean")
           }
 
-          test "a big fix ends the streak the runs before it built" {
+          test "a big fix leaves the Usable streak standing and ends the spotless one" {
               withRoot (fun root ->
                   // Arrange — the edit replaced a mechanism, so the runs before
-                  // it no longer vouch for what runs now. This is the judgement
-                  // /skill-retro used to leave to its reader.
+                  // it no longer vouch for the text; they still vouch for the
+                  // outcomes, which is all 🟢 Usable claims. Wiring fix size
+                  // to this streak kept every skill below Usable.
                   root |> skill "demo" (words 100)
 
                   root
@@ -293,14 +294,15 @@ let private maturityTests =
 
                   // Assert
                   Expect.stringContains result.Stdout "3 runs" "the runs themselves are still on record"
-                  Expect.stringContains result.Stdout "1 clean-or-minor" "but only the one since the fix counts")
+                  Expect.stringContains result.Stdout "3 clean-or-minor" "and all three still count toward Usable"
+                  Expect.stringContains result.Stdout "1 strictly clean" "only the top rung starts over at the fix")
           }
 
           test "a small fix leaves the streak standing and still ends the spotless one" {
               withRoot (fun root ->
-                  // Arrange — the procedure is intact, so earlier runs still
-                  // vouch for it; the top rung is stricter and wants five clean
-                  // runs against text nobody has had to touch
+                  // Arrange — the top rung is stricter and wants five clean
+                  // runs against text nobody has had to touch, so even a
+                  // wording fix restarts it
                   root |> skill "demo" (words 100)
 
                   root

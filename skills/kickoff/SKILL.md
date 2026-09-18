@@ -84,7 +84,3 @@ One line first: **start with X because Y (tier N)**. Then at most two
 runners-up, one line each, so I can veto without a re-run. Then stop: do not
 begin the work, do not open or edit issues, do not post anywhere — wait for my
 pick.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
