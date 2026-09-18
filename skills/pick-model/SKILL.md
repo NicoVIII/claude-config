@@ -38,8 +38,4 @@ Session model choice only. Out of scope: model selection for API calls in applic
 
 ## Output
 
-One recommendation, the one-line reason, and — if it differs from the current model — the reminder that `/model` switches without losing context. No rubric recital.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
+One recommendation, the one-line reason, and — if it differs from the current model — the reminder that `/model` switches without losing context. Where a downgrade has a concrete trigger to come back on, add one line naming it; without a specific trigger, leave it out. No rubric recital.
