@@ -28,7 +28,7 @@ These vary per repo and override the defaults below:
    - decisions you could not make: an explicit "Open questions" list, not buried in prose.
 4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
 5. **Labels** per the repo's taxonomy.
-6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label …`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet.
+6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label …`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
