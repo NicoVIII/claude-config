@@ -9,3 +9,5 @@
 2026-09-13 · tcg-card-collector · 714 words · fix big: issue bodies never fetched in bulk: defects via gh issue view, cross-references via a jq scan; drop dead milestones API fallback
 2026-09-16 · tcg-card-collector · 714 words · retro minor: runner-up rule contradicted the stop-at-first-tier rule (forced reading lower tiers); deferred: non-CI workflow runs (Dependabot Updates) counted as red CI, tier-3 tie-break for mutually cross-referencing issues
 2026-09-16 · tcg-card-collector · 728 words · fix small: runner-ups may read lower tiers when the winning tier has fewer than three candidates
+2026-09-18 · tcg-card-collector · 728 words · retro minor: milestones API re-invoked for a due date the issue list already carries; tier-2 issue query still unprojected at 16.7KB; deferred: tier-2 gate is silent on error-path defects that do surface an error message
+2026-09-18 · tcg-card-collector · 749 words · fix small: project the tier-2 issue list with a jq (16.7KB → 4.2KB) and carry dueOn in it; point tier 3 at that column instead of the milestones API

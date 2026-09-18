@@ -43,7 +43,8 @@ then stalled PRs. Recommend the worst and stop.
 ## Tier 2 — keep the lights on
 
 ```sh
-gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt,updatedAt
+gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt \
+  --jq '.[] | "\(.number)\t[\([.labels[].name]|join(","))]\t\(.milestone.title // "-")\t\(.milestone.dueOn // "")\t\(.createdAt[0:10])\t\(.title)"'
 ```
 
 Never add `body` to that call. Fetch bodies only for suspected defects via
@@ -59,8 +60,9 @@ milestone wins ties. Within the tier, rank by blast radius, then age.
 
 ## Tier 3 — declared focus
 
-From the milestones on the issues above. Nearest due date wins; a single open
-milestone needs no due date; several open milestones with no due dates is a question — ask me
+From the milestones on the issues above. Nearest due date wins — read it from
+the `dueOn` column, never from the milestones API; a single open milestone
+needs no due date; several open milestones with no due dates is a question — ask me
 which is current instead of guessing. Recommend the issue in the milestone that
 unblocks the most of the rest of it (the cross-references above).
 
