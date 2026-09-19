@@ -27,12 +27,14 @@ These vary per repo and override the defaults below:
    - feature or enabler: goal, current state with file paths, scope, and an acceptance section saying when it is done;
    - decisions you could not make: an explicit "Open questions" list, not buried in prose.
 4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
-5. **Labels** per the repo's taxonomy.
-6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label …`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
+5. **Labels and milestone** per the repo's taxonomy and milestone policy: apply the repo's membership test where it states one, else leave the milestone unset. Say which way it came out — an unmilestoned issue should read as a decision, not an oversight.
+6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
 Record a dependency as GitHub's relation, not as body prose: `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue.
+
+Filing several at once: file in dependency order so each relation names an issue that already exists, and let the relation carry the link — a body reaching for a number that doesn't exist yet is a dependency that belongs in a relation. A link that isn't a dependency ("supersedes", "overlaps") stays prose.
 
 ## Refine
 
