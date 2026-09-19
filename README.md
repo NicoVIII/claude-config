@@ -15,6 +15,7 @@ fork it and make it yours.
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🟢 Usable |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🧪 Experimental |
+| [`scope-milestone`](skills/scope-milestone/SKILL.md) | Say what the next milestone promises, and which issues it needs. | Opus | 🚧 WIP |
 | [`file-issue`](skills/file-issue/SKILL.md) | File an issue someone could start cold, or refine a rough one to that bar. | Opus | 🟢 Usable |
 
 ### Repo setup & toolchain
@@ -63,9 +64,10 @@ pipelines — each skill also stands alone.
 ```mermaid
 flowchart LR
   P["/prioritize"] --> MD["/merge-dependabot"] -- flagged --> VB["/verify-bump"]
-  P --> G["/groom"]
+  P --> G["/groom"] --> SM["/scope-milestone"] --> K
   P --> K["/kickoff"] --> I["implement<br/>(no skill)"]
   I -. new issues .-> FI["/file-issue"]
+  SM -. gaps .-> FI
   I -- landed --> P
 ```
 
@@ -73,6 +75,9 @@ flowchart LR
   - dependency bumps → `/merge-dependabot`; for a flagged bump you still want
     to land, `/verify-bump <n>`
   - an issue list you can no longer hold in your head → `/groom`
+  - no milestone, or one whose promise has drifted → `/scope-milestone`, which
+    gives `/kickoff` its tier-3 focus; it grooms nothing itself, so run
+    `/groom` first when it says the backlog can't carry a promise
   - choosing what to start on → `/kickoff`
   - issues that come out of the work → `/file-issue`, which also refines a
     rough one

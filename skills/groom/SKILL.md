@@ -5,7 +5,7 @@ description: Groom one repository's issue backlog — close issues that no longe
 
 Clean up one repository's open issue backlog so what remains is real, distinct, and legible.
 
-Scope is the current repo, and hygiene only. `prioritize` is the cross-repo read-only scan that says which repo needs attention; this one writes, in a repo you have already `cd`'d into. **Do not rank or mark priority** — no `next`/`p1` labels, no milestones, no ordering. That is an open question I have not settled, not an oversight. If a run makes the case for it, say so at the end instead of doing it.
+Scope is the current repo, and hygiene only. `prioritize` is the cross-repo read-only scan that says which repo needs attention; this one writes, in a repo you have already `cd`'d into. **Do not rank or mark priority** — no `next`/`p1` labels, no ordering, and no milestones: scoping one is `/scope-milestone`, which expects a groomed backlog and sends you back here when it doesn't find one. Ranking itself is an open question I have not settled, not an oversight; if a run makes the case for it, say so at the end instead of doing it.
 
 ## Survey
 
