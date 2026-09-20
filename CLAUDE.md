@@ -13,7 +13,9 @@ Personal — never copy them into project repos or force them on contributors. P
 
 - Commit proactively after each independently meaningful change — don't wait to be asked. The full check suite must pass before every commit.
 - When a follow-up refines the change just committed, amend that commit instead of stacking a new one — but only commits made this session, and only if `git branch -r --contains HEAD` is empty. A distinct capability or unrelated concern gets its own commit even in the same files; ambiguous mid-iteration cases default to amend. Adding paragraphs to a just-committed artifact is iteration, not a new concern.
-- Before committing in a repo you don't know, infer the workflow from history rather than defaulting to a branch. Ask only when the signal is genuinely mixed.
+- Develop on a local branch, one per issue or unit of work, named `<issue-number>-<slug>` (`<slug>` when there's no issue). Merge it into the default branch yourself once the work is verified — `git merge --no-ff` with a message naming the issue — then delete the branch. Never leave the merge for me. This holds in every repo of mine, including ones you haven't seen: don't infer the workflow from history, and don't read Dependabot or Copilot PRs in the log as a PR workflow for my own work.
+- A single-commit branch still gets its merge commit. Uniformity is the point: `git log --first-parent` reads as one line per unit of work, and `git revert -m 1` undoes a whole unit.
+- Handoff and end-of-session WIP commit on the branch with a `WIP:` subject — the one exception to the check-suite rule. They must never reach the default branch: the branch merges only once it is green and the WIP commits are squashed or amended away.
 - Commit messages explain WHY — reasoning, trade-offs, non-obvious constraints — not WHAT; the diff carries the what. Never conventional commits (`feat:`, `fix:`, `chore(scope):`) — a history full of them isn't consent, only an explicit project instruction is. A plain `area:` prefix is not a conventional commit.
 - Never push, and don't ask about pushing.
 - Landing a PR: squash when it has one commit or only throwaway messages (bot text, fixups); otherwise rebase-merge so the commits survive. Don't infer the method from how past PRs landed.
@@ -22,6 +24,7 @@ Personal — never copy them into project repos or force them on contributors. P
 ## Issues
 
 - Finishing work that a tracked issue describes includes closing it — comment referencing the commit(s) and what was verified, don't leave it for me to notice and close. A partial fix says explicitly what's left and stays open.
+- Close when the work is merged into the default branch locally, not when it's pushed — note in the comment that the commits are still local. Never hold a close waiting for a push, and never ask whether to close.
 
 ## Code style
 
