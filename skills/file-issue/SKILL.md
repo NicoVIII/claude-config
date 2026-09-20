@@ -29,13 +29,13 @@ These vary per repo and override the defaults below:
    - decisions you could not make: an explicit "Open questions" list, not buried in prose.
 4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
 5. **Labels and milestone** per the repo's taxonomy and milestone policy: apply the repo's membership test where it states one, else leave the milestone unset. Say which way it came out — an unmilestoned issue should read as a decision, not an oversight.
-6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link and labels. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
+6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link and labels. Show a draft first only for open questions whose answer changes the shape of the work — what gets built, where it lives, how big it is — giving each your recommended answer, then fold my answers in and file without showing the draft again. A question the implementer can settle while working stays in the body's Open questions list; don't spend a round trip on it.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
-Record a dependency as GitHub's relation, not as body prose: `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue.
+Record a dependency as GitHub's relation, not as body prose: `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue. It is a dependency only if you can name which issue cannot start until the other is done. Two issues on one subject — one writing a rule, one proving it — are related, not blocked: if you can't name the blocked side, or the direction flips depending on how you read it, the link is prose.
 
-Filing several at once: file in dependency order so each relation names an issue that already exists, and let the relation carry the link — a body reaching for a number that doesn't exist yet is a dependency that belongs in a relation. A link that isn't a dependency ("supersedes", "overlaps") stays prose.
+Filing several at once: file in dependency order so each relation names an issue that already exists, and let the relation carry the link — a body reaching for a number that doesn't exist yet is a dependency that belongs in a relation.
 
 ## Refine
 
