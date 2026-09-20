@@ -13,6 +13,7 @@ These vary per repo and override the defaults below:
 
 - The issue section of `AGENTS.md` / `CLAUDE.md` at the repo root (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`): label taxonomy, milestone/Project policy, the scope document.
 - Labels that exist: `gh label list --json name -q '.[].name'`. Never create a label. With no stated taxonomy, apply an existing label only where one plainly fits, else none.
+- Open milestones and what each promises: `gh api repos/:owner/:repo/milestones --jq '.[] | "\(.number) \(.title): \(.description)"'`. The membership test usually lives in the description, not in the conventions text.
 - The scope document — the one the conventions name, else `docs/vision.md`, else the README's scope or non-goals section. No scope doc: skip the scope check and say so.
 
 ## File
@@ -28,7 +29,7 @@ These vary per repo and override the defaults below:
    - decisions you could not make: an explicit "Open questions" list, not buried in prose.
 4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
 5. **Labels and milestone** per the repo's taxonomy and milestone policy: apply the repo's membership test where it states one, else leave the milestone unset. Say which way it came out — an unmilestoned issue should read as a decision, not an oversight.
-6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link, labels, and body. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
+6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link and labels. Show a draft first only when it carries open questions I haven't seen yet — give each one your recommended answer, then fold my answers into the body and file it without showing the draft again.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
