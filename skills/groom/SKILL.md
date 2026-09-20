@@ -13,7 +13,7 @@ Scope is the current repo, and hygiene only. `prioritize` is the cross-repo read
 gh issue list --state open --limit 200 --json number,title,author,createdAt,updatedAt,comments,labels
 ```
 
-Add `body` to that same call when the repo has ≤40 open issues; above that, pull bodies per cluster later with `gh issue view <n> --json body`, since bodies run ~1 KB each. `comments` is the full array — its length is the count, and the last entry's author is who spoke last.
+Add `body` to that same call, dumped to a file you Read. Budget 3 KB per issue, not 1 — an agent-written backlog runs 2–8 KB each, so a 40-issue repo is ~120 KB of reading. Never head-truncate bodies to trim that: a `Related:` section sits at the *end* of a body, and a reference that has since closed is the most common drift a groom catches. Past what fits, groom a slice — one label, or one dump's date range — and report the rest as unreviewed. `comments` is the full array — its length is the count, and the last entry's author is who spoke last.
 
 Compute days since `createdAt` (age) and since `updatedAt` (touched). Read the shape of the whole list before judging any single issue; two profiles seen in real backlogs need different work:
 
@@ -68,10 +68,6 @@ Everything written to GitHub as prose ends with `🤖 Written by code assistant`
 
 For `ask` issues, draft the reply and let me approve the wording. Never post one inside a batch.
 
-Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and title/label edits. Say which of them did not fit.
+Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and label edits. Say which of them did not fit.
 
 Stop once the approved batches are applied. Do not start fixing an issue you just kept, and do not open new issues for work you noticed on the way — tell me instead.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
