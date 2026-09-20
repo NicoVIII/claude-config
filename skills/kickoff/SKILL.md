@@ -51,20 +51,26 @@ Never add `body` to that call. Fetch bodies only for suspected defects via
 `gh issue view <n> --json body`; for cross-references (tiers 3 and 4) run
 `gh issue list --state open --limit 200 --json number,body --jq '.[] | "\(.number): " + ([.body | scan("#[0-9]+")] | unique | join(" "))'`.
 
-A defect is an issue describing broken shipped behavior — `bug` label where the
-repo uses one, otherwise inferred from the text (crash, error, wrong result,
-"worked before"). The gate for this tier: **a real user hits it in normal
-use**. Cosmetic glitches, papercuts with a workaround, and error paths the user
-only reaches once something else has failed drop to tier 4, wrong state left
-behind or not — and when genuinely unsure, so does the issue: the milestone wins
-ties. Within the tier, rank by blast radius, then age.
+A defect is an issue describing broken shipped behavior. Where the repo's label
+set has a `bug` label (`gh label list --json name -q '.[].name'`), that label is
+the maintainer's own verdict: an issue without it is not a defect here, however
+its text reads. Only where the repo has no `bug` label is it inferred from the
+text (crash, error, wrong result, "worked before"). The gate for this tier: **a
+real user hits it in normal use**. Cosmetic glitches, papercuts with a
+workaround, and error paths the user only reaches once something else has
+failed drop to tier 4, wrong state left behind or not — and when genuinely
+unsure, so does the issue: the milestone wins ties. Within the tier, rank by
+blast radius, then age.
 
 ## Tier 3 — declared focus
 
 From the milestones on the issues above — that column is the whole set that
 matters: a milestone with no open issue holds no candidate. Nearest `dueOn`
 wins; one open milestone needs no due date; several with none is a question —
-ask me which is current instead of guessing.
+ask me which is current instead of guessing. Then read the winning milestone's
+own description once — `gh api "repos/{owner}/{repo}/milestones?state=open" --jq
+'.[] | "\(.title)\n\(.description)"'` — it states what the release promises,
+and the report names which part of that promise the recommendation serves.
 
 Rank by how much each issue unblocks: cross-references pointing at it from any
 open issue, in the milestone or not, minus any whose work has already landed —
