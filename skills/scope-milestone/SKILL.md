@@ -96,12 +96,12 @@ One block, then stop:
 promise · v0.2.0
   <one sentence: what is guaranteed, and what breaks without it>
 in scope (5)
-  #54 search/filter — "at real collection size" is false without it
+  #NN <subject> — <why the promise is false without it>
   …
 excluded · near miss (2)
-  #63 URL-backed pagination — real, but the loop holds without it
+  #NN <subject> — real, but <why the promise survives without it>
 gap (1)
-  nothing open covers the upgrade path the promise names → /file-issue
+  nothing open covers <the part of the promise nothing addresses> → /file-issue
 ```
 
 Ask once, for the whole block — never issue by issue. Gaps hand off to

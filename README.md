@@ -15,7 +15,7 @@ fork it and make it yours.
 | [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🟢 Usable |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🧪 Experimental |
-| [`scope-milestone`](skills/scope-milestone/SKILL.md) | Say what the next milestone promises, and which issues it needs. | Opus | 🚧 WIP |
+| [`scope-milestone`](skills/scope-milestone/SKILL.md) | Say what the next milestone promises, and which issues it needs. | Opus | 🧪 Experimental |
 | [`file-issue`](skills/file-issue/SKILL.md) | File an issue someone could start cold, or refine a rough one to that bar. | Opus | 🟢 Usable |
 
 ### Repo setup & toolchain
