@@ -54,10 +54,15 @@ else
 	fi
 fi
 
-# To stderr: stdout carries what the tool prints, and a caller reading it should
-# not have to skip a build banner first.
+# Captured, not streamed: the CLI prints a "Build succeeded" summary that no
+# verbosity or console-logger flag suppresses, and a caller reading stdout --
+# or an agent reading the terminal -- should not have to skip it. A failed
+# build echoes the whole capture to stderr, where the diagnostics are.
 if [[ ${build} == yes ]]; then
-	(cd "${project}" && dotnet build --nologo --verbosity quiet) >&2
+	if ! buildlog=$(cd "${project}" && dotnet build --nologo --verbosity quiet 2>&1); then
+		printf '%s\n' "${buildlog}" >&2
+		exit 1
+	fi
 fi
 
 exec dotnet "${assembly}" "$@"

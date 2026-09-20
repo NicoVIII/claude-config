@@ -13,7 +13,7 @@ Run `~/.claude/skills/merge-dependabot/scripts/survey.sh`. It prints the repo's 
 
 If it fails, fix the cause — don't fall back to hand-rolled `gh` queries, since the point is that every run classifies on the same facts.
 
-The one judgement it deliberately leaves to you, decided once for the whole repo: **does CI run a real test suite?** Read `.github/workflows/*.{yml,yaml}` and look for a genuine test-runner step (`npm test`, `pytest`, `jest`, `vitest`, `go test`, `cargo test`, `dotnet test`, `mvn test`, …) — *not* lint / typecheck / build / format alone. This is the load-bearing check: if no workflow runs tests, green CI proves nothing and **every** bump is flagged as unverified.
+The one judgement it deliberately leaves to you, decided once for the whole repo: **does CI run a real test suite?** Read `.github/workflows/*.{yml,yaml}` and look for a genuine test-runner step (`npm test`, `pytest`, `jest`, `vitest`, `go test`, `cargo test`, `dotnet test`, `mvn test`, …) — *not* lint / typecheck / build / format alone. A task-runner step (`just test`, `make test`, `npm run ci`, `./scripts/test.sh`) is not an answer but a question: open the recipe it names, read the command underneath, and rule on that. This is the load-bearing check: if no workflow runs tests, green CI proves nothing and **every** bump is flagged as unverified.
 
 ## Classify
 
@@ -26,11 +26,11 @@ Per PR, in order — first match wins:
 5. `MERGE=dirty` → `⚠ needs rebase` — note `@dependabot rebase`; do not merge. `MERGE=blocked` means branch protection will refuse the merge — say so rather than trying.
 6. `LEVEL=major` or `LEVEL=unclear` → `⚠ major` — breaking by design, and tests rarely cover intentional breakage.
 7. **Contradicts repo policy** → `⚠ policy` — even green + minor. Read `.github/dependabot.yml` if present: a bump matching an `ignore` rule shouldn't merge (likely a config gap — offer to close it). For a **library**, also be wary of bumps that raise a dependency floor consumers must match (target framework, `FSharp.Core`, a declared minimum) — the library should keep working against the *old* version, so verify compatibility instead of bumping. Flag; do not merge.
-8. Otherwise → `✓ safe`.
+8. Otherwise → `✓ safe`, with one line naming what actually verified it. Green CI is evidence only about packages CI runs: a devcontainer or CI-image bump no job builds, and a runtime dependency no test imports, are safe on level but unexercised in fact. Say which — `tests cover it` or `green CI doesn't reach this one` — rather than letting `✓` imply the suite ran it.
 
 ## Present & merge
 
-List safe PRs, then flagged PRs grouped by reason. Ask **once** to merge the safe batch. If no PR is safe, say so, skip the merge ask, and go straight to the flagged report and the unstick confirmation — one question total. On confirmation, merge each with the repo's method and delete the branch: `gh pr merge <n> --squash --delete-branch` (swap `--squash` for `--merge`/`--rebase` per the survey). Never touch a flagged PR.
+List safe PRs, then flagged PRs grouped by reason. Ask **once** to merge the safe batch. If no PR is safe, say so, skip the merge ask, and go straight to the flagged report and the unstick confirmation — at most one question. On confirmation, merge each with the repo's method and delete the branch: `gh pr merge <n> --squash --delete-branch` (swap `--squash` for `--merge`/`--rebase` per the survey). Never touch a flagged PR.
 
 For each **flagged** PR, make it actionable — state the reason, then:
 
@@ -61,7 +61,7 @@ After reporting, collect the mechanical unstick actions and offer them as one ba
 - Post `@dependabot rebase` (via `gh pr comment`) on each PR flagged needs-rebase, and on red-CI PRs whose logs have expired or whose last run used a stale toolchain — a fresh run beats chasing a gone log.
 - Close every PR the survey marks `superseded-by` (`gh pr close <n> --comment ...`), in favour of the PR it names.
 
-On confirmation fire the batch, report what was posted and closed, and end — never wait or poll for the fresh CI runs; the next `merge-dependabot` run picks up the results.
+An empty batch is not a question: when nothing needs a rebase and nothing is superseded, say so in one line and end. Otherwise, on confirmation fire the batch, report what was posted and closed, and end — never wait or poll for the fresh CI runs; the next `merge-dependabot` run picks up the results.
 
 Don't start fixing broken bumps or writing tests unless I ask — deep verification of a single flagged bump is `/verify-bump`'s job.
 
