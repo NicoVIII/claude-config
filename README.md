@@ -149,10 +149,13 @@ to keep.
   (`prioritize`'s gather step, `merge-dependabot`'s survey step and the shared
   `bin/skill-refiner` are F# programs — the last makes it a prerequisite of the
   skill-authoring workflow, not just of one skill), and `rg` (ripgrep).
-- To work *on* this repo you also need [`just`](https://just.systems) and
-  [`lefthook`](https://lefthook.dev); run `lefthook install` once to activate
-  the pre-commit typecheck. `just check` runs it by hand. Neither is needed to
-  merely use the skills.
+- To work *on* this repo you also need [`just`](https://just.systems),
+  [`lefthook`](https://lefthook.dev),
+  [`shellcheck`](https://www.shellcheck.net) and
+  [`shfmt`](https://github.com/mvdan/sh); run `lefthook install` once to
+  activate the pre-commit checks. `just check` runs the whole suite (typecheck,
+  tests, shell lint) by hand, and its shell lint fails wherever the last two
+  are missing. None of these is needed to merely use the skills.
 - Add your `settings.json` manually — it is gitignored and not tracked, because
   it holds machine preferences (`theme`, `tui`, `effortLevel`) that the
   `/config` menu rewrites. The permission allowlist is the one part worth

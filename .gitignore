@@ -7,7 +7,6 @@
 !/.devcontainer
 !/.github
 !/.gitignore
-!/AGENTS.md
 !/CLAUDE.md
 !/justfile
 !/lefthook.yml
