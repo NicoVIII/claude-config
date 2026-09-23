@@ -85,8 +85,7 @@ excluded, so the omission reads as a decision.
 actually closed in a comparable window. A promise nobody can finish is not a
 scope statement — when the membership test yields far more than that, the
 promise is too broad, so narrow the promise rather than dropping issues that
-qualify under it. *(Untested — no repo has yet been scoped against its own
-closed-milestone history.)*
+qualify under it.
 
 ## Present
 
