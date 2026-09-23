@@ -15,3 +15,4 @@
 2026-09-18 · tcg-card-collector · 779 words · fix big: tier 3 ranks on cross-references from any open issue minus landed work, then blast radius and age; tier-2 gate drops error paths whose trigger is itself a failure; milestone column stated as the whole relevant set
 2026-09-20 · tcg-card-collector · 779 words · retro minor: tier-2 label clause ambiguous when repo has a bug label no open issue carries (two readings, different winners); milestones API re-invoked a third retro running, this time for the description; deferred: tier-3 body reads unbounded at 13.9KB, issue bodies overtaken by code they cite
 2026-09-20 · tcg-card-collector · 851 words · fix big: the repo bug label, where it exists, is authoritative over issue text; tier 3 reads the winning milestone description and the report names the promise it serves
+2026-09-23 · tcg-card-collector · 851 words · retro clean
