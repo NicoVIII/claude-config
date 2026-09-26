@@ -5,7 +5,8 @@ description: Scope a milestone in the current repo — what the next release pro
 
 Turn one repository's backlog into a milestone with a stated promise and a
 member issue set. Scope is the repo you are `cd`'d into. Read-only until I
-approve; then it writes the milestone and its memberships to GitHub.
+approve; then it writes the milestone and its memberships to GitHub, and does
+what the repo's release procedure says to do on scoping a milestone.
 
 Not this skill's job: ranking the work inside a milestone (`kickoff`), filing
 issues (`file-issue`), closing, deduping or rewording them (`groom`), or
@@ -66,7 +67,12 @@ verdicts for it. Scope a successor only once it is coherent, and say plainly
 that you are deferring one rather than silently not doing it.
 
 **No open milestone** → scope the next one from the scope document's direction
-themes, preferring the theme the backlog already has the most ready work in.
+themes. Where the scope document ranks its themes or purposes, prefer the promise
+that moves the project furthest along that ranking. Where it leaves them
+unordered, never invent an order: prefer the promise that is most plainly false
+today — a workflow that fails outright over one that is only rough — not the one
+binding the most issues. Name the strongest alternative promise in one line
+after the block.
 
 Several open milestones is a question, not a guess: ask which one is current.
 
@@ -81,8 +87,8 @@ promise be false without this issue? Apply it to every open issue, not only the
 ones in the theme. Issues that nearly qualify are reported as explicitly
 excluded, so the omission reads as a decision.
 
-**Size**: calibrate against what past milestones held, or against what the repo
-actually closed in a comparable window. A promise nobody can finish is not a
+**Size**: past milestones and what the repo closed in a comparable window set a
+ceiling, not a floor — a one- or two-issue milestone is fine. A promise nobody can finish is not a
 scope statement — when the membership test yields far more than that, the
 promise is too broad, so narrow the promise rather than dropping issues that
 qualify under it.
@@ -120,9 +126,11 @@ as project fact, and a marker inside a single sentence is noise. Any issue
 comment you post does carry one — `🤖 Written by code assistant` on its own
 line.
 
-Stop once the approved block is applied. Don't begin any issue in the milestone
+Then find the repo's release-procedure steps for scoping a milestone
+(`rg -n -i 'scop.*milestone' docs CONTRIBUTING.md README.md`) and carry them out
+in a commit. Where none exist but the scope document's current-status section
+still names the previous milestone as next, repoint it at this one and its
+promise.
+
+Stop once that is done. Don't begin any issue in the milestone
 you just scoped.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
