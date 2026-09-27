@@ -19,7 +19,7 @@
   <ItemGroup>
     <!-- Test-only. skill-refiner and gather keep their "No PackageReference by
          design" stance: this never enters either tool's runtime closure. -->
-    <PackageReference Include="Expecto" Version="10.2.1" />
+    <PackageReference Include="Expecto" Version="10.2.3" />
   </ItemGroup>
 
   <ItemGroup>
