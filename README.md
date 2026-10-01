@@ -12,7 +12,7 @@ fork it and make it yours.
 | --- | --- | --- | --- |
 | [`prioritize`](skills/prioritize/SKILL.md) | Decide what to work on next across your GitHub repos. | Sonnet | 🧪 Experimental |
 | [`kickoff`](skills/kickoff/SKILL.md) | Pick the one thing to start with in the repo you just entered. | Opus | 🟢 Usable |
-| [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🧪 Experimental |
+| [`merge-dependabot`](skills/merge-dependabot/SKILL.md) | Clear the Dependabot PRs that are actually safe to merge. | Sonnet | 🟢 Usable |
 | [`verify-bump`](skills/verify-bump/SKILL.md) | Land a dependency bump that green CI alone doesn't prove safe. | Opus | 🟢 Usable |
 | [`groom`](skills/groom/SKILL.md) | Clear the dead and duplicated issues out of one repo's backlog. | Opus | 🟢 Usable |
 | [`scope-milestone`](skills/scope-milestone/SKILL.md) | Say what the next milestone promises, and which issues it needs. | Opus | 🟢 Usable |

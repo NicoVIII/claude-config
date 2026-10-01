@@ -24,7 +24,7 @@ Per PR, in order — first match wins:
 3. `CI=pending` → `⏳ pending` — skip this run, no verdict yet.
 4. **No real test suite** (from Gather) → `⚠ unverified` — green CI is meaningless without tests.
 5. `MERGE=dirty` → `⚠ needs rebase` — note `@dependabot rebase`; do not merge. `MERGE=blocked` means branch protection will refuse the merge — say so rather than trying.
-6. `LEVEL=major` or `LEVEL=unclear` → `⚠ major` — breaking by design, and tests rarely cover intentional breakage.
+6. `LEVEL=major` or `LEVEL=unclear` → `⚠ major` — breaking by design, and tests rarely cover intentional breakage. Exception: if every major member is a formatter or linter that a green CI step invokes, the bump is checked by running it, so it falls through to rule 7 and its verdict is `CI runs it directly`.
 7. **Contradicts repo policy** → `⚠ policy` — even green + minor. Read `.github/dependabot.yml` if present: a bump matching an `ignore` rule shouldn't merge (likely a config gap — offer to close it). For a **library**, also be wary of bumps that raise a dependency floor consumers must match (target framework, `FSharp.Core`, a declared minimum) — the library should keep working against the *old* version, so verify compatibility instead of bumping. Flag; do not merge.
 8. Otherwise → `✓ safe`, with one line naming what actually verified it. Green CI is evidence only about packages CI runs: a devcontainer or CI-image bump no job builds, and a runtime dependency no test imports, are safe on level but unexercised in fact. Say which — `tests cover it` or `green CI doesn't reach this one` — rather than letting `✓` imply the suite ran it.
 
@@ -64,7 +64,3 @@ After reporting, collect the mechanical unstick actions and offer them as one ba
 An empty batch is not a question: when nothing needs a rebase and nothing is superseded, say so in one line and end. Otherwise, on confirmation fire the batch, report what was posted and closed, and end — never wait or poll for the fresh CI runs; the next `merge-dependabot` run picks up the results.
 
 Don't start fixing broken bumps or writing tests unless I ask — deep verification of a single flagged bump is `/verify-bump`'s job.
-
----
-
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
