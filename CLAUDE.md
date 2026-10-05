@@ -31,6 +31,7 @@ Personal — never copy them into project repos or force them on contributors. P
 
 - Before writing new code, exhaust reuse in this order: existing helper/pattern in the codebase → stdlib → native platform feature → already-installed dependency. Only then write it — and keep it minimal.
 - Bug fixes target the root cause, not the reported symptom: check the other callers of the function you're touching — one fix in the shared function beats a guard per caller.
+- Expected failures are explicit, never clamped, defaulted, or silently ignored: a result/error type in code, an explicit error in the API. A user-input error may stay untyped (a message with a bad-request status); the client either prevents the request or handles the rejection in a way the user can act on.
 - Prefer small, composable, single-purpose functions. A `// this block does X` comment is a trigger to extract a named function instead. Skip extraction only when it would reduce clarity: helpers needing many threaded parameters, or one-shot blocks that add pure indirection.
 - Order files top-to-bottom F#-style: every definition references only things defined above it. Exceptions only for circular dependencies.
 - Comments explain WHY, not WHAT — if a reader could infer it from types and names, cut it. Carve-outs where prose is warranted: doc comments on public APIs; type-lossy seams where the signature can't express the contract; short orientation labels in long functions.
