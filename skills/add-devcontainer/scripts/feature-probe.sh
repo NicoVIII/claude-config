@@ -3,7 +3,7 @@
 #
 #   feature-probe.sh <feature-ref>...  published tags + pinnable options
 #   feature-probe.sh --mine            features in NicoVIII/devcontainer-features
-#   feature-probe.sh --base            mcr.microsoft.com/devcontainers/base tags
+#   feature-probe.sh --base            newest exact-version base image tag per distro
 #
 # A feature ref is what devcontainer.json holds, with or without ghcr.io/ and a
 # tag: ghcr.io/devcontainers/features/dotnet:2
@@ -75,7 +75,11 @@ case ${1:-} in
 		jq -r '.[] | select(.type == "dir") | "ghcr.io/nicoviii/devcontainer-features/" + .name'
 	;;
 --base)
-	curl -fsSL https://mcr.microsoft.com/v2/devcontainers/base/tags/list | jq -r '.tags[]'
+	curl -fsSL https://mcr.microsoft.com/v2/devcontainers/base/tags/list |
+		jq -r '.tags[] | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+-[a-z]"))' |
+		sort -t- -k2,2 -k1,1V |
+		awk -F- '{ latest[$2] = $0 } END { for (d in latest) print latest[d] }' |
+		sort
 	;;
 *)
 	for ref in "$@"; do

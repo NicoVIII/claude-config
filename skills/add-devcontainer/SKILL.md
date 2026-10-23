@@ -25,7 +25,7 @@ Prefer a feature over a manual install. Pick the source in this order, and stop 
 4. `ghcr.io/devcontainers-extra/features/*`
 5. Tie between an unknown third-party feature and a manual install in a Dockerfile
 
-`~/.claude/skills/add-devcontainer/scripts/feature-probe.sh <feature-ref>...` answers the two questions per candidate that have bitten — is it published as an OCI artifact, and can it pin a version. `--mine` lists my set (3), which is small and easy to forget to check before falling to devcontainers-extra; `--base` lists the base image tags.
+`~/.claude/skills/add-devcontainer/scripts/feature-probe.sh <feature-ref>...` answers the two questions per candidate that have bitten — is it published as an OCI artifact, and can it pin a version. `--mine` lists my set (3), which is small and easy to forget to check before falling to devcontainers-extra; `--base` lists the newest exact-version base image tag per distro.
 
 Read the `options` it prints. Some features expose none at all — `anthropics/devcontainer-features/claude-code` is `options: {}`, so it always installs latest and cannot be pinned. Where a version option exists, its `proposals` understates what it accepts: devcontainers-extra features advertise only `["latest"]` and still honored exact versions (`shellcheck` 0.11.0, `shfmt` 3.13.1, `ripgrep` 14.1.1). Test rather than infer.
 
