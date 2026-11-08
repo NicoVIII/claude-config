@@ -37,3 +37,5 @@
 2026-09-20 · tcg-card-collector · 1348 words · fix big: the certainly-wrong carve-out now covers text that would steer a correct run to a worse answer, so a class of first-sighting fixes that previously deferred now lands
 2026-09-23 · tcg-card-collector · 1348 words · retro minor: skill-refiner log run from ~/.claude named the entry claude-config: SKILL.md never says the working directory sets the logged repo; second sighting of hand-correcting an uncommitted log line
 2026-09-23 · tcg-card-collector · 1394 words · fix small: Apply states the log runs from the session repo, which sets the entry repo and skill resolution; an uncommitted wrong log line is fixed in place
+2026-11-08 · Andromeda-for-GOG · 1394 words · retro minor: replacements drafted around the reviewed run rather than the skill scope, corrected mid-run; repo.md read wholesale again (5.2 KB) for a markdown-only commit the pointer already exempted
+2026-11-08 · Andromeda-for-GOG · 1407 words · fix big: replacements are written at the generality of the skill scope with run specifics in the commit message; the repo.md pointer is gone, the pre-commit hook covers the checks
