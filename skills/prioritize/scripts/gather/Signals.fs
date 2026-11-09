@@ -82,26 +82,29 @@ let private issues (me: string) (repo: string) =
 
     List.length rows, attention
 
-/// The branch is resolved per repo because `gh run list --limit 1` without one
-/// returns the newest run on any branch, which reads healthy while main is red.
+/// How far back the default branch's runs are read. Wide enough that a
+/// workflow which ran this month is still in it behind a week of unrelated
+/// ones; a workflow whose last run is older than the window is not judged.
+let private ciWindow = 50
+
+/// The branch is resolved per repo because `gh run list` without one returns
+/// runs on any branch, which reads healthy while main is red.
 let private ci (repo: string) (branch: Wire.BranchRef option) =
     match branch with
     | None -> NoBranch
     | Some branch ->
-        let runs =
-            Gh.decode<Wire.Run list>
-                [ "run"; "list"; "-R"; repo; "--branch"; branch.name; "--limit"; "1"; "--json"; "conclusion" ]
-
-        match runs with
-        | [] -> NoRuns
-        | run :: _ ->
-            // gh reports a running workflow as an empty conclusion rather than a
-            // null one, so matching None alone leaves the column blank and the
-            // reader unable to tell "still running" from "no data".
-            match run.conclusion with
-            | None
-            | Some "" -> InProgress
-            | Some conclusion -> Concluded conclusion
+        Gh.decode<Wire.Run list>
+            [ "run"
+              "list"
+              "-R"
+              repo
+              "--branch"
+              branch.name
+              "--limit"
+              string ciWindow
+              "--json"
+              "workflowName,conclusion" ]
+        |> Ci.ofRuns
 
 /// Severities rather than a bare count: one critical outranks a pile of lows. A
 /// 403 carrying "Dependabot alerts are disabled" is that repo's setting. gh

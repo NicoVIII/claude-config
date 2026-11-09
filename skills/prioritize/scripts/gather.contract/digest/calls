@@ -4,7 +4,7 @@ gh pr list -R me-user/alpha --limit 200 --json number,title,author,statusCheckRo
 gh issue list -R me-user/alpha --limit 200 --json number,author	alpha-issues.json
 gh issue view 21 -R me-user/alpha --json title,author,createdAt,comments	alpha-issue-21.json
 gh issue view 22 -R me-user/alpha --json title,author,createdAt,comments	alpha-issue-22.json
-gh run list -R me-user/alpha --branch main --limit 1 --json conclusion	alpha-runs.json
+gh run list -R me-user/alpha --branch main --limit 50 --json workflowName,conclusion	alpha-runs.json
 gh api --paginate --slurp repos/me-user/alpha/dependabot/alerts?state=open&per_page=100	alpha-alerts.json
 gh pr list -R me-user/beta --limit 200 --json number,title,author,statusCheckRollup,updatedAt	empty.json
 gh issue list -R me-user/beta --limit 200 --json number,author	issues-disabled.exit1

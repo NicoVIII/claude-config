@@ -48,7 +48,9 @@ type IssueDetail =
       createdAt: string
       comments: Comment list }
 
-type Run = { conclusion: string option }
+type Run =
+    { workflowName: string
+      conclusion: string option }
 
 type Advisory = { severity: string }
 
