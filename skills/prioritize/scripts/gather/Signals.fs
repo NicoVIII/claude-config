@@ -35,17 +35,7 @@ let private pulls (repo: string) =
     let attention =
         rows
         |> List.choose (fun pull ->
-            let failing =
-                pull.statusCheckRollup
-                |> Option.defaultValue []
-                |> List.exists (fun check ->
-                    match check.conclusion with
-                    // Absent = still running. Anything not known-good is a
-                    // decision for a human, including conclusions GitHub
-                    // adds after this was written.
-                    | None -> false
-                    | Some("SUCCESS" | "NEUTRAL" | "SKIPPED") -> false
-                    | Some _ -> true)
+            let failing = Ci.pullFailing pull.statusCheckRollup
 
             match failing, pull.author.isBot with
             | false, true -> None

@@ -36,26 +36,6 @@ let openPulls () =
           "number,title,statusCheckRollup" ]
     |> Gh.guardTruncation "dependabot PRs"
 
-let private ci (rollup: Wire.Check list option) =
-    let checks = Option.defaultValue [] rollup
-
-    let failing =
-        checks
-        |> List.filter (fun check ->
-            match check.conclusion with
-            | None -> false
-            | Some("SUCCESS" | "NEUTRAL" | "SKIPPED") -> false
-            | Some _ -> true)
-
-    if not (List.isEmpty failing) then
-        Red(failing |> List.map (fun check -> check.name, check.detailsUrl))
-    elif checks |> List.exists (fun check -> check.conclusion.IsNone) then
-        Pending
-    elif checks |> List.exists (fun check -> check.conclusion = Some "SUCCESS") then
-        Green
-    else
-        NoChecks
-
 /// Named rather than derived: every ecosystem spells its manifest differently
 /// (a github-actions bump edits a workflow, a docker bump a Dockerfile), so a
 /// manifest allowlist would report half the ecosystems as lockfile-only. A lock
@@ -136,7 +116,7 @@ let survey (pull: Wire.Pull) =
       level = Bumps.worst bumps
       bumps = bumps
       merge = mergeState 1 pull.number
-      ci = ci pull.statusCheckRollup
+      ci = Checks.verdict pull.statusCheckRollup
       files = files pull.number
       supersededBy = None
       notes = notes body bumps }

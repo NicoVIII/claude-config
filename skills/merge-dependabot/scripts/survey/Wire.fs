@@ -10,7 +10,7 @@ module Wire
 /// walks at the cost of the strictness invariant (abd4b0f).
 type Check =
     { name: string
-      /// Absent while the check is still running.
+      /// `""` while the check is still running — see Conclusion.classify.
       conclusion: string option
       detailsUrl: string option }
 

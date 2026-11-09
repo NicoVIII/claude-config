@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Include="Gh.fs" />
+    <Compile Include="Conclusion.fs" />
   </ItemGroup>
 
 </Project>

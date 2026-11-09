@@ -53,6 +53,7 @@ test: (require "dotnet")
     dotnet run --project skills/merge-dependabot/scripts/survey.tests
     dotnet run --project skills/add-devcontainer/scripts/feature-probe.tests
     dotnet run --project skills/add-dependabot/scripts/dependabot-schema.tests
+    dotnet run --project skills/prioritize/scripts/gather.tests
 
 # Lint and format-check every shell script in the repo.
 #

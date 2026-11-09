@@ -60,9 +60,8 @@ module MergeState =
         | "DRAFT" -> Draft
         | other -> OtherState other
 
-/// A check with no conclusion yet is pending, not red. Anything that concluded
-/// outside the three known-good states is red, including conclusions GitHub
-/// adds after this was written.
+/// A check with no conclusion yet is pending, not red; lib/gh's Conclusion
+/// decides which is which.
 type Ci =
     /// At least one check succeeded and none failed or is still running.
     | Green

@@ -27,6 +27,7 @@
   <ItemGroup>
     <Compile Include="Wire.fs" />
     <Compile Include="Domain.fs" />
+    <Compile Include="Ci.fs" />
     <Compile Include="Signals.fs" />
     <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />

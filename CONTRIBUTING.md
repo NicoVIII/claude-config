@@ -85,8 +85,9 @@ The seam depends on what the helper reaches:
   calls a scenario's `calls` file lists, so a changed flag fails too. It runs
   no `--jq` filter: a fixture holds what `gh` would have printed after it.
 - **Nothing gh-facing is covered in-process.** `lib/gh`'s `run` hardcodes
-  `Process.Start "gh"` with no seam to fake, so `survey.tests` reaches only
-  `Bumps`, the one pure module.
+  `Process.Start "gh"` with no seam to fake, so `survey.tests` and
+  `gather.tests` reach only their pure modules (`Bumps` and `Checks`; `Ci`):
+  logic worth testing moves into one rather than staying inside `Signals`.
 - **A helper that only needs HTTP fakes the handler and does not shell out to
   `curl` to reach the stub.** The fake answers only the requests a test lists,
   so a changed URL or a dropped header fails the same way. The price is that

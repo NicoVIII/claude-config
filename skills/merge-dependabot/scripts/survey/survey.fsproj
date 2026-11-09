@@ -25,6 +25,7 @@
     <Compile Include="Wire.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="Bumps.fs" />
+    <Compile Include="Checks.fs" />
     <Compile Include="Signals.fs" />
     <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />
