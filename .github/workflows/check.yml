@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
 
+# The suite only reads the checkout. Without this the token carries whatever
+# the repository's default grants, which a pull request's code then runs with.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
