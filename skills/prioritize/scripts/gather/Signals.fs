@@ -117,10 +117,18 @@ let private ci (repo: string) (branch: Wire.BranchRef option) =
 /// 403 carrying "Dependabot alerts are disabled" is that repo's setting. gh
 /// appends a boilerplate hint about admin:repo_hook scope to any 403 — noise,
 /// disproved by the other repos in the same run answering with data.
+///
+/// `gh api` returns one page — 30 alerts by default — and says nothing about
+/// the rest, so every page is followed. `--slurp` is what makes the pages one
+/// JSON document, an array per page; without it they arrive as arrays laid end
+/// to end, which no parser reads.
 let private alerts (repo: string) =
-    let path = $"repos/{repo}/dependabot/alerts?state=open"
+    let path = $"repos/{repo}/dependabot/alerts?state=open&per_page=100"
 
-    match Gh.decodeTolerating<Wire.Alert list> "Dependabot alerts are disabled" [ "api"; path ] with
+    match
+        Gh.decodeTolerating<Wire.Alert list list> "Dependabot alerts are disabled" [ "api"; "--paginate"; "--slurp"; path ]
+        |> Option.map List.concat
+    with
     | None -> Disabled
     | Some [] -> Clean
     | Some rows ->
