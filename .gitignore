@@ -34,6 +34,7 @@
 # sits at the root and stays untracked, while the permissions a contributor
 # needs to run `just check` here live one level down and ship with the repo.
 # settings.local.json is personal by definition, so re-ignoring everything and
-# naming the one tracked file keeps it out even if it reappears.
+# naming the tracked files keeps it out even if it reappears.
 /.claude/*
 !/.claude/settings.json
+!/.claude/CLAUDE.md

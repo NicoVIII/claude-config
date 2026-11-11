@@ -35,7 +35,7 @@ An AGENTS.md is in context **only where a CLAUDE.md imports it** — check the i
 Destinations, by what needs the rule:
 
 - **A project's own AGENTS.md** — only that repo needs it.
-- **`~/.claude/references/repo.md`** — only for working on `~/.claude` itself; nothing loads it, so the rule needs a skill that already points there.
+- **`~/.claude/.claude/CLAUDE.md`** — only for working on `~/.claude` itself; it loads in sessions started there and nowhere else.
 - **A SKILL.md** — only one workflow needs it. Check the rule never applies outside that workflow: `a3cd73c` moved the attribution norm into `author-skill`, and `1122821` moved it back once issues filed on direct request went unmarked.
 - **Deletion** — nothing else needs it. Last resort, and the only irreversible one.
 
@@ -64,7 +64,7 @@ A rule that was re-added is load-bearing — don't propose it a second time.
 
 ## Finish
 
-Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. `~/.claude/references/repo.md` names the checks for what the commit stages; a markdown-only commit has none.
+Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. `~/.claude/.claude/CLAUDE.md` names the checks for what the commit stages; a markdown-only commit has none.
 
 ---
 

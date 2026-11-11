@@ -176,7 +176,8 @@ to keep.
 ## Contents
 
 - `CLAUDE.md` — global personal preferences, loaded into every Claude Code session; applies automatically after cloning
-- `references/` — guardrails for working on this repo and on its skills; nothing auto-loads them, so the skills that need one point at it by path
+- `.claude/CLAUDE.md` — guardrails for working on this repo; loads in sessions started here and in no other project
+- `references/` — conventions the skills need wherever they run; nothing auto-loads them, so the skills that need one point at it by path
 - `skills/` — slash-command skills for Claude Code, see the table above; each
   follows the [Agent Skills](https://agentskills.io/specification) layout, so a
   skill folder — `SKILL.md` plus its `scripts/` — is portable to any agent that
