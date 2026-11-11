@@ -39,5 +39,5 @@ Personal — never copy them into project repos or force them on contributors. P
 ## Documentation
 
 - Every change that alters how something is used, placed, or behaves gets a docs pass before its commit: find the docs describing the touched area — READMEs (humans: how to run/operate it), AGENTS.md (agents: at the appropriate directory level), skills — and update each whose reader would now be wrong or missing something. A new user-facing option belongs in the README even when an agent-facing doc already covers it.
-- Claude Code reads AGENTS.md directly; no CLAUDE.md import is needed. Include only what can't be inferred from the code.
+- Claude Code reads AGENTS.md directly only in a repo with no CLAUDE.md of its own; where one exists, AGENTS.md is in context only if that CLAUDE.md imports it. Include only what can't be inferred from the code.
 - Docs people read — READMEs, release notes, feature descriptions — earn their length. Lead with what the reader has to act on, state each constraint once, and cut background they did not ask for. Prefer trimming to a note that the long version lives elsewhere.
