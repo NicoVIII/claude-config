@@ -3,8 +3,9 @@
     "allow": [
       "Bash(just check)",
       "Bash(just check *)",
-      "Bash(dotnet run)",
-      "Bash(dotnet run *)"
+      "Bash(just typecheck)",
+      "Bash(just test)",
+      "Bash(just shell)"
     ]
   }
 }

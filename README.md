@@ -168,8 +168,8 @@ to keep.
   it in, replacing whatever `.permissions` is there. Re-run it after editing.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - `.claude/settings.json` is committed and applies only while working *in* this
-  repo: it allows `just check` and the `dotnet run` behind it, so the checks
-  below do not prompt.
+  repo: it allows `just check` and the three recipes it is made of, so the
+  checks do not prompt.
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
   into every Claude Code session — review it and replace what isn't yours.
 
