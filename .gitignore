@@ -8,6 +8,7 @@
 !/.github
 !/.gitignore
 !/CLAUDE.md
+!/docs
 !/justfile
 !/lefthook.yml
 !/LICENSE
