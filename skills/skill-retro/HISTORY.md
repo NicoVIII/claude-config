@@ -39,3 +39,4 @@
 2026-09-23 · tcg-card-collector · 1394 words · fix small: Apply states the log runs from the session repo, which sets the entry repo and skill resolution; an uncommitted wrong log line is fixed in place
 2026-11-08 · Andromeda-for-GOG · 1394 words · retro minor: replacements drafted around the reviewed run rather than the skill scope, corrected mid-run; repo.md read wholesale again (5.2 KB) for a markdown-only commit the pointer already exempted
 2026-11-08 · Andromeda-for-GOG · 1407 words · fix big: replacements are written at the generality of the skill scope with run specifics in the commit message; the repo.md pointer is gone, the pre-commit hook covers the checks
+2026-11-11 · claude-config · 1430 words · fix small: Propose paragraph split into three labelled lists (what counts as a finding, how an edit is written, order and deferral); sentences carried over, no rule changed
