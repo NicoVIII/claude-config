@@ -46,9 +46,12 @@ build=no
 if [[ ! -f ${assembly} || ! -f ${output}/${name}.runtimeconfig.json ]]; then
 	build=yes
 else
-	# .fsproj too, not just sources: a new Compile entry or a bumped package
-	# changes what the assembly should contain without touching any watched .fs.
-	changed=$(find "${watched[@]}" \( -name '*.fs' -o -name '*.fsproj' \) -newer "${assembly}" -print -quit)
+	# Any file, not a list of extensions: what the assembly is built from is
+	# whatever the .fsproj names, and skill-refiner embeds a markdown file — a
+	# `*.fs` filter left an edit to it shipping the old text until some source
+	# happened to change too. bin/ and obj/ are the build's own output, which
+	# it rewrites on every run and would otherwise always read as newer.
+	changed=$(find "${watched[@]}" \( -name bin -o -name obj \) -prune -o -type f -newer "${assembly}" -print -quit)
 	if [[ -n ${changed} ]]; then
 		build=yes
 	fi
