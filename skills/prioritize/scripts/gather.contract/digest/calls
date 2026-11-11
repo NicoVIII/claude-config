@@ -1,0 +1,12 @@
+api user	user.json
+repo list --no-archived --source --limit 200 --json name,owner,pushedAt,defaultBranchRef	repos.json
+pr list -R me-user/alpha --limit 200 --json number,title,author,statusCheckRollup,updatedAt	alpha-prs.json
+issue list -R me-user/alpha --limit 200 --json number,author	alpha-issues.json
+issue view 21 -R me-user/alpha --json title,author,createdAt,comments	alpha-issue-21.json
+issue view 22 -R me-user/alpha --json title,author,createdAt,comments	alpha-issue-22.json
+run list -R me-user/alpha --branch main --limit 1 --json conclusion	alpha-runs.json
+api --paginate --slurp repos/me-user/alpha/dependabot/alerts?state=open&per_page=100	alpha-alerts.json
+pr list -R me-user/beta --limit 200 --json number,title,author,statusCheckRollup,updatedAt	empty.json
+issue list -R me-user/beta --limit 200 --json number,author	issues-disabled.err
+api --paginate --slurp repos/me-user/beta/dependabot/alerts?state=open&per_page=100	alerts-disabled.err
+search prs --review-requested=@me --state=open --limit 200 --json number,title,repository,author,updatedAt	reviews.json
