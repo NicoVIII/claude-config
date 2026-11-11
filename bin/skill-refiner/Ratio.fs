@@ -1,9 +1,7 @@
 /// How far a skill's SKILL.md has grown, read straight from its HISTORY.md.
 ///
 /// Every entry carries the word count at the moment it was written, so the log
-/// is itself a size time-series and nothing here consults git. That is the whole
-/// difference from the version this replaces, which had to reconstruct a first
-/// commit to say anything about the long horizon.
+/// is itself a size time-series and nothing here consults git.
 ///
 /// Growth rather than absolute size: a skill born complex should not be
 /// penalised for it, and a universal word limit would be an arbitrary number
@@ -21,9 +19,9 @@
 /// because whether a risen floor was earned is a judgement from the runs, not
 /// from arithmetic.
 ///
-/// Creation counts as a deliberate size here, unlike the first commit the old
-/// floor refused to anchor to: it is logged by an author who has just sized the
-/// draft against the other skills, not whatever a first pass happened to weigh.
+/// Creation counts as a deliberate size: it is logged by an author who has just
+/// sized the draft against the other skills, not whatever a first pass happened
+/// to weigh.
 ///
 /// All of that measures words alone, which cannot separate a skill that grew
 /// because it covers more from one that grew because it explains the same
@@ -48,8 +46,8 @@ let private isListMarker (token: string) =
 
 /// The list items a SKILL.md states, standing in for the rules it carries.
 /// Fenced code is skipped: `add-devcontainer` embeds a workflow whose YAML
-/// sequence entries are bullets by shape alone, and counting them would have
-/// inflated its rule count by a sixth.
+/// sequence entries are bullets by shape alone, and counting them would
+/// inflate its rule count by a sixth.
 let private ruleCount (text: string) =
     let opensListItem (line: string) =
         line.Split([| ' '; '\t' |], StringSplitOptions.RemoveEmptyEntries)

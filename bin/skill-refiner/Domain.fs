@@ -1,15 +1,12 @@
 /// The history-log format, and the event taxonomy every reader shares.
 ///
-/// This module is why the helper is F# and not shell. The log had three shell
-/// parsers and they disagreed twice: `maturity` counted a `compacted:` baseline
-/// as a run (a8531b1), and `ratio` matched that phrase inside unrelated prose.
-/// Both are missing-case bugs. So the events are a closed tree, and every match
-/// over it lists all of `ChangeEvent`'s cases rather than falling back to a
-/// wildcard: adding a fourth event is then a compile error at each site that has
-/// to decide what it means, which is the whole point of the port. A wildcard
-/// *inside* a case is fine where the answer cannot depend on the payload — a
-/// retro is a run whatever its grade — because extending `RetroVerdict` could
-/// not change that answer.
+/// The events are a closed tree, and every match over it lists all of
+/// `ChangeEvent`'s cases rather than falling back to a wildcard: adding an event
+/// is then a compile error at each site that has to decide what it means, where
+/// a missed case is a reader silently miscounting (a8531b1). A wildcard *inside*
+/// a case is fine where the answer cannot depend on the payload — a retro is a
+/// run whatever its grade — because extending `RetroVerdict` could not change
+/// that answer.
 module Domain
 
 open System
@@ -28,8 +25,7 @@ let usage message = raise (UsageError message)
 /// How the run itself went, by the damage it did: `Minor` for issues that did
 /// not much hinder a good result, `Major` for big ones up to an abort. It grades
 /// the run and nothing else — whether the edits it led to invalidate the runs
-/// before them is `Fix`'s question, and answering it twice is what let one mild
-/// correction cost three runs of progress.
+/// before them is `Fix`'s question.
 ///
 /// `Clean` carries no clause by construction: a run with nothing to report can
 /// only fill one with filler, and filler is noise in the corpus a later retro
@@ -42,9 +38,7 @@ type RetroVerdict =
 /// Whether the edit leaves the runs before it standing as evidence. `Big` means
 /// it does not — a mechanism replaced, a step added or removed, a contract
 /// changed; `Small` means the procedure is intact and only its wording moved.
-/// This is the judgement `/skill-retro` used to leave to its reader ("a clean
-/// entry logged against machinery a later retro replaced doesn't count"), stated
-/// once at the time the edit is made, when it is actually known.
+/// Judged when the edit is made, which is when it is known.
 type FixSize =
     | Small
     | Big
@@ -52,8 +46,7 @@ type FixSize =
 /// What a run and its aftermath record. A retro pass that edits the skill writes
 /// two of these — the retro for how the run went, the fix for what the edit did
 /// — which is what makes an unfixed finding visible: a clause with no fix beside
-/// it is the deferral, and a later retro matches a recurrence against it. One
-/// line saying both is what used to hide it.
+/// it is the deferral, and a later retro matches a recurrence against it.
 type ChangeEvent =
     | Retro of RetroVerdict
     | Fix of size: FixSize * clause: string
@@ -132,8 +125,7 @@ let private clauseAfter (prefix: string) (text: string) =
 
 /// The one definition of the vocabulary, mirroring `renderChangeEvent` case for
 /// case. The writer validates through here too, so it cannot accept a form the
-/// readers do not recognise — in the shell version those were two separate
-/// regexes.
+/// readers do not recognise.
 let parseChangeEvent (text: string) : ChangeEvent option =
     match text with
     | "retro clean" -> Some(Retro Clean)
@@ -181,10 +173,8 @@ let private parseDate (text: string) =
     | true, date -> Some date
     | _ -> None
 
-/// A count, and only when it is exactly one. Zero or less is not a size: a
-/// negative used to reach `ratio` as a baseline and divide into a -1.0x that
-/// printed as "under the trigger" — a wrong answer wearing the shape of a
-/// reassuring one (a1d87eb).
+/// A count, and only a positive one. Zero or less is not a size: as a baseline
+/// it divides into a ratio that prints as "under the trigger" (a1d87eb).
 let private parseWords (text: string) =
     if text.EndsWith " words" then
         match Int32.TryParse(text.Substring(0, text.Length - " words".Length)) with
@@ -200,8 +190,8 @@ let private parseWords (text: string) =
 let parseLine (line: string) : Entry<Event> =
     // Bounded so the event keeps the rest of the line: date, repo and the count
     // cannot contain the separator, but the clause is free text a retro writes,
-    // and an unbounded split turned one stray " · " in it into a parse abort
-    // that took down every reader of that skill's whole log.
+    // and an unbounded split would turn one stray " · " in it into a parse
+    // abort for every reader of that skill's log.
     match line.Split(separator, 4, StringSplitOptions.None) with
     | [| date; repo; words; event |] ->
         match parseDate date, parseWords words, parseEvent event with

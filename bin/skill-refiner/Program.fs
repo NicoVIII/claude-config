@@ -49,8 +49,7 @@ let private log (skill: string) (args: string list) =
         | Compacted _ -> ()
 
 /// Rejects a typo'd skill name before anything else runs, so the failure names
-/// the real mistake rather than surfacing as "not inside a git repo" — the
-/// confusing error a misspelling used to produce.
+/// the real mistake rather than surfacing as "not inside a git repo".
 let private withSkill (skill: string) (body: string -> unit) =
     Layout.skillDir skill |> ignore
     body skill

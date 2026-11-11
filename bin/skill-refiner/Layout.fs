@@ -115,13 +115,6 @@ let history (skill: string) : History =
     else
         { Creation = None; Entries = [] }
 
-/// Seeding the origin baseline. It must be the first line, so this refuses once
-/// a change has been logged against it — a late creation is a shape the reader
-/// would reject anyway. Re-seeding a log that is still nothing but a creation
-/// line is safe and deliberately allowed: no retro or fix has read that
-/// baseline yet, and the alternative is a number frozen before the author
-/// settled on the text (12e09b7's interrupt, and again in the run that seeded
-/// `groom`).
 /// The caller is an agent reading through dotnet's first-run banner, where a
 /// silent success is indistinguishable from a swallowed failure. Echoing the
 /// written line is the confirmation it would otherwise spend a round trip on —
@@ -129,6 +122,12 @@ let history (skill: string) : History =
 /// this after a `cd` gets wrong without ever seeing it.
 let private announce (path: string) (line: string) = printfn $"logged to {path}:\n  {line}"
 
+/// Seeding the origin baseline. It must be the first line, so this refuses once
+/// a change has been logged against it — a late creation is a shape the reader
+/// would reject anyway. Re-seeding a log that is still nothing but a creation
+/// line is safe and deliberately allowed: no retro or fix has read that
+/// baseline yet, and the alternative is a number frozen before the author
+/// settled on the text (12e09b7).
 let createHistory (skill: string) (entry: Entry<CreationEvent>) =
     let path = historyFile skill
 

@@ -1,10 +1,9 @@
 /// Rating a skill from its history log.
 ///
-/// The promotion bars had been patched three times as SKILL.md prose (2e46084,
-/// 9060c13, 4543bab); counting entries by event and repo is mechanical, so it
-/// lives here. The judgement that used to stay in SKILL.md — whether a rewrite
-/// invalidated the entries the count is based on — is now recorded when the
-/// rewrite happens, as a big fix, so the ladder can read it.
+/// Counting entries by event and repo is mechanical, so it lives here rather
+/// than in SKILL.md prose. The one judgement involved — whether an edit
+/// invalidated the runs before it — is recorded when the edit is made, as a big
+/// fix, so the ladder can read it.
 ///
 /// Demotion needs no separate rule: a major retro ends the trailing streak,
 /// which drops the log-derived rating on its own. A big fix does not: 🟢 Usable
@@ -12,13 +11,13 @@
 /// Fix size only reaches the top rung, which is a claim about text stability:
 /// 🛡️ Battle-tested means the mechanism has not moved for five good runs in more
 /// than one repo, so a big fix drops a skill to 🟢 Usable and a major retro to
-/// 🧪 Experimental. It used to demand strictly clean runs against text nobody
-/// had touched, and no clean grade was ever logged in 44 runs — the retro's
-/// cost axis always finds a minor — so that bar was a lock, not a goal. Fix
-/// size wired to Usable had the same effect one rung down — the deferral rule lands every
-/// second-sighting rule as a step added, so a skill going through the loop
-/// took a big fix every other run, and 0 of 15 skills held Usable after ~45
-/// runs.
+/// 🧪 Experimental.
+///
+/// Two stricter bars were tried and are ruled out. Requiring clean grades: a
+/// retro's cost axis always finds a minor, so no skill ever qualified — which
+/// is why clean and minor count alike everywhere below. Letting a big fix end
+/// the 🟢 Usable streak: deferred findings land as added steps, so a skill in
+/// the loop took one every other run and none held the rung.
 module Maturity
 
 open Domain
@@ -104,7 +103,7 @@ type private Counts =
 
 /// A run happened: the skill was used, then reviewed. A fix records an edit and
 /// a compaction a baseline; both share the log without being runs, and counting
-/// one as a run is the bug a8531b1 had to patch out of the shell version.
+/// one as a run inflates every bar (a8531b1).
 let private isRun (entry: Entry<ChangeEvent>) =
     match entry.Event with
     | Retro _ -> true
@@ -168,12 +167,11 @@ let private stableClause counts =
         $"%d{counts.Stable} since the last big fix, across %d{counts.Repos} {repos}"
 
 /// A log with no runs in it cannot argue with the README. Both a skill nobody
-/// has run yet and one whose evidence was discarded (e976e0c deleted the run
-/// logs) rate 🚧 WIP, and printing that rung beside a higher claim reads as a
-/// demotion the reader is meant to propose — which is how six untouched rows
-/// came to generate the same rejected proposal at every retro. Absence of
-/// evidence is not evidence: the claim is unbacked, not contradicted, so the
-/// rung is left unsaid here and the next bar below says what would back it.
+/// has run yet and one whose evidence was discarded (e976e0c) rate 🚧 WIP, and
+/// printing that rung beside a higher claim reads as a demotion the reader is
+/// meant to propose. Absence of evidence is not evidence: the claim is
+/// unbacked, not contradicted, so the rung is left unsaid here and the next bar
+/// below says what would back it.
 let private claimLine (skill: string) (claim: Layout.Claim) (counts: Counts) rating =
     let said =
         match claim with
