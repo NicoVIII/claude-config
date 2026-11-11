@@ -21,6 +21,7 @@ let tests =
               // Arrange
               let cases =
                   [ "retro clean", Retro Clean
+                    "run", Run
                     "retro minor: footer placement guessed", Retro(Minor "footer placement guessed")
                     "retro major: the run was aborted", Retro(Major "the run was aborted")
                     "fix small: stale path corrected", Fix(Small, "stale path corrected")
@@ -36,6 +37,7 @@ let tests =
               // Arrange — one of each case; the clause is arbitrary
               let events =
                   [ Retro Clean
+                    Run
                     Retro(Minor "a clause")
                     Retro(Major "a clause")
                     Fix(Small, "a clause")

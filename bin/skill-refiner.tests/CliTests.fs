@@ -274,8 +274,8 @@ let private maturityTests =
 
                   // Assert
                   Expect.stringContains result.Stdout "4 runs" "every run counts toward the total"
-                  Expect.stringContains result.Stdout "2 clean-or-minor" "the streak restarts at the major"
-                  Expect.stringContains result.Stdout "2 since the last big fix" "and so does the stable count")
+                  Expect.stringContains result.Stdout "2 since the last major retro" "the streak restarts at the major"
+                  Expect.stringContains result.Stdout "2 reviewed since the last big fix" "and so does the stable count")
           }
 
           test "a big fix leaves the Usable streak standing and ends the stable one" {
@@ -294,8 +294,8 @@ let private maturityTests =
 
                   // Assert
                   Expect.stringContains result.Stdout "3 runs" "the runs themselves are still on record"
-                  Expect.stringContains result.Stdout "3 clean-or-minor" "and all three still count toward Usable"
-                  Expect.stringContains result.Stdout "1 since the last big fix" "only the top rung starts over at the fix")
+                  Expect.stringContains result.Stdout "3 since the last major retro" "and all three still count toward Usable"
+                  Expect.stringContains result.Stdout "1 reviewed since the last big fix" "only the top rung starts over at the fix")
           }
 
           test "a small fix is transparent to both streaks" {
@@ -312,8 +312,78 @@ let private maturityTests =
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "2 clean-or-minor" "the small fix is transparent to this streak"
-                  Expect.stringContains result.Stdout "2 since the last big fix" "and to the one above it")
+                  Expect.stringContains result.Stdout "2 since the last major retro" "the small fix is transparent to this streak"
+                  Expect.stringContains result.Stdout "2 reviewed since the last big fix" "and to the one above it")
+          }
+
+          test "logs a run nobody reviewed as a bare event" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> skill "demo" (words 37)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "run" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (root |> historyFile "demo" |> Option.defaultValue "")
+                      $"· {sessionRepoName} · 37 words · run\n"
+                      "an unreviewed run has nothing to say beyond having happened")
+          }
+
+          test "refuses a clause on an unreviewed run" {
+              withRoot (fun root ->
+                  // Arrange — a clause is what a review finds, so a run that
+                  // has one to give belongs in a retro
+                  root |> skill "demo" (words 37)
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "log"; "run"; "went fine" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 1 "should be a usage error"
+                  Expect.equal (root |> historyFile "demo") None "and nothing is written")
+          }
+
+          test "counts unreviewed runs toward Usable" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> skill "demo" (words 100)
+                  root |> logged "demo" [ "run"; "retro minor: tweak"; "run" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "🟢 Usable" "three runs without a major clear the bar, reviewed or not"
+                  Expect.stringContains result.Stdout "1 reviewed since the last big fix" "only the retro is a reviewed run")
+          }
+
+          test "keeps unreviewed runs out of the Battle-tested count" {
+              withRoot (fun root ->
+                  // Arrange — six runs across two repos, but only four of them
+                  // reviewed: nobody looked at whether the text held for the rest
+                  root |> skill "demo" (words 100)
+
+                  root
+                  |> loggedIn
+                      "demo"
+                      [ "repo-a", "retro clean"
+                        "repo-a", "retro minor: tweak"
+                        "repo-a", "run"
+                        "repo-b", "retro clean"
+                        "repo-b", "run"
+                        "repo-b", "retro minor: tweak" ]
+
+                  // Act
+                  let result = root |> skillRefiner [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.stringContains result.Stdout "log supports 🟢 Usable" "four reviewed runs fall short of the top rung"
+                  Expect.stringContains result.Stdout "6 runs; 6 since the last major retro" "all six still count as runs"
+                  Expect.stringContains result.Stdout "4 reviewed since the last big fix" "and only the retros as reviewed")
           }
 
           test "reaches Usable at three clean-or-minor runs since the last reset" {
@@ -375,7 +445,7 @@ let private maturityTests =
                   let result = root |> skillRefiner [ "demo"; "maturity" ]
 
                   // Assert
-                  Expect.stringContains result.Stdout "0 since the last big fix" "the big fix ends the stable streak"
+                  Expect.stringContains result.Stdout "0 reviewed since the last big fix" "the big fix ends the stable streak"
 
                   Expect.isFalse
                       (result.Stdout.Contains "repos)")

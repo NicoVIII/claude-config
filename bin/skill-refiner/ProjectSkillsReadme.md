@@ -18,7 +18,7 @@ line per event:
     2026-08-03 · this-repo · 1233 words · fix big: <what the edit changed>
 
 — the date, the repo the run happened in, the SKILL.md's word count at that
-moment, and what happened (`created`, `retro clean|minor|major`,
+moment, and what happened (`created`, `run`, `retro clean|minor|major`,
 `fix small|big`, `compacted`). Read together, the lines say which runs went
 badly, what each edit changed, and how far the text has grown since anyone last
 shortened it — so a skill can be improved from evidence rather than memory.

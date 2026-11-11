@@ -99,4 +99,4 @@ jq -r '.features["ghcr.io/devcontainers/features/dotnet:2"].version' .devcontain
 
 Following the target repo's own conventions, record two things: that versions are pinned in `devcontainer.json` and bumped there rather than in the workflow, and the feature priority order, for whoever adds the next tool. If the container shares host credentials or config read-write, say so wherever someone decides whether to open it — that is a convenience, not a sandbox.
 
-This skill is not yet battle-tested: if any instruction above was ambiguous, wrong, or needed a workaround, say so briefly at the end of the run.
+This skill is not yet battle-tested. At the end of the run, say briefly whether any instruction above was ambiguous, wrong, or needed a workaround. If none was and I corrected nothing during the run, log it instead: from the session repo's working directory run `~/.claude/bin/skill-refiner.sh <this skill's name> log run`, then commit the `HISTORY.md` line it names, alone, in the repo that holds the skill. Where that script does not exist, skip the logging.

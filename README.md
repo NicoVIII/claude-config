@@ -104,9 +104,12 @@ flowchart LR
 - **Capturing a workflow** — run `/author-skill` in the session that revealed
   it, while the context is fresh. A workflow specific to one project lands in
   that repo's `.claude/skills`.
-- **Refining after use** — below 🛡️ Battle-tested, run `/skill-retro` in the
-  same session after every run; past it, on demand. A retro is the only thing
-  that logs a run, so a skill nobody retros never earns the top rung. When it
+- **Refining after use** — below 🟢 Usable the skill's footer settles it: a
+  run that met friction, or that you corrected, gets `/skill-retro` in the same
+  session; one that met none logs itself as a bare `run`. From 🟢 Usable up
+  there is no footer, and only a reviewed run counts toward 🛡️ Battle-tested —
+  run `/skill-retro` when a run felt off, or when you want the skill to earn
+  the top rung. When it
   reports the skill over the growth trigger, run `/skill-compact` as a separate
   pass.
 - **Project skills** work the same: run the commands from inside that repo, and

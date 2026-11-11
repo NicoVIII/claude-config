@@ -49,6 +49,11 @@ type FixSize =
 /// it is the deferral, and a later retro matches a recurrence against it.
 type ChangeEvent =
     | Retro of RetroVerdict
+    /// A run nobody reviewed: the executor reported no friction and logged it
+    /// itself. It is evidence that the skill was used and nothing went visibly
+    /// wrong, and nothing more — no grade, and no clause, because a clause is
+    /// what a review finds.
+    | Run
     | Fix of size: FixSize * clause: string
     /// Not a run: `/skill-compact`'s new baseline for the growth ratio. The
     /// clause says what the pass cut, which is the growth trace's only account
@@ -102,6 +107,7 @@ let private renderFix size clause =
 let renderChangeEvent event =
     match event with
     | Retro verdict -> renderRetro verdict
+    | Run -> "run"
     | Fix(size, clause) -> renderFix size clause
     | Compacted clause -> $"compacted: {clause}"
 
@@ -129,6 +135,7 @@ let private clauseAfter (prefix: string) (text: string) =
 let parseChangeEvent (text: string) : ChangeEvent option =
     match text with
     | "retro clean" -> Some(Retro Clean)
+    | "run" -> Some Run
     | _ when text.StartsWith "retro minor: " -> clauseAfter "retro minor: " text |> Option.map (Minor >> Retro)
     | _ when text.StartsWith "retro major: " -> clauseAfter "retro major: " text |> Option.map (Major >> Retro)
     | _ when text.StartsWith "fix small: " -> clauseAfter "fix small: " text |> Option.map (fun c -> Fix(Small, c))

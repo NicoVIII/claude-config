@@ -98,6 +98,7 @@ let private changePoint (entry: Entry<ChangeEvent>) =
         | Retro Clean -> "retro clean", "", Changed
         | Retro(Minor clause) -> "retro minor", clause, Changed
         | Retro(Major clause) -> "retro major", clause, Changed
+        | Run -> "run", "", Changed
         | Fix(Small, clause) -> "fix small", clause, Changed
         | Fix(Big, clause) -> "fix big", clause, Changed
         | Compacted clause -> "compacted", clause, Compaction

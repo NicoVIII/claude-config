@@ -13,6 +13,11 @@
 /// than one repo, so a big fix drops a skill to 🟢 Usable and a major retro to
 /// 🧪 Experimental.
 ///
+/// A run logged without a review counts toward 🟢 Usable and no further. That
+/// rung asks whether the skill gets used without going badly, which an
+/// executor reporting no friction can speak to; 🛡️ Battle-tested asks whether
+/// the text held up under review, which it cannot.
+///
 /// Two stricter bars were tried and are ruled out. Requiring clean grades: a
 /// retro's cost axis always finds a minor, so no skill ever qualified — which
 /// is why clean and minor count alike everywhere below. Letting a big fix end
@@ -38,8 +43,8 @@ let private label rating =
 let private nextBar rating =
     match rating with
     | Wip -> Some "🧪 Experimental needs one run logged"
-    | Experimental -> Some "🟢 Usable needs ~3 clean-or-minor runs since the last major retro"
-    | Usable -> Some "🛡️ Battle-tested needs ~5 clean-or-minor runs since the last major retro or big fix, across 2+ repos"
+    | Experimental -> Some "🟢 Usable needs ~3 runs since the last major retro"
+    | Usable -> Some "🛡️ Battle-tested needs ~5 reviewed runs since the last major retro or big fix, across 2+ repos"
     | BattleTested -> None
 
 /// Which side of 🟢 Usable a rating sits on. The feedback footer is carried
@@ -96,17 +101,28 @@ type private Counts =
     { Runs: int
       /// Runs since the last major retro.
       Streak: int
-      /// Runs since the last major retro or big fix — the tail of `Streak` the
-      /// text has stood still for. A minor and a small fix break neither.
+      /// Reviewed runs since the last major retro or big fix — the tail of
+      /// `Streak` the text has stood still for, less the runs nobody reviewed.
+      /// A minor and a small fix break neither.
       Stable: int
       Repos: int }
 
-/// A run happened: the skill was used, then reviewed. A fix records an edit and
-/// a compaction a baseline; both share the log without being runs, and counting
+/// A run happened: the skill was used, reviewed or not. A fix records an edit
+/// and a compaction a baseline; both share the log without being runs, and counting
 /// one as a run inflates every bar (a8531b1).
 let private isRun (entry: Entry<ChangeEvent>) =
     match entry.Event with
     | Retro _ -> true
+    | Run -> true
+    | Fix _ -> false
+    | Compacted _ -> false
+
+/// The runs a retro looked at. Only these vouch for the text, so only these
+/// reach the top rung and its repo spread.
+let private isReviewed (entry: Entry<ChangeEvent>) =
+    match entry.Event with
+    | Retro _ -> true
+    | Run -> false
     | Fix _ -> false
     | Compacted _ -> false
 
@@ -119,6 +135,7 @@ let private survivesStreak (entry: Entry<ChangeEvent>) =
     | Retro Clean
     | Retro(Minor _) -> true
     | Retro(Major _) -> false
+    | Run -> true
     | Fix(Small, _)
     | Fix(Big, _) -> true
     | Compacted _ -> true
@@ -132,6 +149,7 @@ let private survivesStable (entry: Entry<ChangeEvent>) =
     | Retro Clean
     | Retro(Minor _) -> true
     | Retro(Major _) -> false
+    | Run -> true
     | Fix(Small, _) -> true
     | Fix(Big, _) -> false
     | Compacted _ -> true
@@ -141,7 +159,7 @@ let private survivesStable (entry: Entry<ChangeEvent>) =
 /// never reaches this: it is not a change at all.
 let private count (entries: Entry<ChangeEvent> list) =
     let newestFirst = List.rev entries
-    let stable = newestFirst |> List.takeWhile survivesStable |> List.filter isRun
+    let stable = newestFirst |> List.takeWhile survivesStable |> List.filter isReviewed
 
     { Runs = entries |> List.filter isRun |> List.length
       Streak = newestFirst |> List.takeWhile survivesStreak |> List.filter isRun |> List.length
@@ -161,10 +179,10 @@ let private plural count singular many = if count = 1 then singular else many
 /// the whole log, and every skill whose last entry is a big fix shows it.
 let private stableClause counts =
     if counts.Stable = 0 then
-        "0 since the last big fix"
+        "0 reviewed since the last big fix"
     else
         let repos = plural counts.Repos "repo" "repos"
-        $"%d{counts.Stable} since the last big fix, across %d{counts.Repos} {repos}"
+        $"%d{counts.Stable} reviewed since the last big fix, across %d{counts.Repos} {repos}"
 
 /// A log with no runs in it cannot argue with the README. Both a skill nobody
 /// has run yet and one whose evidence was discarded (e976e0c) rate 🚧 WIP, and
@@ -196,7 +214,7 @@ let run (skill: string) =
     printfn "%s" (claimLine skill claim counts rating)
 
     printfn
-        "  %d %s; %d clean-or-minor since the last major retro (%s)"
+        "  %d %s; %d since the last major retro (%s)"
         counts.Runs
         (plural counts.Runs "run" "runs")
         counts.Streak

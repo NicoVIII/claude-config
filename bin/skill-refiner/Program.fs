@@ -19,6 +19,8 @@ let private changeEvent (args: string list) =
     | "retro" :: _ ->
         usage
             $"{binaryName} <skill> log retro <clean | minor <clause> | major <clause>>\n  e.g. {binaryName} grilling log retro minor 'footer placement guessed'"
+    | [ "run" ] -> Run
+    | "run" :: _ -> usage $"{binaryName} <skill> log run"
     | [ "fix"; "small"; text ] -> Fix(Small, clause text)
     | [ "fix"; "big"; text ] -> Fix(Big, clause text)
     | "fix" :: _ ->
@@ -28,13 +30,14 @@ let private changeEvent (args: string list) =
     | "compacted" :: _ ->
         usage
             $"{binaryName} <skill> log compacted <clause>\n  e.g. {binaryName} grilling log compacted 'merged the two retraction rules'"
-    | _ -> usage $"{binaryName} <skill> log <creation | retro … | fix … | compacted <clause>>"
+    | _ -> usage $"{binaryName} <skill> log <creation | run | retro … | fix … | compacted <clause>>"
 
 /// A fix is the one event logged after the SKILL.md changed size, so the
 /// accretion report follows it here rather than costing the caller a second
 /// invocation — and a number that can only arrive after the edit is a number
 /// nobody projects before one. A compaction reports its own result through the
-/// baseline it sets, and a retro is logged before any edit at all.
+/// baseline it sets, and a retro or an unreviewed run is logged with no edit
+/// behind it.
 let private log (skill: string) (args: string list) =
     match args with
     | [ "creation" ] -> Log.creation skill
@@ -46,6 +49,7 @@ let private log (skill: string) (args: string list) =
         match event with
         | Fix _ -> Ratio.summary skill
         | Retro _
+        | Run
         | Compacted _ -> ()
 
 /// Rejects a typo'd skill name before anything else runs, so the failure names

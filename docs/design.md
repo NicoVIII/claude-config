@@ -53,19 +53,20 @@ flowchart TD
 ## The history log
 
 The `HISTORY.md` beside a `SKILL.md` is that evidence, appended to by the
-skills above and by nothing else. One line per event:
+skills above — and by a run's own executor, when the feedback footer has a run
+that met no friction log itself — and by nothing else. One line per event:
 
 ```
 2026-08-03 · claude-config · 1233 words · fix big: failure branch now …
 ```
 
 — the date, the repo the run happened in, the SKILL.md's size at that moment,
-and what happened: `created`, `retro clean|minor|major`, `fix small|big`, or
+and what happened: `created`, `run`, `retro clean|minor|major`, `fix small|big`, or
 `compacted`. Three readers depend on that shape, which is why the file is
 written only through `~/.claude/bin/skill-refiner.sh <skill> log …` and never by
 hand, and why earlier lines are never rewritten:
 
-- `skill-refiner maturity` rates the skill from the run grades since the last
+- `skill-refiner maturity` rates the skill from the runs since the last
   major retro — and, for 🛡️ Battle-tested, since the last big fix too, and from
   how many repos those runs came from, which is what the repo field is for.
 - `skill-refiner ratio` measures growth against the last deliberate size
