@@ -5,8 +5,6 @@ description: File a GitHub issue in the current repo, or refine a rough one unti
 
 Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
 
-Untested: a Refine run that ends in a rewritten body — the rewrite rule replaced one the user overruled mid-run and has not been exercised since.
-
 ## Read the repo's conventions first
 
 These vary per repo and override the defaults below:
@@ -44,8 +42,8 @@ For an issue that is plausible but not startable — a one-paragraph idea, no ac
 1. `gh issue view <n> --json title,body,labels,comments,author`. If someone other than me authored or commented, say so before editing or posting anything.
 2. **Scope check** against the scope doc and the repo's decision records (e.g. `docs/decisions/`): quote any non-goal, "someday, maybe", or settled decision it touches. If the scope doc doesn't plainly cover it, ask before any interview whether to close it as not planned, park it, or change the scope doc. **Park**: do step 3, skip steps 4–5, post one comment with the facts found and the decisions left open, close the issue as not planned, and commit a line linking it into the scope doc's "someday" section.
 3. **Look up the facts** — what exists in the code, what the dependency or platform supports. Don't ask me what the repo can answer.
-4. **List the open decisions**, then interview me on them following the `grilling` skill's rules: one question at a time, each with your recommended answer, dependencies resolved in order.
-5. **Rewrite the body** to File's step 3 bar — the decisions made folded in, the acceptance section, anything still open — so the issue reads cleanly when work starts instead of as a body plus a comment trail. Show it to me, then `gh issue edit <n> --body-file …`; GitHub's edit history keeps the original. Fix the title in the same call with `--title` only if it misleads.
+4. **List the open decisions.** Interview me only on those that pass File step 6's test — the answer changes the shape of the work — and that I have not already settled in this session. Follow the `grilling` skill's rules: one question at a time, each with your recommended answer, dependencies resolved in order. Every other open decision goes into the body's Open questions list with your recommended answer.
+5. **Rewrite the body** to File's step 3 bar — the decisions made folded in, the acceptance section, anything still open — so the issue reads cleanly when work starts instead of as a body plus a comment trail. Apply it with `gh issue edit <n> --body-file …`, then show me the link; GitHub's edit history keeps the original. Fix the title in the same call with `--title` only if it misleads.
 
 Stop once the issue is updated. Don't start implementing.
 
