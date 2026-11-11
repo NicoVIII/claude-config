@@ -20,7 +20,7 @@ These vary per repo and override the defaults below:
    - it is a trivial fix — make the fix instead, or say it is one;
    - the scope doc lists it as a non-goal — name the line; file only if I still want it;
    - it is a small nit — add it to the repo's open sweep issue (`gh issue list --search "sweep in:title"`) as a comment, or bundle it with other nits into one new sweep issue.
-2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms: one job often hides behind two wordings ("No mobile layout" vs "Responsive pass"). On a match, comment the new scope onto that issue instead of filing.
+2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms: one job often hides behind two wordings ("No mobile layout" vs "Responsive pass"). On a match — the same work packet under another wording — don't file and don't comment: fold the new scope into that issue's body as Refine step 5 does. An issue that shares the goal but is a different packet — another mechanism, its own acceptance, startable on its own — is not a match: file separately, and add one "Related: #n" line to the existing issue's body.
 3. **Write the body so someone could start it cold**, without this session:
    - bug: repro steps, expected, actual;
    - feature or enabler: goal, current state with file paths, scope, and an acceptance section saying when it is done;
