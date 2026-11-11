@@ -20,7 +20,7 @@
       "Bash(~/.claude/skills/add-dependabot/scripts/dependabot-schema.sh *)",
       "Bash(bun pm view *)",
       "Bash(dotnet --version)",
-      "Read(~/skills/**)"
+      "Read(~/.claude/skills/**)"
     ]
   }
 }
