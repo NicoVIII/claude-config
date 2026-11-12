@@ -16,3 +16,5 @@
 2026-09-20 · tcg-card-collector · 779 words · retro minor: tier-2 label clause ambiguous when repo has a bug label no open issue carries (two readings, different winners); milestones API re-invoked a third retro running, this time for the description; deferred: tier-3 body reads unbounded at 13.9KB, issue bodies overtaken by code they cite
 2026-09-20 · tcg-card-collector · 851 words · fix big: the repo bug label, where it exists, is authoritative over issue text; tier 3 reads the winning milestone description and the report names the promise it serves
 2026-09-23 · tcg-card-collector · 851 words · retro clean
+2026-11-12 · claude-config · 851 words · retro minor: tier-4 cross-reference scan counted #8/#10 as unblocking #7 though both bodies call it related, not a dependency (blocker weighting, deferred 2026-09-13, recurred); outcome held on age
+2026-11-12 · claude-config · 859 words · fix big: unblocking counted from GitHub's blocked-by relations (a blocks: column on the issue query), not a #n body scan; groom records prose-only dependencies as relations

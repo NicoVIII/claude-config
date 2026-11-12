@@ -43,13 +43,14 @@ then stalled PRs. Recommend the worst and stop.
 ## Tier 2 — keep the lights on
 
 ```sh
-gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt \
-  --jq '.[] | "\(.number)\t[\([.labels[].name]|join(","))]\t\(.milestone.title // "-")\t\(.milestone.dueOn // "")\t\(.createdAt[0:10])\t\(.title)"'
+gh issue list --state open --limit 200 --json number,title,labels,milestone,createdAt,blocking \
+  --jq '.[] | "\(.number)\t[\([.labels[].name]|join(","))]\t\(.milestone.title // "-")\t\(.milestone.dueOn // "")\t\(.createdAt[0:10])\tblocks:\(.blocking.totalCount)\t\(.title)"'
 ```
 
-Never add `body` to that call. Fetch bodies only for suspected defects via
-`gh issue view <n> --json body`; for cross-references (tiers 3 and 4) run
-`gh issue list --state open --limit 200 --json number,body --jq '.[] | "\(.number): " + ([.body | scan("#[0-9]+")] | unique | join(" "))'`.
+Never add `body` to that call. Fetch bodies only for suspected defects, via
+`gh issue view <n> --json body`. The `blocks:` column counts the issues GitHub
+records as blocked by this one, and it is the only dependency tiers 3 and 4
+count: a `#n` in an issue's prose is not a blocker, whatever the prose says.
 
 A defect is an issue describing broken shipped behavior. Where the repo's label
 set has a `bug` label (`gh label list --json name -q '.[].name'`), that label is
@@ -72,8 +73,8 @@ own description once — `gh api "repos/{owner}/{repo}/milestones?state=open" --
 '.[] | "\(.title)\n\(.description)"'` — it states what the release promises,
 and the report names which part of that promise the recommendation serves.
 
-Rank by how much each issue unblocks: cross-references pointing at it from any
-open issue, in the milestone or not, minus any whose work has already landed —
+Rank by how much each issue unblocks: its `blocks:` count, whether the blocked
+issues are in the milestone or not, minus any whose work has already landed —
 a milestone issue whose commits are in `git log` is done but unclosed, so say
 so. Break ties on blast radius, then age, as in tier 2; read the contenders'
 bodies, not just their titles.
