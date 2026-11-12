@@ -23,10 +23,12 @@ let private jsonOptions = JsonSerializerOptions(RespectRequiredConstructorParame
 
 let private describe (args: string list) = String.concat " " args
 
-/// Runs a gh invocation, yielding its stdout. A failure whose stderr contains
-/// `tolerated` yields None instead — a per-repo feature being switched off is a
-/// fact, not an error. Every other failure aborts.
-let private run (tolerated: string option) (args: string list) : string option =
+type private Finished =
+    { Exit: int
+      Stdout: string
+      Stderr: string }
+
+let private exec (args: string list) : Finished =
     let startInfo =
         ProcessStartInfo("gh", RedirectStandardOutput = true, RedirectStandardError = true)
 
@@ -44,10 +46,20 @@ let private run (tolerated: string option) (args: string list) : string option =
     let stderr = proc.StandardError.ReadToEndAsync()
     proc.WaitForExit()
 
-    match proc.ExitCode, tolerated with
-    | 0, _ -> Some stdout.Result
-    | _, Some pattern when stderr.Result.Contains pattern -> None
-    | _ -> fail $"gh {describe args} failed: {stderr.Result.Trim()}"
+    { Exit = proc.ExitCode
+      Stdout = stdout.Result
+      Stderr = stderr.Result }
+
+/// Runs a gh invocation, yielding its stdout. A failure whose stderr contains
+/// `tolerated` yields None instead — a per-repo feature being switched off is a
+/// fact, not an error. Every other failure aborts.
+let private run (tolerated: string option) (args: string list) : string option =
+    let finished = exec args
+
+    match finished.Exit, tolerated with
+    | 0, _ -> Some finished.Stdout
+    | _, Some pattern when finished.Stderr.Contains pattern -> None
+    | _ -> fail $"gh {describe args} failed: {finished.Stderr.Trim()}"
 
 let private parse<'T> (args: string list) (raw: string) : 'T =
     try
@@ -70,6 +82,20 @@ let lines (args: string list) : string list =
     run None args
     |> Option.get
     |> fun stdout -> stdout.Split '\n' |> Array.toList |> List.map (fun line -> line.Trim()) |> List.filter (fun line -> line <> "")
+
+/// For a command whose exit status reports on what it found rather than on
+/// whether it ran: `gh pr checks` exits non-zero merely because a check is red
+/// or pending. Whatever reached stdout is the answer, and may be nothing. Only
+/// a non-zero exit with nothing on stdout and a complaint on stderr is gh
+/// itself failing, which must not read as "found nothing".
+let outputDespiteExit (args: string list) : string =
+    let finished = exec args
+    let answer = finished.Stdout.Trim()
+
+    if finished.Exit <> 0 && answer = "" && finished.Stderr.Trim() <> "" then
+        fail $"gh {describe args} failed: {finished.Stderr.Trim()}"
+
+    answer
 
 /// A result arriving at the ceiling means the query truncated and the digest is
 /// incomplete — which this script exists to prevent.

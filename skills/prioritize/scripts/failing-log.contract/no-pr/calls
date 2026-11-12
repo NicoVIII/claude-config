@@ -1,0 +1,1 @@
+gh pr checks 99 -R me-user/alpha --json bucket,link --jq first(.[] | select(.bucket == "fail") | .link)	gone.exit1
