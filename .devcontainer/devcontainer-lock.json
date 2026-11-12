@@ -49,6 +49,11 @@
       "version": "0.1.0",
       "resolved": "ghcr.io/nicoviii/devcontainer-features/lefthook@sha256:59840e9efc444a89c8bf3c5bf43df05c36baef265213ef2c23692967937bdc55",
       "integrity": "sha256:59840e9efc444a89c8bf3c5bf43df05c36baef265213ef2c23692967937bdc55"
+    },
+    "ghcr.io/nicoviii/devcontainer-features/scrut:0": {
+      "version": "0.1.0",
+      "resolved": "ghcr.io/nicoviii/devcontainer-features/scrut@sha256:47ce46e15ddd7a9e4b3348ddf5efcffc4bff9b4843f359201708f8fcb8c35d90",
+      "integrity": "sha256:47ce46e15ddd7a9e4b3348ddf5efcffc4bff9b4843f359201708f8fcb8c35d90"
     }
   }
 }

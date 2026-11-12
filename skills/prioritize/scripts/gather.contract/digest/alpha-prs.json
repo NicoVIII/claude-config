@@ -1,0 +1,4 @@
+[{"number":11,"title":"Bump green","author":{"login":"app/dependabot","is_bot":true},"updatedAt":"2026-10-20T00:00:00Z","statusCheckRollup":[{"conclusion":"SUCCESS"},{"conclusion":"SKIPPED"}]},
+ {"number":12,"title":"Bump red","author":{"login":"app/dependabot","is_bot":true},"updatedAt":"2026-10-21T00:00:00Z","statusCheckRollup":[{"conclusion":"SUCCESS"},{"conclusion":"FAILURE"}]},
+ {"number":13,"title":"A human change whose title is long enough that the digest has to clip it","author":{"login":"contributor","is_bot":false},"updatedAt":"2026-10-15T00:00:00Z","statusCheckRollup":null},
+ {"number":14,"title":"Bump still running","author":{"login":"app/dependabot","is_bot":true},"updatedAt":"2026-10-22T00:00:00Z","statusCheckRollup":[{"conclusion":null}]}]

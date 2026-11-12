@@ -62,6 +62,13 @@ shell:
     git ls-files -z '*.sh' | xargs -0 -r shellcheck -o all -S style
     git ls-files -z '*.sh' | xargs -0 -r shfmt -d
 
+# Run the contract suites: each tool's output matched whole, through the path
+# its SKILL.md names, with `lib/gh-stub.sh` standing in for gh.
+#
+# Named by hand for the same reason as `test`.
+contract:
+    scrut test skills/prioritize/scripts/gather.contract
+
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.
-check: typecheck test shell
+check: typecheck test contract shell

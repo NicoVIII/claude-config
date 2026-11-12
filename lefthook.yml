@@ -14,3 +14,16 @@ pre-commit:
     - name: shell
       glob: "*.sh"
       run: just shell
+
+    # The contract suites drive the tools through their wrappers, so they
+    # depend on the F# sources, the wrappers and the gh stub as much as on a
+    # suite's own fixtures and expectations.
+    - name: contract
+      glob:
+        - "*.fs"
+        - "*.fsproj"
+        - "*.contract/*"
+        - "lib/gh-stub.sh"
+        - "bin/dotnet-tool.sh"
+        - "skills/*/scripts/*.sh"
+      run: just contract
