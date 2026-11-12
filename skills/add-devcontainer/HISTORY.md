@@ -5,3 +5,4 @@
 2026-10-23 · scripts · 1135 words · retro minor: feature-probe --base dumped 32KB of tags; deferred: repo without check suite/CI, inventory mixing check vs runtime tools
 2026-10-23 · scripts · 1139 words · fix small: feature-probe --base prints newest exact-version tag per distro (575 B instead of 32 KB)
 2026-11-12 · claude-config · 1160 words · fix small: runs only when typed: disable-model-invocation keeps its description out of every session (no retro: standards session)
+2026-11-12 · claude-config · 1295 words · fix big: CI takes its versions from devcontainer.json: native jobs plus a container job is the default and untested, all-in-container is the exception for hand-rolled installs (no retro: standards session)

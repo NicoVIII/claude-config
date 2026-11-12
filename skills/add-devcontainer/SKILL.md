@@ -1,10 +1,10 @@
 ---
 name: add-devcontainer
-description: Add a devcontainer to a repository so its toolchain is pinned in exactly one place and CI runs inside it. Use when I ask to add or set up a devcontainer, containerize a repo's dev environment, pin a project's toolchain, make CI and my machine use the same tool versions, or stop CI and local builds drifting apart.
+description: Add a devcontainer to a repository so its toolchain is pinned in exactly one place and CI takes its versions from it. Use when I ask to add or set up a devcontainer, containerize a repo's dev environment, pin a project's toolchain, make CI and my machine use the same tool versions, or stop CI and local builds drifting apart.
 disable-model-invocation: true
 ---
 
-Give a repo a devcontainer that *is* its toolchain definition: every version pinned in `devcontainer.json`, and CI running the repo's own check suite inside that container, so no second install path exists to drift from it.
+Give a repo a devcontainer that *is* its toolchain definition: every version pinned in `devcontainer.json`, and CI taking its versions from that file, so no second statement of a version exists to drift from it.
 
 Scope: one repository. This skill sets up the container and points CI at it. It does not wire up Dependabot (`add-dependabot` does, and is worth running after this one), publish prebuilt images to a registry, or tune CI caching — stop and report if the user wants those.
 
@@ -77,9 +77,11 @@ Clean up afterwards: remove the images and containers you created, and nothing e
 
 A feature install can fail on a network timeout without the feature being broken — devcontainers-extra ones use `nanolayer`, which reaches ghcr.io mid-build. A second failure for the same reason is the signal to stop and report.
 
-## Point CI at the container
+## Point CI at the pinned versions
 
-Preferred, and what makes the sync structural rather than clerical:
+No workflow states a tool version of its own: CI reads them from `devcontainer.json`, in one of two shapes. Say which you chose and why.
+
+**Native jobs plus a container job — the default.** *(Untested — no repo runs this shape yet. The first run is its test: report what it took.)* Each job installs its tools with setup actions and passes them the versions read from `devcontainer.json`. One further job runs the check suite inside the container, triggered by changes under `.devcontainer/` and by a weekly schedule. It is what verifies a devcontainer update, and what notices an unpinned part breaking without a commit:
 
 ```yaml
 - uses: actions/checkout@v7
@@ -88,13 +90,11 @@ Preferred, and what makes the sync structural rather than clerical:
     runCmd: <the repo check command>
 ```
 
-Then delete the now-redundant `setup-*` steps and any hand-rolled tool downloads — leaving them is what recreates the second source of truth this skill exists to remove. Only the local equivalent of this workflow has ever been run; treat the first real CI run as part of the job.
+Reading the versions is the unsolved part. The file is JSONC, and `jq` fails on the comments this skill has you write (`parse error: Invalid numeric literal`). `devcontainer read-configuration --workspace-folder .` prints the parsed configuration as plain JSON and is the candidate; it has not been run for this. Don't strip the comments with a pattern.
 
-**Untested fallback** — say so when taking it. If the repo's CI is a build matrix, or the image build would dominate a short run, rebuilding the container per job may cost more than it is worth. Then keep native runners and read the versions out of `devcontainer.json` instead, so they still live in one file:
+**Everything inside the container.** Take this shape when a native install would be hand-rolled, which means a tool with no setup action that accepts a version (`shfmt`, `scrut`): downloading tools by hand in a workflow is the second install path this skill removes. The check job is then only the container step above, on every push and pull request. This shape is proven in two repos.
 
-```sh
-jq -r '.features["ghcr.io/devcontainers/features/dotnet:2"].version' .devcontainer/devcontainer.json
-```
+Either way, delete every setup step that states its own version and any hand-rolled tool download. Treat the first real CI run as part of the job.
 
 ## Then document it
 
