@@ -42,6 +42,7 @@ What holds only under a condition lives in `~/.claude/standards/`, one file per 
 
 - `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
 - `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
+- `repo-setup.md` — creating a repository or changing its tooling: task runner, hooks, CI, devcontainer, dependency updates, releases.
 
 ## Documentation
 
