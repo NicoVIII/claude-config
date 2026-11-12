@@ -1,7 +1,6 @@
 # Writing a helper for a skill
 
-Read this before adding an executable helper to a skill, or when deciding
-whether one should be a shell script or an F# project.
+Read this before adding an executable helper to a skill.
 
 ## When a skill should ship one
 
@@ -20,11 +19,14 @@ Keep judgement and anything conditional in the SKILL.md.
 Make the helper abort loudly. A partial result the reader cannot tell apart
 from good news is worse than no result.
 
-## Shell or an F# project
+## An F# project, always
 
-A helper that owns a **contract** — a format it parses, a format with a second
-reader, or a closed taxonomy — is an F# project, so that changing the contract
-is an error at every site that has to decide about it:
+A helper is an F# project. There is no "small enough for shell" case: that
+call was made three times and was wrong each time — `skill-refiner` read as
+three tidy shell scripts and was one four-case taxonomy with two readers that
+disagreed twice (a8531b1, f803d2a), `feature-probe.sh` carried a registry's
+answer as an in-band string (ac92d34), and `failing-log.sh` shipped a fallback
+branch that had never once run (7368d95).
 
 - Name the fields as types. A renamed or dropped one is then a parse error, not
   a null reading downstream as "nothing here".
@@ -33,22 +35,19 @@ is an error at every site that has to decide about it:
   only a warning (7e0c921 is what that costs when it is missed).
 - Split so each file answers one question, and let the compile order carry the
   dependencies.
+- Call `gh` through [`lib/gh`](../lib/gh/Gh.fs), which aborts on everything it
+  was not told to expect. Make HTTP requests in-process, with the
+  `HttpMessageHandler` passed in so a test can fake it; don't shell out to
+  `curl`.
 
-Only a helper performing a single mechanical action, parsing nothing, is a
-shell script. Length argues one way only: one long enough to need sections is
-an F# project whatever it does.
-
-A shell one has to pass `just shell` — `shellcheck -o all -S style` and
-`shfmt -d`. Every optional shellcheck check is on, not just the default
-severity, because at this size the style rules cost nothing to satisfy and the
-opt-in ones are where the bugs were: SC2312 caught `failing-log.sh` gating its
-fallback on a pipeline exit status that `head` made zero unconditionally, so
-the branch had never once run. Write `${braces}`, `[[ ]]`, and no bare
-pipelines whose exit status you mean to test, and it passes first try.
-
-Judge by the contract, not by whether the code looks short: `skill-refiner` read
-as three tidy shell scripts and was one four-case taxonomy with two readers that
-disagreed twice (a8531b1, f803d2a).
+Shell is only what cannot be F#: the wrapper a skill names, `bin/dotnet-tool.sh`
+that builds and launches the tools, and the stub the contract suites put on
+`PATH`. It has to pass `just shell` — `shellcheck -o all -S style` and
+`shfmt -d`. Every optional shellcheck check is on because the opt-in ones are
+where the bugs were: SC2312 is what caught `failing-log.sh` gating its fallback
+on a pipeline exit status that `head` made zero unconditionally. Write
+`${braces}`, `[[ ]]`, and no bare pipelines whose exit status you mean to test,
+and it passes first try.
 
 ## How a skill names it
 
