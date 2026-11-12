@@ -13,6 +13,13 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # Replaces the block above for this job, so `contents` is repeated. The
+    # write on packages is for publishing the devcontainer image as a build
+    # cache; a pull request from a fork or from Dependabot is capped to read
+    # by GitHub whatever is asked for here.
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v7
       # The claude-mount feature bind-mounts ~/.claude unconditionally, and a
@@ -20,14 +27,29 @@ jobs:
       # skipped. The runner has no ~/.claude, so create an empty one: the mount
       # then succeeds and stays the no-op `just check` already assumes it is.
       - run: mkdir -p ~/.claude
+      # For pulling the cache image, and on main for pushing it.
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       # The suite runs inside the devcontainer rather than on the runner, so the
       # toolchain CI checks with is by construction the one the container
       # defines. Every version lives once, in devcontainer.json; there is no
       # second install path here to keep in step with it.
       #
-      # No image caching yet: the build is a few minutes, and pushing to GHCR
-      # needs packages: write plus a registry login. Add imageName/cacheFrom if
-      # that wait starts to bite.
+      # An experiment: the image a push to main builds is published and used as
+      # the layer cache of every later build, to find out whether that turns
+      # the container build - most of this step's ~160s - into a pull. It is a
+      # cache and nothing more: devcontainer.json still names the base image
+      # and the features, a changed feature rebuilds from its layer on, and a
+      # run that cannot pull the image builds everything as before. Whether a
+      # first run with no image published yet warns or fails is not known.
       - uses: devcontainers/ci@v0.3
         with:
+          imageName: ghcr.io/nicoviii/claude-config-devcontainer
+          cacheFrom: ghcr.io/nicoviii/claude-config-devcontainer
+          push: filter
+          refFilterForPush: refs/heads/main
+          eventFilterForPush: push
           runCmd: just check
