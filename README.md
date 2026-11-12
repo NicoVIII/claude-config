@@ -122,19 +122,11 @@ memory, and optionally the project's own instruction files steered it; its
 findings accumulate in `references/instructions-history.md`. `standards/`
 files a session read are reviewed the same way.
 
-Run `/claude-md-compact` once `CLAUDE.md` stands about 150 words above where
-the last pass left it. That is the size after the most recent commit that cut
-20 words or more, which this lists newest first:
-
-```sh
-git -C ~/.claude log --format=%h -- CLAUDE.md | head -15 | while read c; do
-  printf '%s %4s %s\n' "$c" "$(git -C ~/.claude show $c:CLAUDE.md | wc -w)" \
-    "$(git -C ~/.claude log -1 --format=%s $c)"; done
-```
-
-The trigger is growth, not size, because cutting alone does not hold the size
-down. Moving a rule that holds only for one kind of work into a standard does,
-and the pass proposes those moves too.
+Run `/claude-md-compact` when `~/.claude/bin/claude-md-growth.sh` reports
+`CLAUDE.md` over its trigger; `/instructions-retro` runs that check whenever it
+edits the file. The trigger is growth since the last pass, not size, because
+cutting alone does not hold the size down. Moving a rule that holds only for
+one kind of work into a standard does, and the pass proposes those moves too.
 
 ## Setup
 

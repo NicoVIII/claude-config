@@ -71,7 +71,7 @@ Then make the edits and commit each repo separately:
 - Memory files are untracked — edit them and don't commit.
 - A project repo — its own commit, under its own checks and commit conventions. Never push.
 
-After editing `~/.claude/CLAUDE.md`, check it against the compaction trigger: the **Global preferences** paragraphs of `~/.claude/README.md` state it and give the command that measures it — read them there, the number is kept nowhere else. When it is met, suggest `/claude-md-compact` as a separate pass.
+After editing `~/.claude/CLAUDE.md`, run `~/.claude/bin/claude-md-growth.sh`. When it reports the file over the trigger, suggest `/claude-md-compact` as a separate pass.
 
 ---
 

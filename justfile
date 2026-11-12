@@ -70,6 +70,7 @@ shell:
 # Named by hand for the same reason as `test`.
 contract:
     scrut test bin/skill-refiner.contract
+    scrut test bin/claude-md-growth.contract
     scrut test skills/prioritize/scripts/gather.contract
     scrut test skills/prioritize/scripts/failing-log.contract
     scrut test skills/merge-dependabot/scripts/survey.contract

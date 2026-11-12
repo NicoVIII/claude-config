@@ -19,9 +19,9 @@ Keep judgement and anything conditional in the SKILL.md.
 Make the helper abort loudly. A partial result the reader cannot tell apart
 from good news is worse than no result.
 
-## An F# project, always
+## An F# project, with one exception
 
-A helper is an F# project. There is no "small enough for shell" case: that
+A helper is an F# project. "Small enough for shell" is not a reason: that
 call was made three times and was wrong each time — `skill-refiner` read as
 three tidy shell scripts and was one four-case taxonomy with two readers that
 disagreed twice (a8531b1, f803d2a), `feature-probe.sh` carried a registry's
@@ -40,10 +40,18 @@ branch that had never once run (7368d95).
   `HttpMessageHandler` passed in so a test can fake it; don't shell out to
   `curl`.
 
-Shell is only what cannot be F#: the wrapper a skill names, `bin/dotnet-tool.sh`
-that builds and launches the tools, and the stub the contract suites put on
-`PATH`. It has to pass `just shell` — `shellcheck -o all -S style` and
-`shfmt -d`. Every optional shellcheck check is on because the opt-in ones are
+The exception is a helper that parses nothing and that nothing parses: it asks
+git or the filesystem for a few values, does arithmetic on them, and prints a
+sentence for a person or an agent to read. All three failures above were about
+shape — cases, fields, branches — and such a helper has none for types to hold,
+so a project would only add a build. `bin/claude-md-growth.sh` is the one so
+far. It gets a contract suite that reaches every branch, since an unexercised
+branch is what `failing-log.sh` got wrong.
+
+Otherwise shell is only what cannot be F#: the wrapper a skill names,
+`bin/dotnet-tool.sh` that builds and launches the tools, and the stub the
+contract suites put on `PATH`. All of it has to pass `just shell` —
+`shellcheck -o all -S style` and `shfmt -d`. Every optional shellcheck check is on because the opt-in ones are
 where the bugs were: SC2312 is what caught `failing-log.sh` gating its fallback
 on a pipeline exit status that `head` made zero unconditionally. Write
 `${braces}`, `[[ ]]`, and no bare pipelines whose exit status you mean to test,

@@ -7,3 +7,4 @@
 2026-11-12 · claude-config · 945 words · retro minor: declined candidates in earlier commit bodies went unread (subjects-only log), second sighting — patched. Deferred: move candidates dismissed in one line without per-rule evidence
 2026-11-12 · claude-config · 1001 words · fix big: read earlier passes’ commit bodies for declined candidates before finding new ones
 2026-11-12 · claude-config · 1084 words · fix big: a standard is a move destination, with two kinds of rule that stay until standards are shown to load (no retro: design session adding standards/)
+2026-11-12 · claude-config · 1111 words · fix small: an empty pass says the growth script still reports over its trigger (no retro: follow-up to the standards session)

@@ -9,7 +9,7 @@ Reduce what loads into every session in every project, without losing a preferen
 
 `~/.claude/CLAUDE.md` only. Removal only — never add a rule in this pass; note what you spot and let a later session add it. `/skill-compact` keeps its passes separate for this reason, and CLAUDE.md has the same failure mode: additions made alongside a removal cancel it.
 
-The pass must never end with **more words in CLAUDE.md than it started**. A rule moved into a standard, an imported AGENTS.md or a SKILL.md counts as removed — those load in fewer sessions. A move that opens a new standard also adds that standard's line to CLAUDE.md, and the line counts against the pass. When no candidate carries evidence, say so and commit nothing: a cut made only to have one is the failure this pass guards against.
+The pass must never end with **more words in CLAUDE.md than it started**. A rule moved into a standard, an imported AGENTS.md or a SKILL.md counts as removed — those load in fewer sessions. A move that opens a new standard also adds that standard's line to CLAUDE.md, and the line counts against the pass. When no candidate carries evidence, say so and commit nothing: a cut made only to have one is the failure this pass guards against. `~/.claude/bin/claude-md-growth.sh` reads a pass from the commit it left, so after one that committed nothing it still reports the file over its trigger — say that too.
 
 Compaction passes have no run log of their own. Git is the log:
 
