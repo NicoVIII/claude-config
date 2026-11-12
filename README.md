@@ -26,6 +26,8 @@ fork it and make it yours.
 | [`add-dependabot`](skills/add-dependabot/SKILL.md) | Set up a repo's Dependabot config so bumps arrive in mergeable batches. | Sonnet | 🧪 Experimental |
 | [`upgrade-toolchain`](skills/upgrade-toolchain/SKILL.md) | Move a pinned toolchain version across every place a repo pins it. | Sonnet | 🧪 Experimental |
 
+`add-devcontainer` and `add-dependabot` run only when typed as `/add-devcontainer` and `/add-dependabot`: asking for a devcontainer in prose does not start them.
+
 ### Skill lifecycle
 
 | Skill | Summary | Suggested model | Maturity |

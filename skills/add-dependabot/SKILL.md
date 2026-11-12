@@ -1,6 +1,7 @@
 ---
 name: add-dependabot
 description: Set up or repair a repo's dependabot.yml. Use when I ask to add or set up Dependabot, enable dependency updates on a repo, watch a project's dependencies, group or cut down Dependabot PR noise, or fix a dependabot.yml that misses an ecosystem.
+disable-model-invocation: true
 ---
 
 Configure Dependabot version updates for one repository: inventory what the repo actually depends on, write `.github/dependabot.yml`, and validate it — since nothing local will tell you it is wrong.

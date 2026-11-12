@@ -1,6 +1,7 @@
 ---
 name: add-devcontainer
 description: Add a devcontainer to a repository so its toolchain is pinned in exactly one place and CI runs inside it. Use when I ask to add or set up a devcontainer, containerize a repo's dev environment, pin a project's toolchain, make CI and my machine use the same tool versions, or stop CI and local builds drifting apart.
+disable-model-invocation: true
 ---
 
 Give a repo a devcontainer that *is* its toolchain definition: every version pinned in `devcontainer.json`, and CI running the repo's own check suite inside that container, so no second install path exists to drift from it.
