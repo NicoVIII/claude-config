@@ -11,7 +11,9 @@ Applies when creating a repository or changing its tooling: task runner, hooks, 
 ## Toolchain
 
 - **The devcontainer is the toolchain definition.** Every tool version is pinned in `devcontainer.json`, to the exact patch version, and nowhere else.
-- **CI runs `just check` inside the devcontainer.** No workflow installs a tool itself.
+- **CI takes its tool versions from `devcontainer.json`.** No workflow states a version of its own.
+- **By default CI runs natively,** and a further job runs `just check` inside the devcontainer whenever `.devcontainer/` changes and once a week. That job is what verifies a devcontainer update.
+- **Where a native install would be hand-rolled, all of CI runs `just check` inside the devcontainer instead.**
 - **A tool comes in as a devcontainer feature,** from the first source that has it: the official features, the tool's own maintainers, my own (`ghcr.io/nicoviii/devcontainer-features`), devcontainers-extra, and only then an unknown third party or a manual install.
 - **`devcontainer-lock.json` is tracked,** and refreshed in the commit that changes a feature.
 
@@ -41,7 +43,6 @@ Applies when creating a repository or changing its tooling: task runner, hooks, 
 
 ## Not settled — raise the trade-off, leave the call to me
 
-- **CI on native runners.** Where a build matrix or a very short job makes building the container for every job cost more than it gives, the alternative is native runners that read their versions out of `devcontainer.json`. Untried.
 - **Pinning actions to commit SHAs** instead of tags. Dependabot maintains either.
 - **Where a project's own skills live:** `.claude/skills/`, or `.agents/skills/` with a symlink from it.
 - **The directory for a project's decision records:** `docs/decisions/` or `docs/adrs/`.
