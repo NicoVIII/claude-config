@@ -7,9 +7,11 @@ Two ideas drive the structure. First, **context is billed**: anything that
 auto-loads — `CLAUDE.md`, every skill's frontmatter `description` — costs
 tokens in every session, so each fact lives at the least-loaded level that
 still reaches its reader. Trigger phrases go in the description, procedure in
-the SKILL.md body, shared conventions in `references/` files read by path, and
-fixed pipelines into compiled helpers, because prose that makes a model
-reproduce a pipeline reloads every run and regresses where a program doesn't.
+the SKILL.md body, shared conventions in `references/` files read by path,
+preferences that hold only for one kind of work in `standards/` files that
+`CLAUDE.md` names by that work, and fixed pipelines into compiled helpers,
+because prose that makes a model reproduce a pipeline reloads every run and
+regresses where a program doesn't.
 
 ```mermaid
 flowchart LR
@@ -22,10 +24,12 @@ flowchart LR
     end
     subgraph demand ["read or run only when pointed at"]
         REF["references/*.md"]
+        STD["standards/*.md"]
         BIN["bin/, lib/ and per-skill helpers"]
     end
     DESC -->|"trigger phrase matches"| BODY
     BODY -->|"reads by path"| REF
+    CM -->|"names the work each is read before"| STD
     BODY -->|"shells out to"| BIN
 ```
 

@@ -36,6 +36,12 @@ Personal — never copy them into project repos or force them on contributors. P
 - Order files top-down: every definition references only things defined above it. Exceptions only for circular dependencies.
 - Comments explain WHY, not WHAT — if a reader could infer it from types and names, cut it. Carve-outs where prose is warranted: doc comments on public APIs; type-lossy seams where the signature can't express the contract; short orientation labels in long functions.
 
+## Standards
+
+What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names:
+
+- `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
+
 ## Documentation
 
 - Every change that alters how something is used, placed, or behaves gets a docs pass before its commit: find the docs describing the touched area — READMEs (humans: how to run/operate it), AGENTS.md (agents: at the appropriate directory level), skills — and update each whose reader would now be wrong or missing something. A new user-facing option belongs in the README even when an agent-facing doc already covers it.
