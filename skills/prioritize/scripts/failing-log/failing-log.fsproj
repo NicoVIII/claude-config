@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <WarningsAsErrors>FS0025</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../../../lib/gh/gh.fsproj" />
+  </ItemGroup>
+
+  <!-- Compile order is the architecture: every file may reference only files
+       above it, so the dependency direction is checked by the compiler. -->
+  <ItemGroup>
+    <Compile Include="Excerpt.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>

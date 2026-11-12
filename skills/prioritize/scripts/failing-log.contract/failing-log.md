@@ -70,6 +70,21 @@ $ cat stderr
 no run id in the failing check's link on me-user/alpha#12: https://ci.example.test/builds/7
 ```
 
+## gh itself failing
+
+A PR that does not exist is gh's complaint, passed on — not "no failing check",
+which would be an answer about a PR that was never looked at.
+
+```scrut
+$ CLI_STUB="$TESTDIR/no-pr" "$TESTDIR/../failing-log.sh" me-user/alpha 99 2>stderr
+[1]
+```
+
+```scrut
+$ cat stderr
+failing-log: gh pr checks 99 -R me-user/alpha --json bucket,link --jq first(.[] | select(.bucket == "fail") | .link) failed: GraphQL: Could not resolve to a PullRequest with the number of 99. (repository.pullRequest)
+```
+
 ## Usage
 
 ```scrut
