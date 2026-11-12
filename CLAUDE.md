@@ -25,7 +25,7 @@ Personal — never copy them into project repos or force them on contributors. P
 ## Issues
 
 - Finishing work that a tracked issue describes includes closing it — comment referencing the commit(s) and what was verified, don't leave it for me to notice and close. A partial fix says explicitly what's left and stays open.
-- Close when the work is merged into the default branch locally, not when it's pushed — note in the comment that the commits are still local. Never hold a close waiting for a push, and never ask whether to close.
+- Close when the work is merged into the default branch locally, not when it's pushed. Write issue comments as if the commits were already on the remote: I push shortly after, so a "still local" note is stale as soon as I do. Never hold a close waiting for a push, and never ask whether to close.
 
 ## Code style
 
