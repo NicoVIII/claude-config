@@ -18,6 +18,14 @@ git -C ~/.claude log --format='%h %s' -- CLAUDE.md
 git -C ~/.claude blame -- CLAUDE.md
 ```
 
+Earlier passes recorded the candidates they declined, and why, in their commit bodies. Before looking for candidates, read the body of every commit in that list whose subject is a cut, trim or move:
+
+```sh
+git -C ~/.claude show -s --format=%B <hash>
+```
+
+A candidate an earlier pass declined needs evidence that pass did not have.
+
 For the size curve, which shows what past passes achieved:
 
 ```sh
@@ -65,7 +73,3 @@ A rule that was re-added is load-bearing — don't propose it a second time.
 ## Finish
 
 Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. `~/.claude/.claude/CLAUDE.md` names the checks for what the commit stages; a markdown-only commit has none.
-
----
-
-This skill is not yet battle-tested. At the end of the run, say briefly whether any instruction above was ambiguous, wrong, or needed a workaround. If none was and I corrected nothing during the run, log it instead: from the session repo's working directory run `~/.claude/bin/skill-refiner.sh <this skill's name> log run`, then commit the `HISTORY.md` line it names, alone, in the repo that holds the skill. Where that script does not exist, skip the logging.
