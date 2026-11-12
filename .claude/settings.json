@@ -5,7 +5,8 @@
       "Bash(just check *)",
       "Bash(just typecheck)",
       "Bash(just test)",
-      "Bash(just shell)"
+      "Bash(just shell)",
+      "Bash(just contract)"
     ]
   }
 }
