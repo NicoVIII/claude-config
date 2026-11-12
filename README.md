@@ -159,11 +159,13 @@ to keep.
   skill-authoring workflow, not just of one skill), and `rg` (ripgrep).
 - To work *on* this repo you also need [`just`](https://just.systems),
   [`lefthook`](https://lefthook.dev),
-  [`shellcheck`](https://www.shellcheck.net) and
-  [`shfmt`](https://github.com/mvdan/sh); run `lefthook install` once to
-  activate the pre-commit checks. `just check` runs the whole suite (typecheck,
-  tests, shell lint) by hand, and its shell lint fails wherever the last two
-  are missing. None of these is needed to merely use the skills.
+  [`shellcheck`](https://www.shellcheck.net),
+  [`shfmt`](https://github.com/mvdan/sh) and
+  [`scrut`](https://github.com/facebookincubator/scrut) (x86_64 only for now);
+  run `lefthook install` once to activate the pre-commit checks. `just check`
+  runs the whole suite (typecheck, tests, contract tests, shell lint) by hand,
+  and fails wherever one of the last three is missing. The devcontainer has
+  them all. None of these is needed to merely use the skills.
 - Add your `settings.json` manually — it is gitignored and not tracked, because
   it holds machine preferences (`theme`, `tui`, `effortLevel`) that the
   `/config` menu rewrites. The permission allowlist is the one part worth
@@ -171,7 +173,7 @@ to keep.
   it in, replacing whatever `.permissions` is there. Re-run it after editing.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
 - `.claude/settings.json` is committed and applies only while working *in* this
-  repo: it allows `just check` and the three recipes it is made of, so the
+  repo: it allows `just check` and the recipes it is made of, so the
   checks do not prompt.
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
   into every Claude Code session — review it and replace what isn't yours.

@@ -30,6 +30,9 @@
 		"ghcr.io/nicoviii/devcontainer-features/just:0": { "version": "1.57.0" },
 		"ghcr.io/nicoviii/devcontainer-features/lefthook:0": { "version": "2.1.10" },
 		"ghcr.io/nicoviii/devcontainer-features/claude-mount:0": {},
+		// x86_64 only: upstream's linux-aarch64 tarballs hold x86_64 binaries
+		// through 0.5.0, so on arm64 the container build fails at this feature.
+		"ghcr.io/nicoviii/devcontainer-features/scrut:0": { "version": "0.5.0" },
 
 		// devcontainers-extra, for the three with no better-maintained source.
 		"ghcr.io/devcontainers-extra/features/shellcheck:1": { "version": "0.11.0" },
