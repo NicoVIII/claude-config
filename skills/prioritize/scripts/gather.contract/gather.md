@@ -2,10 +2,10 @@
 
 What `prioritize`'s SKILL.md reads from `gather.sh`: the whole digest, the
 abort on gh output it cannot decode, and the exit codes. `gh` is the stub in
-`lib/gh-stub.sh`, answering only the argv each scenario's `calls` lists.
+`lib/cli-stub.sh`, answering only the argv each scenario's `calls` lists.
 
 ```scrut
-$ mkdir stub && ln -s "$TESTDIR/../../../../lib/gh-stub.sh" stub/gh && export PATH="$PWD/stub:$PATH"
+$ mkdir stub && ln -s "$TESTDIR/../../../../lib/cli-stub.sh" stub/gh && export PATH="$PWD/stub:$PATH"
 ```
 
 ## The digest
@@ -15,7 +15,7 @@ empty-string conclusion reads as in-progress, alerts from every page are
 counted by severity, and a disabled feature is a value rather than an error.
 
 ```scrut
-$ GH_STUB="$TESTDIR/digest" "$TESTDIR/../gather.sh"
+$ CLI_STUB="$TESTDIR/digest" "$TESTDIR/../gather.sh"
 REPO            PR  ISSUE  CI           ALERTS                    PUSHED
 me-user/alpha    4      3  in-progress  critical:1 high:2 low:1   2026-11-01
 me-user/beta     0      0  no-branch    disabled                  2026-10-02
@@ -33,7 +33,7 @@ pr     me-user/alpha#12   app/dependabot  FAILING-CI            2026-10-21  Bump
 Nothing reaches stdout: a partial digest reads as a clean one.
 
 ```scrut
-$ GH_STUB="$TESTDIR/missing-field" "$TESTDIR/../gather.sh" 2>stderr
+$ CLI_STUB="$TESTDIR/missing-field" "$TESTDIR/../gather.sh" 2>stderr
 [1]
 ```
 

@@ -23,7 +23,7 @@ pre-commit:
         - "*.fs"
         - "*.fsproj"
         - "*.contract/*"
-        - "lib/gh-stub.sh"
+        - "lib/cli-stub.sh"
         - "bin/*.sh"
         - "skills/*/scripts/*.sh"
       run: just contract

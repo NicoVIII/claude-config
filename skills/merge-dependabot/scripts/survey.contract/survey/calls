@@ -1,15 +1,15 @@
-pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json
-repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed	methods.json
-pr view 1 --json body	body-1.json
-pr view 1 --json mergeStateStatus	unknown.json
-pr view 1 --json mergeStateStatus	clean.json
-pr diff 1 --name-only	diff-1.txt
-pr view 2 --json body	body-2.json
-pr view 2 --json mergeStateStatus	blocked.json
-pr diff 2 --name-only	diff-2.txt
-pr view 3 --json body	body-3.json
-pr view 3 --json mergeStateStatus	dirty.json
-pr diff 3 --name-only	diff-3.txt
-pr view 4 --json body	body-4.json
-pr view 4 --json mergeStateStatus	clean.json
-pr diff 4 --name-only	diff-1.txt
+gh pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json
+gh repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed	methods.json
+gh pr view 1 --json body	body-1.json
+gh pr view 1 --json mergeStateStatus	unknown.json
+gh pr view 1 --json mergeStateStatus	clean.json
+gh pr diff 1 --name-only	diff-1.txt
+gh pr view 2 --json body	body-2.json
+gh pr view 2 --json mergeStateStatus	blocked.json
+gh pr diff 2 --name-only	diff-2.txt
+gh pr view 3 --json body	body-3.json
+gh pr view 3 --json mergeStateStatus	dirty.json
+gh pr diff 3 --name-only	diff-3.txt
+gh pr view 4 --json body	body-4.json
+gh pr view 4 --json mergeStateStatus	clean.json
+gh pr diff 4 --name-only	diff-1.txt

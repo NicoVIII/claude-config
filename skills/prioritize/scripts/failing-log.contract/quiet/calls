@@ -1,2 +1,2 @@
-pr checks 12 -R me-user/alpha --json bucket,link --jq first(.[] | select(.bucket == "fail") | .link)	link.txt
-run view -R me-user/alpha 4242 --log-failed	log.txt
+gh pr checks 12 -R me-user/alpha --json bucket,link --jq first(.[] | select(.bucket == "fail") | .link)	link.txt
+gh run view -R me-user/alpha 4242 --log-failed	log.txt

@@ -2,11 +2,11 @@
 
 What `merge-dependabot`'s SKILL.md reads from `survey.sh`: the merge method,
 one labelled block per open Dependabot PR, the empty case, and the aborts.
-`gh` is the stub in `lib/gh-stub.sh`, answering only the argv each scenario's
+`gh` is the stub in `lib/cli-stub.sh`, answering only the argv each scenario's
 `calls` lists.
 
 ```scrut
-$ mkdir stub state && ln -s "$TESTDIR/../../../../lib/gh-stub.sh" stub/gh && export PATH="$PWD/stub:$PATH" GH_STUB_STATE="$PWD/state"
+$ mkdir stub state && ln -s "$TESTDIR/../../../../lib/cli-stub.sh" stub/gh && export PATH="$PWD/stub:$PATH" CLI_STUB_STATE="$PWD/state"
 ```
 
 ## The survey
@@ -19,7 +19,7 @@ and the dependency's home only without them, and a PR taking the same
 dependency further supersedes the other.
 
 ```scrut
-$ GH_STUB="$TESTDIR/survey" "$TESTDIR/../survey.sh"
+$ CLI_STUB="$TESTDIR/survey" "$TESTDIR/../survey.sh"
 merge-method: merge
 
 PR #1  LEVEL=patch  CI=green  MERGE=clean  FILES=manifest
@@ -51,14 +51,14 @@ Nothing beyond the PR list is asked: the merge method only matters once there
 is something to merge.
 
 ```scrut
-$ GH_STUB="$TESTDIR/none" "$TESTDIR/../survey.sh"
+$ CLI_STUB="$TESTDIR/none" "$TESTDIR/../survey.sh"
 no open dependabot PRs
 ```
 
 ## A repo allowing no merge method aborts
 
 ```scrut
-$ GH_STUB="$TESTDIR/no-method" "$TESTDIR/../survey.sh" 2>stderr
+$ CLI_STUB="$TESTDIR/no-method" "$TESTDIR/../survey.sh" 2>stderr
 [1]
 ```
 
@@ -73,7 +73,7 @@ A StatusContext rollup entry has no `name`; decoding it strictly is the
 invariant abd4b0f chose over a converter nothing walks.
 
 ```scrut
-$ GH_STUB="$TESTDIR/status-context" "$TESTDIR/../survey.sh" 2>stderr
+$ CLI_STUB="$TESTDIR/status-context" "$TESTDIR/../survey.sh" 2>stderr
 [1]
 ```
 

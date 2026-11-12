@@ -1,1 +1,1 @@
-pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json
+gh pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json

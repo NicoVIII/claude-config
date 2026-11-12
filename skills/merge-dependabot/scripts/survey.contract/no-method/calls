@@ -1,2 +1,2 @@
-pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json
-repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed	methods.json
+gh pr list --author app/dependabot --state open --limit 200 --json number,title,statusCheckRollup	pulls.json
+gh repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed	methods.json
