@@ -13,6 +13,7 @@ Each file covers one condition and opens by stating it. Nothing here loads by it
 - Each rule has one home. Don't restate `CLAUDE.md` or another standard.
 - A rule I have not settled goes under a heading that says so, phrased as a trade-off to raise, not a choice to make.
 - No reference only I can resolve.
+- A standard depends on no project: no link into one, and no rule that needs one to be understood. Projects point here, never the other way.
 
 ## Decision records
 

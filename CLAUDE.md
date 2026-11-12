@@ -41,6 +41,7 @@ Personal — never copy them into project repos or force them on contributors. P
 What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names:
 
 - `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
+- `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
 
 ## Documentation
 
