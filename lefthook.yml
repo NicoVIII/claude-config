@@ -24,6 +24,6 @@ pre-commit:
         - "*.fsproj"
         - "*.contract/*"
         - "lib/gh-stub.sh"
-        - "bin/dotnet-tool.sh"
+        - "bin/*.sh"
         - "skills/*/scripts/*.sh"
       run: just contract

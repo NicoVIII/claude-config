@@ -63,11 +63,14 @@ shell:
     git ls-files -z '*.sh' | xargs -0 -r shfmt -d
 
 # Run the contract suites: each tool's output matched whole, through the path
-# its SKILL.md names, with `lib/gh-stub.sh` standing in for gh.
+# its SKILL.md names, with `lib/gh-stub.sh` standing in for gh where a tool
+# calls it.
 #
 # Named by hand for the same reason as `test`.
 contract:
+    scrut test bin/skill-refiner.contract
     scrut test skills/prioritize/scripts/gather.contract
+    scrut test skills/prioritize/scripts/failing-log.contract
     scrut test skills/merge-dependabot/scripts/survey.contract
 
 # The single entry point lefthook and CI both call, so neither can drift from

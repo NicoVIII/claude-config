@@ -1,0 +1,5 @@
+build	UNKNOWN STEP	2026-11-01T10:00:00.1234567Z Restoring packages
+build	UNKNOWN STEP	2026-11-01T10:00:01.1234567Z src/App.fs(3,5): error FS0039: The value is not defined
+test	Run tests	2026-11-01T10:00:02.1234567Z 2 tests FAILED
+build	UNKNOWN STEP	2026-11-01T10:00:03.1234567Z ##[error]Process completed with exit code 1.
+build	UNKNOWN STEP	2026-11-01T10:00:04.1234567Z git config --unset-all extensions.worktreeConfig

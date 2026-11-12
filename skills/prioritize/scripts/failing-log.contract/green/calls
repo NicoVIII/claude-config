@@ -1,0 +1,1 @@
+pr checks 12 -R me-user/alpha --json bucket,link --jq first(.[] | select(.bucket == "fail") | .link)	link.txt

@@ -1,0 +1,2 @@
+deploy	UNKNOWN STEP	2026-11-01T10:00:00.1234567Z Waiting for the runner
+deploy	Publish	2026-11-01T10:00:01.1234567Z The operation was canceled.
