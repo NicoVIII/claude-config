@@ -14,17 +14,21 @@ $ mkdir stub && ln -s "$TESTDIR/../../../../lib/cli-stub.sh" stub/curl && export
 A ref is taken with or without `ghcr.io/` and a tag. The manifest is cut down
 to its version and options, an empty `options` being the finding that a feature
 cannot be pinned. A registry answering with an HTTP error means not published,
-and a missing manifest is reported with the URL that was tried; neither stops
-the refs after it. curl's own complaint on stderr is left out here.
+whether it refuses the token or grants one and then has no tag list, and a
+missing manifest is reported with the URL that was tried; neither stops the
+refs after it. curl's own complaint on stderr is left out here.
 
 ```scrut
-$ CLI_STUB="$TESTDIR/probe" "$TESTDIR/../feature-probe.sh" ghcr.io/devcontainers/features/dotnet:2 acme/features/ghost anthropics/devcontainer-features/claude-code 2>/dev/null
+$ CLI_STUB="$TESTDIR/probe" "$TESTDIR/../feature-probe.sh" ghcr.io/devcontainers/features/dotnet:2 acme/features/ghost acme/features/half anthropics/devcontainer-features/claude-code 2>/dev/null
 == devcontainers/features/dotnet
 tags     ["1","2","2.4","2.4.1","latest"]
 manifest {"version":"2.4.1","options":{"version":{"type":"string","proposals":["latest","lts","10.0"],"default":"latest"}}}
 == acme/features/ghost
 tags     NOT PUBLISHED — no such artifact on ghcr.io
 manifest NO MANIFEST at https://raw.githubusercontent.com/acme/features/main/src/ghost/devcontainer-feature.json — wrong path, or not a src/<feature> layout
+== acme/features/half
+tags     NOT PUBLISHED — no such artifact on ghcr.io
+manifest {"version":"0.1.0","options":{}}
 == anthropics/devcontainer-features/claude-code
 tags     ["1","1.0","latest"]
 manifest {"version":"1.0.5","options":{}}

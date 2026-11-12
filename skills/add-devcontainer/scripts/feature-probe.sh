@@ -31,17 +31,21 @@ ghcr_curl() {
 	esac
 }
 
-# GHCR hands out a pull token per repository, even for public ones.
+# GHCR hands out a pull token per repository, even for public ones. Either
+# request can be the one that answers with an HTTP error, so both are checked
+# for the marker before jq is handed what would otherwise be JSON.
 ghcr_tags() {
-	local repo=$1 token
+	local repo=$1 token tags
 	token=$(ghcr_curl "https://ghcr.io/token?scope=repository:${repo}:pull&service=ghcr.io")
-	[[ ${token} != NOT_PUBLISHED ]] || {
+	if [[ ${token} != NOT_PUBLISHED ]]; then
+		token=$(jq -r .token <<<"${token}")
+		tags=$(ghcr_curl -H "Authorization: Bearer ${token}" "https://ghcr.io/v2/${repo}/tags/list")
+	fi
+	if [[ ${token} == NOT_PUBLISHED || ${tags} == NOT_PUBLISHED ]]; then
 		echo "NOT PUBLISHED — no such artifact on ghcr.io"
 		return
-	}
-	token=$(jq -r .token <<<"${token}")
-	ghcr_curl -H "Authorization: Bearer ${token}" "https://ghcr.io/v2/${repo}/tags/list" |
-		jq -rc '.tags'
+	fi
+	jq -rc '.tags' <<<"${tags}"
 }
 
 # The manifest is the only statement of what the feature can pin. Its

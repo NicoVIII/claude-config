@@ -6,3 +6,6 @@ curl -fsSL -H Authorization: Bearer pull-token https://ghcr.io/v2/anthropics/dev
 curl -fsSL https://raw.githubusercontent.com/anthropics/devcontainer-features/main/src/claude-code/devcontainer-feature.json	manifest-no-options.json
 curl -fsSL https://ghcr.io/token?scope=repository:acme/features/ghost:pull&service=ghcr.io	not-found.exit22
 curl -fsSL https://raw.githubusercontent.com/acme/features/main/src/ghost/devcontainer-feature.json	not-found.exit22
+curl -fsSL https://ghcr.io/token?scope=repository:acme/features/half:pull&service=ghcr.io	token.json
+curl -fsSL -H Authorization: Bearer pull-token https://ghcr.io/v2/acme/features/half/tags/list	not-found.exit22
+curl -fsSL https://raw.githubusercontent.com/acme/features/main/src/half/devcontainer-feature.json	manifest-half.json
