@@ -68,6 +68,7 @@ shell:
 # Named by hand for the same reason as `test`.
 contract:
     scrut test skills/prioritize/scripts/gather.contract
+    scrut test skills/merge-dependabot/scripts/survey.contract
 
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.
