@@ -42,7 +42,13 @@ typecheck:
 # Listed by hand, unlike typecheck's project list: a `*.tests` glob over the
 # index would also match a suite in a foreign checkout that happened to be
 # tracked here, and there are few enough of these to name.
+#
+# Git's own variables are dropped first, as in `contract` and for its reason:
+# the skill-refiner harness runs `git init` in a throwaway session repo.
 test:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    unset $(git rev-parse --local-env-vars)
     dotnet run --project bin/skill-refiner.tests
     dotnet run --project skills/merge-dependabot/scripts/survey.tests
     dotnet run --project skills/add-devcontainer/scripts/feature-probe.tests
@@ -68,7 +74,16 @@ shell:
 # calls.
 #
 # Named by hand for the same reason as `test`.
+#
+# Git's own variables are dropped first. A pre-commit hook in a linked worktree
+# is handed GIT_DIR, and every git command a suite runs in its throwaway repo
+# then acts on this repository instead: `git init` rewrote `core.worktree` here,
+# and a suite that commits would have committed here. `--local-env-vars` is
+# git's list of what binds a process to one repository.
 contract:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    unset $(git rev-parse --local-env-vars)
     scrut test bin/skill-refiner.contract
     scrut test bin/claude-md-growth.contract
     scrut test skills/prioritize/scripts/gather.contract
