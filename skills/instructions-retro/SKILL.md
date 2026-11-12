@@ -1,6 +1,6 @@
 ---
 name: instructions-retro
-description: Review how standing instructions — CLAUDE.md, AGENTS.md, references, memory — steered this session's plain-prompt work, and turn misleading or missing ones into edits. Use when I say instructions retro, retro this session, did my instructions help or mislead, or want to refine CLAUDE.md from how a run without a skill went.
+description: Review how standing instructions — CLAUDE.md, AGENTS.md, standards, references, memory — steered this session's plain-prompt work, and turn misleading or missing ones into edits. Use when I say instructions retro, retro this session, did my instructions help or mislead, or want to refine CLAUDE.md from how a run without a skill went.
 ---
 
 Judge whether the instructions in context helped or misled this session's work, using the transcript as evidence, and propose edits to the files that hold them.
@@ -12,10 +12,10 @@ The subject is the session's work done outside any skill. Friction that arose in
 Before collecting evidence, ask whether this repo's instruction files are in scope: its `CLAUDE.md`, the `AGENTS.md` files it imports, and its docs. Ask every run — some projects want them reviewed, others don't. The global sources are always in scope:
 
 - `~/.claude/CLAUDE.md`
-- `~/.claude/references/*.md` that the session actually read
+- `~/.claude/references/*.md` and `~/.claude/standards/*.md` that the session actually read
 - memory: `MEMORY.md` in the project's memory directory and any memory recalled during the session
 
-Only text that was in context counts. A rule the session never loaded cannot have steered it — don't review files the run never saw.
+Only text that was in context counts. A rule the session never loaded cannot have steered it — don't review files the run never saw. A standard is the one case where never loading is itself evidence: when its line in `CLAUDE.md` named work the session did and the file was not read, that is an **Ignored** finding against the line, not against the standard. *(Untested — one standard exists, and no session has yet skipped one.)*
 
 ## Collect evidence
 
@@ -46,7 +46,7 @@ Present each finding as a concrete edit: quote the current text, show the replac
 
 1. Delete the rule.
 2. Narrow or tighten it.
-3. Move it to where it applies — a global rule that only one repo needs goes to that repo's `AGENTS.md` or a skill; personal preferences never go into a project repo.
+3. Move it to where it applies — a global rule that only one repo needs goes to that repo's `AGENTS.md` or a skill, and one that holds only for one kind of work goes to a standard, written by the rules in `~/.claude/standards/README.md`; personal preferences never go into a project repo.
 4. Add a rule — last resort.
 
 An edit that **adds** text waits for a second sighting: on a first sighting, propose no edit, list it after the numbered findings as deferred, and log it. Apply on first sighting anyway when I corrected it mid-run, when the edit only removes text, or when the text is certainly wrong (it contradicts another source, points at something that no longer exists, or steers a correct follower to a worse answer).
@@ -67,11 +67,11 @@ Append one line per finding to the sighting log — applied, declined, or deferr
 
 Then make the edits and commit each repo separately:
 
-- `~/.claude` — the log plus edits to `CLAUDE.md` and `references/`. Markdown-only, so there are no checks: review the diff and commit with `git -C ~/.claude`. Record declined findings and the reason in the commit message.
+- `~/.claude` — the log plus edits to `CLAUDE.md`, `references/` and `standards/`. Markdown-only, so there are no checks: review the diff and commit with `git -C ~/.claude`. Record declined findings and the reason in the commit message.
 - Memory files are untracked — edit them and don't commit.
 - A project repo — its own commit, under its own checks and commit conventions. Never push.
 
-After editing `~/.claude/CLAUDE.md`, run `wc -w ~/.claude/CLAUDE.md`. Past ~500 words, suggest `/claude-md-compact` as a separate pass.
+After editing `~/.claude/CLAUDE.md`, check it against the compaction trigger: the **Global preferences** paragraphs of `~/.claude/README.md` state it and give the command that measures it — read them there, the number is kept nowhere else. When it is met, suggest `/claude-md-compact` as a separate pass.
 
 ---
 

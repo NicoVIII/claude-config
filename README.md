@@ -33,7 +33,7 @@ fork it and make it yours.
 | [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🟢 Usable |
 | [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
-| [`instructions-retro`](skills/instructions-retro/SKILL.md) | Check whether `CLAUDE.md` and friends helped or misled a run without a skill. | Opus | 🚧 WIP |
+| [`instructions-retro`](skills/instructions-retro/SKILL.md) | Check whether `CLAUDE.md` and friends helped or misled a run without a skill. | Opus | 🧪 Experimental |
 
 ### Session helpers
 
@@ -119,10 +119,22 @@ flowchart LR
 **Global preferences** — after a session worked from plain prompts rather than
 a skill, run `/instructions-retro` to review how `CLAUDE.md`, `references/`,
 memory, and optionally the project's own instruction files steered it; its
-findings accumulate in `references/instructions-history.md`. Nothing tracks
-`CLAUDE.md` growth for you. Check with
-`wc -w ~/.claude/CLAUDE.md` and run `/claude-md-compact` once it is well past
-~500 words.
+findings accumulate in `references/instructions-history.md`. `standards/`
+files a session read are reviewed the same way.
+
+Run `/claude-md-compact` once `CLAUDE.md` stands about 150 words above where
+the last pass left it. That is the size after the most recent commit that cut
+20 words or more, which this lists newest first:
+
+```sh
+git -C ~/.claude log --format=%h -- CLAUDE.md | head -15 | while read c; do
+  printf '%s %4s %s\n' "$c" "$(git -C ~/.claude show $c:CLAUDE.md | wc -w)" \
+    "$(git -C ~/.claude log -1 --format=%s $c)"; done
+```
+
+The trigger is growth, not size, because cutting alone does not hold the size
+down. Moving a rule that holds only for one kind of work into a standard does,
+and the pass proposes those moves too.
 
 ## Setup
 
