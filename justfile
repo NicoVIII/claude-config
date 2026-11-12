@@ -45,6 +45,7 @@ typecheck:
 test:
     dotnet run --project bin/skill-refiner.tests
     dotnet run --project skills/merge-dependabot/scripts/survey.tests
+    dotnet run --project skills/add-devcontainer/scripts/feature-probe.tests
 
 # Lint and format-check every shell script in the repo.
 #
@@ -63,8 +64,8 @@ shell:
     git ls-files -z '*.sh' | xargs -0 -r shfmt -d
 
 # Run the contract suites: each tool's output matched whole, through the path
-# its SKILL.md names, with `lib/cli-stub.sh` standing in for the gh or curl a
-# tool calls.
+# its SKILL.md names, with `lib/cli-stub.sh` standing in for the gh a tool
+# calls.
 #
 # Named by hand for the same reason as `test`.
 contract:
@@ -72,7 +73,6 @@ contract:
     scrut test skills/prioritize/scripts/gather.contract
     scrut test skills/prioritize/scripts/failing-log.contract
     scrut test skills/merge-dependabot/scripts/survey.contract
-    scrut test skills/add-devcontainer/scripts/feature-probe.contract
 
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.

@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 # Stands in for an external command on PATH in the contract tests: symlinked
-# under the command's name (gh, curl), it looks its call up in
-# ${CLI_STUB}/calls: one call per line, the command and its argv joined by
-# single spaces, a tab, then the fixture to answer with. A fixture named
-# `*.exit<N>` goes to stderr with exit N, which is how gh reports a feature
-# switched off for a repo (1) and curl an HTTP error (22).
+# under the command's name, it looks its call up in ${CLI_STUB}/calls: one call
+# per line, the command and its argv joined by single spaces, a tab, then the
+# fixture to answer with. A fixture named `*.exit<N>` goes to stderr with exit
+# N, which is how gh reports a feature switched off for a repo (1).
+#
+# gh is the only command stubbed today. It stays keyed on its own name rather
+# than hardcoding gh because that costs nothing, but a tool that only needs
+# HTTP should not shell out to curl to get stubbed here: it fakes the
+# HttpMessageHandler in-process instead, as feature-probe does.
 #
 # A call the list does not name fails loudly rather than answering with
 # nothing, so a changed or dropped flag breaks the test: 0492e84's missing

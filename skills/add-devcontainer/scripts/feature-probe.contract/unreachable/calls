@@ -1,1 +1,0 @@
-curl -fsSL https://ghcr.io/token?scope=repository:acme/features/ghost:pull&service=ghcr.io	no-host.exit6
