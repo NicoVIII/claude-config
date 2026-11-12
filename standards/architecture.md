@@ -6,6 +6,7 @@ Applies when designing or reviewing module structure, domain types, boundaries, 
 
 - **Functional core, imperative shell, at every scale.** Domain logic is pure and immutable. IO, network, persistence, clock, and randomness sit in a thin shell at the boundary, which orchestrates and holds no domain rules.
 - **Organise by feature slice and bounded context, never by layer.** The core/shell split sits inside each slice.
+- **A server backend is hexagonal from the start:** ports and adapters around the core, bounded contexts drawn by strategic DDD, and commands separated from queries.
 - **Bounded contexts do not nest.** What looks like a sub-context is a module or aggregate inside one.
 - **Make illegal states unrepresentable.** Use sum types wherever a boolean flag, an optional field, or a string would encode an invariant the type system can hold.
 - **Parse, don't validate.** Check once at the boundary into a type that is correct by construction. Nothing downstream validates again.
@@ -25,5 +26,4 @@ Applies when designing or reviewing module structure, domain types, boundaries, 
 
 ## Not settled — raise the trade-off, leave the call to me
 
-- **Ports and dependency inversion.** Functional core / imperative shell is the default. Formal hexagonal structure enters a slice only once the slice has earned it.
-- **Strategic DDD and CQRS.** They are the toolkit once a project goes hexagonal. Name the cost in eventual consistency and a second model before reaching for them.
+- **Hexagonal structure outside a server backend.** Functional core / imperative shell without ports is the default there. Ports and dependency inversion, and with them strategic DDD and CQRS, enter only once a slice has earned them. Name the cost in eventual consistency and a second model before reaching for the latter two.

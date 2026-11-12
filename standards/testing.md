@@ -13,7 +13,7 @@ Applies when writing, placing, or reviewing tests, deciding whether a change nee
 ## Which tests exist
 
 - **Some tests are owed and the rest are earned.** Owed tests together cover the whole behaviour. A unit test is earned by logic complex enough to need fast feedback, and a thin wrapper never earns one.
-- **Owed for a slice with a core:** its behaviour driven through its entry point below the transport, with the dependencies it owns faked; each mapping between the transport and the core, as the pure function it is; each adapter against the real thing or a throwaway instance of it.
+- **Owed for a hexagonal slice:** its behaviour driven through its driving port, below the transport, with its driven ports faked; each mapping between the transport and the core, as the pure function it is; each driven adapter against the real thing or a throwaway instance of it.
 - **Owed for a program that is mostly shell:** the built program driven against a throwaway root, in place of tests for its layers.
 - **Glue that only wires tested pieces together gets no test of its own.**
 - **Property-based by default for pure domain logic.** Example-based for known cases and regressions.
@@ -41,6 +41,7 @@ Applies when writing, placing, or reviewing tests, deciding whether a change nee
 
 ## Not settled — raise the trade-off, leave the call to me
 
+- **What is owed where a core has no ports** — a web frontend, a library, a command-line program with logic of its own. Only earned tests are decided there, so nothing says which tests cover the whole behaviour.
 - **Proving a fake matches the real adapter.** Owed tests trust the fake, adapter tests exercise the real thing, and nothing proves the two agree. A suite run against both closes that gap at real cost.
 - **Tests through the real transport, end to end.** Not added unless I ask; thin when they are.
 - **Pinning the calls made to an external program.** A stub that answers only the calls a scenario lists makes a changed flag fail, which is the point of it, and is also an assertion on a call. Whether the boundary to a program I don't own is where that rule stops is open.
