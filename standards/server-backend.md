@@ -35,7 +35,7 @@ Applies when designing or reviewing a server backend: its bounded contexts, use 
 - **The wire is as typed as the contract language allows,** and both sides still parse it into domain types.
 - **A response carries no generic success or error variant.** Failure travels on the transport's error channel.
 - **While client and server ship together, the contract is unversioned** ([decision](decisions/0003-unversioned-contract-while-client-and-server-ship-together.md)). A breaking change is legal only when the contract, the generated code, and both sides' adaptations land in one change, and a snapshot check catches drift.
-- **Compatibility discipline starts with the first release a client I don't ship depends on,** and it starts as a decision record.
+- **Compatibility discipline starts with the first release that a separately shipped client depends on,** and it starts as a decision record.
 
 ## Database
 
@@ -49,7 +49,7 @@ Applies when designing or reviewing a server backend: its bounded contexts, use 
 - **From the first release on, an upgrade loses no user-authored data.** Data that can be fetched or derived again is exempt. Any other loss is a breaking change the release notes state plainly.
 - **Owed: a migration that rewrites or drops a user-authored table ships a test** that seeds the previous schema, applies the migration, and asserts on the rows that survived.
 
-## Not settled — raise the trade-off, leave the call to me
+## Not settled — raise the trade-off, leave the call to the maintainer
 
 - **Enforcing context isolation inside SQL.** No import check sees into a statement, so review is the only enforcement there.
 - **How a context reacts to a change in another.** An in-process event wired in the composition root keeps the imports clean. Whether it carries a payload, runs synchronously, or may fail the publisher is open.

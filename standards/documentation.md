@@ -37,6 +37,6 @@ Applies when deciding where a piece of knowledge gets written down, when writing
 - **A setup or run instruction that fails is a defect, not a nit.**
 - **A record's context and decision are history and never drift.** Its consequences do, wherever they state an obligation that still holds.
 
-## Not settled — raise the trade-off, leave the call to me
+## Not settled — raise the trade-off, leave the call to the maintainer
 
 - **Where user docs beyond the README live:** in `docs/` itself, or in a folder of their own beside `docs/dev/`.

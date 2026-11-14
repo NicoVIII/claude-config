@@ -39,9 +39,9 @@ Applies when writing, placing, or reviewing tests, deciding whether a change nee
 - **Every verdict states what was not covered.**
 - **Scripts written to drive a verification are thrown away.** They are not committed as tests and not wired into CI.
 
-## Not settled — raise the trade-off, leave the call to me
+## Not settled — raise the trade-off, leave the call to the maintainer
 
 - **What is owed where a core has no ports** — a web frontend, a library, a command-line program with logic of its own. Only earned tests are decided there, so nothing says which tests cover the whole behaviour.
 - **Proving a fake matches the real adapter.** Owed tests trust the fake, adapter tests exercise the real thing, and nothing proves the two agree. A suite run against both closes that gap at real cost.
-- **Tests through the real transport, end to end.** Not added unless I ask; thin when they are.
-- **Pinning the calls made to an external program.** A stub that answers only the calls a scenario lists makes a changed flag fail, which is the point of it, and is also an assertion on a call. Whether the boundary to a program I don't own is where that rule stops is open.
+- **Tests through the real transport, end to end.** Not added unless the maintainer asks; thin when they are.
+- **Pinning the calls made to an external program.** A stub that answers only the calls a scenario lists makes a changed flag fail, which is the point of it, and is also an assertion on a call. Whether the boundary to a program the project does not own is where that rule stops is open.

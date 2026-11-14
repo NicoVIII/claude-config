@@ -22,6 +22,6 @@ Applies when designing or reviewing module structure, domain types, boundaries, 
 2. Safety over velocity.
 3. Safety over ecosystem convenience: a gap means writing it or picking a safer primitive.
 
-## Not settled — raise the trade-off, leave the call to me
+## Not settled — raise the trade-off, leave the call to the maintainer
 
 - **Hexagonal structure outside a server backend.** Functional core / imperative shell without ports is the default there. Ports and dependency inversion, and with them strategic DDD and CQRS, enter only once a slice has earned them. Name the cost in eventual consistency and a second model before reaching for the latter two.
