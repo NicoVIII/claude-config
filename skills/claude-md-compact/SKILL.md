@@ -73,4 +73,4 @@ A rule that was re-added is load-bearing — don't propose it a second time.
 
 ## Finish
 
-Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. `~/.claude/.claude/CLAUDE.md` names the checks for what the commit stages; a markdown-only commit has none.
+Record declined candidates and why in the commit message, so the next pass doesn't re-derive them. Commit CLAUDE.md together with any file a rule moved into — a pass of pure trims touches nothing else. A standard is the exception: `~/.claude/standards` is a repository of its own, so follow `~/.claude/references/standards-edits.md`, which commits the rule there and puts the moved pin into the CLAUDE.md commit. `~/.claude/.claude/CLAUDE.md` names the checks for what the commit stages; a markdown-only commit has none.

@@ -7,6 +7,7 @@
 !/.devcontainer
 !/.github
 !/.gitignore
+!/.gitmodules
 !/CLAUDE.md
 !/docs
 !/justfile

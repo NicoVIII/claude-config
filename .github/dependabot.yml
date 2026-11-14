@@ -45,6 +45,14 @@ updates:
         patterns: ["*"]
         update-types: [major]
 
+  # `standards/`. It is edited in the checkout this pin points into, so the pin
+  # normally moves in the same sitting; this catches the times it did not. A
+  # commit has no update level, hence no groups.
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: weekly
+
   # This one sees the Feature *references* (`.../dotnet:2`); whether it also
   # refreshes `devcontainer-lock.json` is undocumented, so assume the digests
   # stay ours to refresh until a PR proves otherwise. The tool versions that

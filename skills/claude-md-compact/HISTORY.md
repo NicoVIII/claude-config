@@ -8,3 +8,4 @@
 2026-11-12 · claude-config · 1001 words · fix big: read earlier passes’ commit bodies for declined candidates before finding new ones
 2026-11-12 · claude-config · 1084 words · fix big: a standard is a move destination, with two kinds of rule that stay until standards are shown to load (no retro: design session adding standards/)
 2026-11-12 · claude-config · 1111 words · fix small: an empty pass says the growth script still reports over its trigger (no retro: follow-up to the standards session)
+2026-11-14 · claude-config · 1140 words · fix small: a rule moved into a standard is committed in the standards repo, with its pin in the CLAUDE.md commit (no retro: session that split standards/ into a submodule)

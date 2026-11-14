@@ -67,7 +67,8 @@ Append one line per finding to the sighting log — applied, declined, or deferr
 
 Then make the edits and commit each repo separately:
 
-- `~/.claude` — the log plus edits to `CLAUDE.md`, `references/` and `standards/`. Markdown-only, so there are no checks: review the diff and commit with `git -C ~/.claude`. Record declined findings and the reason in the commit message.
+- `~/.claude` — the log plus edits to `CLAUDE.md` and `references/`. Markdown-only, so there are no checks: review the diff and commit with `git -C ~/.claude`. Record declined findings and the reason in the commit message.
+- `~/.claude/standards` — a repository of its own inside `~/.claude`. Follow `~/.claude/references/standards-edits.md` before editing there: the edit is committed in that repo, and its moved pin goes into the `~/.claude` commit.
 - Memory files are untracked — edit them and don't commit.
 - A project repo — its own commit, under its own checks and commit conventions. Never push.
 
