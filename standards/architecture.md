@@ -5,9 +5,7 @@ Applies when designing or reviewing module structure, domain types, boundaries, 
 ## Rules
 
 - **Functional core, imperative shell, at every scale.** Domain logic is pure and immutable. IO, network, persistence, clock, and randomness sit in a thin shell at the boundary, which orchestrates and holds no domain rules.
-- **Organise by feature slice and bounded context, never by layer.** The core/shell split sits inside each slice.
-- **A server backend is hexagonal from the start:** ports and adapters around the core, bounded contexts drawn by strategic DDD, and commands separated from queries.
-- **Bounded contexts do not nest.** What looks like a sub-context is a module or aggregate inside one.
+- **Organise by feature slice, never by layer.** The core/shell split sits inside each slice.
 - **Make illegal states unrepresentable.** Use sum types wherever a boolean flag, an optional field, or a string would encode an invariant the type system can hold.
 - **Parse, don't validate.** Check once at the boundary into a type that is correct by construction. Nothing downstream validates again.
 - **Newtypes over primitives for domain values**, opaque where the language allows.
