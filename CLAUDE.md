@@ -36,6 +36,7 @@ What holds only under a condition lives in `~/.claude/standards/`, one file per 
 - `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
 - `repo-setup.md` — creating a repository or changing its tooling: task runner, hooks, CI, devcontainer, dependency updates, releases.
 - `server-backend.md` — designing, changing, or reviewing a server backend: its contexts, use cases, API contract, database schema, or migrations.
+- `github.md` — filing, refining, labelling, or closing an issue, grooming a backlog, or scoping a milestone.
 - `documentation.md` — deciding where knowledge gets written down, or writing or reviewing a README, CONTRIBUTING.md, AGENTS.md, decision record, or developer doc.
 
 ## Documentation
