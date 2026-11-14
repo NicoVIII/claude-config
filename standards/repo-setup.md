@@ -46,4 +46,3 @@ Applies when creating a repository or changing its tooling: task runner, hooks, 
 
 - **Pinning actions to commit SHAs** instead of tags. Dependabot maintains either.
 - **Where a project's own skills live:** `.claude/skills/`, or `.agents/skills/` with a symlink from it.
-- **The directory for a project's decision records:** `docs/decisions/` or `docs/adrs/`.

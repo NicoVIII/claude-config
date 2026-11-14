@@ -17,6 +17,6 @@ Each file covers one condition and opens by stating it. Nothing here loads by it
 
 ## Decision records
 
-A rule gets a record when the decision had real alternatives and is expensive to reverse or likely to be questioned again. Most rules get none.
+A rule's record follows [`documentation.md`](documentation.md), which says when a decision gets one and what it holds. Most rules get none.
 
-Records live in `decisions/NNNN-short-title.md`, numbered in sequence, each with the context at the time, the options considered and why they lost, the decision, and its consequences. An accepted record is not edited: a changed mind gets a new record that supersedes it.
+Records live in `decisions/NNNN-short-title.md`, numbered in sequence.
