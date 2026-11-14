@@ -26,6 +26,7 @@ Applies when creating a repository or changing its tooling: task runner, hooks, 
 ## Workflows
 
 - **A workflow declares the least `permissions` it needs.**
+- **A job that pull requests trigger holds no write permission.** What publishes runs in a job of its own, on pushes to the default branch only.
 
 ## Agent instructions
 
