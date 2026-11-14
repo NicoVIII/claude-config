@@ -29,7 +29,7 @@ Personal — never copy them into project repos or force them on contributors. P
 
 ## Standards
 
-What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names — from the repo's own `docs/standards/` where it has one, since that is the version the repo conforms to:
+What holds only under a condition lives in `~/.claude/standards/`, one file per condition. A task usually falls under several: before starting, read every file whose work the task includes — from the repo's own `docs/standards/` where it has one, since that is the version the repo conforms to:
 
 - `code-style.md` — writing or reviewing any code, alongside whichever of the others applies.
 - `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
