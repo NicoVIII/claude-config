@@ -5,7 +5,9 @@ description: Groom one repository's issue backlog — close issues that no longe
 
 Clean up one repository's open issue backlog so what remains is real, distinct, and legible.
 
-Scope is the current repo, and hygiene only. `prioritize` is the cross-repo read-only scan that says which repo needs attention; this one writes, in a repo you have already `cd`'d into. **Do not rank or mark priority** — no `next`/`p1` labels, no ordering, and no milestones: scoping one is `/scope-milestone`, which expects a groomed backlog and sends you back here when it doesn't find one. Ranking itself is an open question I have not settled, not an oversight; if a run makes the case for it, say so at the end instead of doing it.
+Scope is the current repo, and hygiene only. `prioritize` is the cross-repo read-only scan that says which repo needs attention; this one writes, in a repo you have already `cd`'d into. **Do not rank or mark priority** — no `next`/`p1` labels, no ordering, and no milestones: scoping one is `/scope-milestone`, which expects a groomed backlog and sends you back here when it doesn't find one. Ranking is left open by the standard, not overlooked; if a run makes the case for it, say so at the end instead of doing it.
+
+The conventions this pass holds issues to are a standard: read `docs/standards/github.md` in this repo where it exists, else `~/.claude/standards/github.md`, before judging anything. The repo's own issue section in `AGENTS.md` / `CLAUDE.md` overrides it where they differ.
 
 ## Survey
 
@@ -33,7 +35,7 @@ First match wins:
 5. **`body fix`** — still plausible, but the body states something no longer true (dead path, closed blocker, moved count, removed feature), states a dependency only in prose, or nobody could say when it is finished. Edit it; never close it.
 6. **`keep`** — real, distinct, legible. No action.
 
-Age alone never justifies a close. A seven-year-old issue for a feature the repo still lacks is `keep`, not `obsolete`.
+A seven-year-old issue for a feature the repo still lacks is `keep`, not `obsolete`.
 
 Cap a run at ~15 non-`keep` verdicts, then report the rest as unreviewed and stop. A half-checked backlog believed to be fully checked is worse than an untouched one.
 
@@ -61,9 +63,9 @@ On approval:
 - `done` → `gh issue close <n> --reason completed --comment $'<one line why>\n\n🤖 Written by code assistant'`
 - `duplicate` → `gh issue close <n> --duplicate-of <survivor>`, which sets both the reason and the relation. Where the survivor lacks scope the duplicate had, fold that scope into the survivor's body with `gh issue edit <survivor> --body-file` — not `--comment` on the close, which lands on the closed issue.
 - `obsolete` → `gh issue close <n> --reason "not planned" --comment $'…\n\n🤖 Written by code assistant'`
-- `body fix` → make the issue read as currently true. A drifted **fact** (dead path, closed blocker, moved count, renamed symbol) is edited in place and silently — `gh issue edit <n> --body-file`, plus `--title` when the title carries it — with no comment and no dated "updated" note in the body; GitHub's edit history holds the superseded text, which is where a stale draft belongs. Only a **judgement or a question for me** (which of two overlaps survives, whether this is still wanted) is a `gh issue comment <n>`. Rewrite only the prose you are correcting — a correction left as a comment under a body that still reads false is the worst of both.
-- A dependency stated only in prose ("blocked by #n", "needs #n first") → record it as the relation, `gh issue edit <n> --add-blocked-by <m>`, and cut the sentence. It counts as a dependency only if you can name which issue cannot start until the other is done; a "related" mention stays prose.
-- A plainly wrong label → `gh issue edit <n> --add-label`/`--remove-label`. Don't invent a labelling scheme.
+- `body fix` → make the issue read as currently true, the way the standard says. A drifted **fact** (dead path, closed blocker, moved count, renamed symbol) goes into the body with `gh issue edit <n> --body-file`, plus `--title` when the title carries it. A **judgement or a question for me** (which of two overlaps survives, whether this is still wanted) is a `gh issue comment <n>`. Rewrite only the prose you are correcting — a correction left as a comment under a body that still reads false is the worst of both.
+- A dependency stated only in prose ("blocked by #n", "needs #n first") → record it as the relation, `gh issue edit <n> --add-blocked-by <m>`, and cut the sentence. Whether it is a dependency is the standard's test; a "related" mention stays prose.
+- A type label that is wrong by the standard → `gh issue edit <n> --add-label`/`--remove-label`. A backlog that mostly lacks type labels is not relabelled on the side: say so at the end and leave it to me. *(Untested — the standard's type labels are newer than every run of this skill; a run on an unlabelled backlog shows whether that stop is right.)*
 
 Everything written to GitHub as prose ends with `🤖 Written by code assistant` on its own line. Closes, labels, and title and body edits carry their own authorship and need no marker.
 

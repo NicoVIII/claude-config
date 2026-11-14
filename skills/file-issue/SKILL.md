@@ -5,33 +5,29 @@ description: File a GitHub issue in the current repo, or refine a rough one unti
 
 Two modes, both scoped to the current repo: **file** a new issue, or **refine** an existing one that isn't ready to start. Not for backlog cleanup across many issues (`groom`) or picking what to work on (`kickoff`).
 
-## Read the repo's conventions first
+## Read the conventions first
 
-These vary per repo and override the defaults below:
-
-- The issue section of `AGENTS.md` / `CLAUDE.md` at the repo root (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`): label taxonomy, milestone/Project policy, the scope document.
-- Labels that exist: `gh label list --json name -q '.[].name'`. Never create a label. With no stated taxonomy, apply an existing label only where one plainly fits, else none.
+- **The standard:** `docs/standards/github.md` in this repo where it exists, else `~/.claude/standards/github.md`. It holds what an issue's title and body say, the type labels, how a dependency is recorded, and what a milestone is. The steps below are how to apply it and restate none of it.
+- What this repo does differently: the issue section of `AGENTS.md` / `CLAUDE.md` at the repo root (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`). It overrides the standard, and names the scope document.
+- Labels that exist: `gh label list --json name -q '.[].name'`. Where the repo lacks the type label the standard calls for, don't create it yourself: say which one is missing and ask once, because adding it changes the repo's label set. *(Untested — the standard's four type labels are newer than every run of this skill; a run in a repo without `foundation` or `question` shows whether asking is the right stop.)*
 - Open milestones and what each promises: `gh api repos/:owner/:repo/milestones --jq '.[] | "\(.number) \(.title): \(.description)"'`. The membership test usually lives in the description, not in the conventions text.
 - The scope document — the one the conventions name, else `docs/vision.md`, else the README's scope or non-goals section. No scope doc: skip the scope check and say so.
 
 ## File
 
-1. **Triage before filing.** Stop and report instead of filing when:
+1. **Triage before filing**, by the standard's rules on what is not filed. Stop and report instead of filing when:
    - it is a trivial fix — make the fix instead, or say it is one;
    - the scope doc lists it as a non-goal — name the line; file only if I still want it;
    - it is a small nit — add it to the repo's open sweep issue (`gh issue list --search "sweep in:title"`) as a comment, or bundle it with other nits into one new sweep issue.
 2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms: one job often hides behind two wordings ("No mobile layout" vs "Responsive pass"). On a match — the same work packet under another wording — don't file and don't comment: fold the new scope into that issue's body as Refine step 5 does. An issue that shares the goal but is a different packet — another mechanism, its own acceptance, startable on its own — is not a match: file separately, and add one "Related: #n" line to the existing issue's body.
-3. **Write the body so someone could start it cold**, without this session:
-   - bug: repro steps, expected, actual;
-   - feature or enabler: goal, current state with file paths, scope, and an acceptance section saying when it is done;
-   - decisions you could not make: an explicit "Open questions" list, not buried in prose.
-4. **Title** specific enough to triage from the list view alone: name the thing and the gap, not the area ("Settings default sort is saved but never read", not "Settings issue").
-5. **Labels and milestone** per the repo's taxonomy and milestone policy: apply the repo's membership test where it states one, else leave the milestone unset. Say which way it came out — an unmilestoned issue should read as a decision, not an oversight.
+3. **Write the body to the standard's bar**: someone could start it cold, without this session.
+4. **Title** by the standard: "Settings default sort is saved but never read", not "Settings issue".
+5. **Label and milestone**: the one type label the standard calls for, and a milestone only where the issue passes the membership test — the repo's own where it states one, else the standard's. Say which way the milestone came out — an unmilestoned issue should read as a decision, not an oversight.
 6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link and labels. Show a draft first only for open questions whose answer changes the shape of the work — what gets built, where it lives, how big it is — giving each your recommended answer, then fold my answers in and file without showing the draft again. A question the implementer can settle while working stays in the body's Open questions list; don't spend a round trip on it.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
 
-Record a dependency as GitHub's relation, not as body prose: `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue. It is a dependency only if you can name which issue cannot start until the other is done. Two issues on one subject — one writing a rule, one proving it — are related, not blocked: if you can't name the blocked side, or the direction flips depending on how you read it, the link is prose.
+A dependency, as the standard defines one, is recorded with `--blocked-by <n>` / `--blocking <n>` on `gh issue create`, or `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` on an existing issue. Two issues on one subject — one writing a rule, one proving it — are related, not blocked: if you can't name the blocked side, or the direction flips depending on how you read it, the link is prose.
 
 Filing several at once: file in dependency order so each relation names an issue that already exists, and let the relation carry the link — a body reaching for a number that doesn't exist yet is a dependency that belongs in a relation.
 

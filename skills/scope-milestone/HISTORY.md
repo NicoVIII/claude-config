@@ -8,3 +8,4 @@
 2026-09-26 · tcg-card-collector · 893 words · retro minor: apply leaves scope-doc current-status stale (2nd sighting, fixed); size calibration read as a floor, user corrected (fixed); theme tie-break by issue count failed again (2nd sighting): replacement under discussion, not yet patched
 2026-09-26 · tcg-card-collector · 934 words · fix big: apply now carries out the repo's release-procedure steps for scoping (scope-doc current-status) in a commit; size is a ceiling not a floor; footer removed at Usable
 2026-09-26 · tcg-card-collector · 991 words · fix big: theme tie-break: scope doc's own ranking where stated, else most plainly false today (broken over rough), never issue count; name the runner-up promise
+2026-11-14 · standards · 1006 words · fix big: what a milestone is and its membership test now come from standards/github.md, with the repo own issues section overriding; the fallback asks for a version, not for what milestones mean

@@ -14,11 +14,12 @@ starting any of the work.
 
 ## Read the conventions
 
-These vary per repo and override every default below:
+The standard gives the defaults, and what the repo states overrides them:
 
-- The issues section of `AGENTS.md` / `CLAUDE.md`
-  (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`) — the milestone policy and,
-  where stated, its membership test.
+- The standard: `docs/standards/github.md` in this repo where it exists, else `~/.claude/standards/github.md` — what a milestone is, and its
+  membership test.
+- What this repo does differently: the issues section of `AGENTS.md` /
+  `CLAUDE.md` (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`).
 - The scope document the conventions name, else `docs/vision.md`, else the
   README's scope or direction section.
 - The house pattern, from every milestone the repo has had:
@@ -29,9 +30,9 @@ gh api "repos/{owner}/{repo}/milestones?state=all" \
 ```
 
 Read from it: how titles are shaped, whether descriptions state a promise or
-just name a theme, and how many issues one has historically held. With neither
-a stated policy nor a past milestone to read one from, ask me what milestones
-mean here — don't invent a versioning scheme.
+just name a theme, and how many issues one has historically held. What a
+milestone means is the standard's answer. With no past milestone to read a
+title from, ask me for the version — don't invent a versioning scheme.
 
 ## Read the state
 
@@ -82,9 +83,8 @@ One sentence saying what the milestone guarantees, phrased so a reader can tell
 what breaks without it. A theme name is not a promise, and neither is a list of
 features.
 
-**Membership**: the repo's own test where it states one, else — would the
-promise be false without this issue? Apply it to every open issue, not only the
-ones in the theme. Issues that nearly qualify are reported as explicitly
+**Membership**: the repo's own test where it states one, else the standard's.
+Apply it to every open issue, not only the ones in the theme. Issues that nearly qualify are reported as explicitly
 excluded, so the omission reads as a decision.
 
 **Size**: past milestones and what the repo closed in a comparable window set a
