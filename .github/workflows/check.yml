@@ -13,15 +13,6 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    # Replaces the block above for this job, so `contents` is repeated. The
-    # write on packages is for publishing the devcontainer image as a build
-    # cache. A pull request from a fork is capped to read by GitHub whatever
-    # is asked for here; one from Dependabot is not - its token is read-only
-    # by default, and this block raises it. Only the ref filter on the push
-    # below keeps such a run from publishing.
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v7
       # The claude-mount feature bind-mounts ~/.claude unconditionally, and a
@@ -29,32 +20,55 @@ jobs:
       # skipped. The runner has no ~/.claude, so create an empty one: the mount
       # then succeeds and stays the no-op `just check` already assumes it is.
       - run: mkdir -p ~/.claude
-      # For pulling the cache image, and on main for pushing it.
-      - uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       # The suite runs inside the devcontainer rather than on the runner, so the
       # toolchain CI checks with is by construction the one the container
       # defines. Every version lives once, in devcontainer.json; there is no
       # second install path here to keep in step with it.
       #
-      # An experiment: the image a push to main builds is published and used as
-      # the layer cache of every later build, which turns the container build
-      # into a pull - this step went from ~165s to ~93s. It is a cache and
-      # nothing more: devcontainer.json still names the base image and the
-      # features, and a run that cannot pull the image logs the importer's
-      # error and builds everything as before. So does a run that changes any
-      # feature, whichever one: the build copies every feature's install
-      # content in one early layer, and all the feature layers sit on top of
-      # it. A Dependabot pull request can read the image; nothing but a push
-      # to main writes it.
+      # An experiment: the build takes its layers from the image `publish-cache`
+      # below pushes, which turns it into a pull - this step went from ~165s to
+      # ~93s. It is a cache and nothing more: devcontainer.json still names the
+      # base image and the features, and a run that cannot pull the image logs
+      # the importer's error and builds everything as before. So does a run
+      # that changes any feature, whichever one: the build copies every
+      # feature's install content in one early layer, and all the feature
+      # layers sit on top of it.
+      #
+      # The image is public, which is what lets this job read it without a
+      # login and without any permission on packages. It must not have one: a
+      # pull request runs code nobody has reviewed - a bumped action, on the
+      # runner - and what it could write here is what every later run builds
+      # from. GitHub caps a fork's token to read whatever a job asks for, but
+      # not Dependabot's, which a `permissions` block raises.
+      - uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/nicoviii/claude-config-devcontainer
+          push: never
+          runCmd: just check
+
+  # Its own job so that the write on packages exists only here, and here only
+  # on a push to main. The price is a second container build per push, beside
+  # the one `check` does: a pull while .devcontainer is unchanged, a full build
+  # when it is not. It does not wait for `check`, because the image is the
+  # devcontainer as defined, whatever the suite makes of the commit.
+  publish-cache:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    # Replaces the block at the top for this job, so `contents` is repeated.
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # No runCmd: the image is built and pushed and no container is started,
+      # so the ~/.claude that claude-mount binds is not needed here.
       - uses: devcontainers/ci@v0.3
         with:
           imageName: ghcr.io/nicoviii/claude-config-devcontainer
           cacheFrom: ghcr.io/nicoviii/claude-config-devcontainer
-          push: filter
-          refFilterForPush: refs/heads/main
-          eventFilterForPush: push
-          runCmd: just check
+          push: always
