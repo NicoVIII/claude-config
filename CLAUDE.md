@@ -27,19 +27,11 @@ Personal — never copy them into project repos or force them on contributors. P
 - Finishing work that a tracked issue describes includes closing it — comment referencing the commit(s) and what was verified, don't leave it for me to notice and close. A partial fix says explicitly what's left and stays open.
 - Close when the work is merged into the default branch locally, not when it's pushed. Write issue comments as if the commits were already on the remote: I push shortly after, so a "still local" note is stale as soon as I do. Never ask whether to close.
 
-## Code style
-
-- Before writing new code, exhaust reuse in this order: existing helper/pattern in the codebase → stdlib → native platform feature → already-installed dependency. Only then write it — and keep it minimal.
-- Bug fixes target the root cause, not the reported symptom: check the other callers of the function you're touching — one fix in the shared function beats a guard per caller.
-- Expected failures are explicit, never clamped, defaulted, or silently ignored: a result/error type in code, an explicit error in the API. A user-input error may stay untyped (a message with a bad-request status); the client either prevents the request or handles the rejection in a way the user can act on.
-- Prefer small, composable, single-purpose functions. A `// this block does X` comment is a trigger to extract a named function instead. Skip extraction only when it would reduce clarity: helpers needing many threaded parameters, or one-shot blocks that add pure indirection.
-- Order files top-down: every definition references only things defined above it. Exceptions only for circular dependencies.
-- Comments explain WHY, not WHAT — if a reader could infer it from types and names, cut it. Carve-outs where prose is warranted: doc comments on public APIs; type-lossy seams where the signature can't express the contract; short orientation labels in long functions.
-
 ## Standards
 
 What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names — from the repo's own `docs/standards/` where it has one, since that is the version the repo conforms to:
 
+- `code-style.md` — writing or reviewing any code, alongside whichever of the others applies.
 - `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
 - `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
 - `repo-setup.md` — creating a repository or changing its tooling: task runner, hooks, CI, devcontainer, dependency updates, releases.

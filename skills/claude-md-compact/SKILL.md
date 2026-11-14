@@ -52,7 +52,7 @@ Destinations, by what needs the rule:
 
 Ranked by how well the evidence holds:
 
-1. **A rule the rest of the file already decides.** Strongest, because it is provable: name the other bullets that force the same outcome. They are often in a different section — the check-suite requirement under Commits is what makes a non-compiling commit impossible, not anything in Code style.
+1. **A rule the rest of the file already decides.** Strongest, because it is provable: name the other bullets that force the same outcome. They are often in a different section — the check-suite requirement under Commits is what makes a non-compiling commit impossible, not any rule about code.
 2. **A rule that states its ruling and then illustrates it.** The same proof as 1, inside one bullet: name the clause that already decides it and cut the worked example — but only where the ruling survives alone. A counterweight whose whole value *is* its examples is not this ("skip extraction only when it would reduce clarity" is a blank check without them).
 3. **A rule scoped to one kind of work, one repo, or one workflow.** Move it; see above.
 4. **A special case that never recurred.** `blame` names the commit and its message gives the reason; nothing resembling it in the log since. Weak on its own — a special case can be rare *and* load-bearing, so pair it with 1.
