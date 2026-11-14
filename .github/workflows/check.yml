@@ -27,12 +27,13 @@ jobs:
       #
       # An experiment: the build takes its layers from the image `publish-cache`
       # below pushes, which turns it into a pull - this step went from ~165s to
-      # ~93s. It is a cache and nothing more: devcontainer.json still names the
+      # ~100s. It is a cache and nothing more: devcontainer.json still names the
       # base image and the features, and a run that cannot pull the image logs
-      # the importer's error and builds everything as before. So does a run
-      # that changes any feature, whichever one: the build copies every
-      # feature's install content in one early layer, and all the feature
-      # layers sit on top of it.
+      # the importer's error and builds everything as before. So does every
+      # run after the base image's tag has moved to a new digest, until a push
+      # to main has published an image built on it: that happened within two
+      # days of the first publish. What a changed feature costs is not known.
+      # The one run that changed one met a new base image as well.
       #
       # The image is public, which is what lets this job read it without a
       # login and without any permission on packages. It must not have one: a
@@ -48,8 +49,8 @@ jobs:
 
   # Its own job so that the write on packages exists only here, and here only
   # on a push to main. The price is a second container build per push, beside
-  # the one `check` does: a pull while .devcontainer is unchanged, a full build
-  # when it is not. It does not wait for `check`, because the image is the
+  # the one `check` does: a pull of ~30s while the cache holds, a full build of
+  # ~100s when it does not. It does not wait for `check`, because the image is the
   # devcontainer as defined, whatever the suite makes of the commit.
   publish-cache:
     if: github.event_name == 'push'
