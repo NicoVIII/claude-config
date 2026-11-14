@@ -38,7 +38,7 @@ Personal — never copy them into project repos or force them on contributors. P
 
 ## Standards
 
-What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names:
+What holds only under a condition lives in `~/.claude/standards/`, one file per condition. Read the file before the work it names — from the repo's own `docs/standards/` where it has one, since that is the version the repo conforms to:
 
 - `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
 - `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
