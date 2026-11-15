@@ -12,3 +12,5 @@
 2026-08-03 · claude-config · 710 words · fix small: the shell-or-F# test now names the formats a helper parses rather than its own output, and gives length as a one-way signal; repo.md states staging as an imperative
 2026-09-06 · claude-config · 745 words · fix small: model lookup and commit target now cover a project skill in the session repo .claude/skills
 2026-09-13 · claude-config · 773 words · fix big: floor is no-growth, not must-shrink; an empty pass changes nothing and logs no baseline
+2026-11-15 · claude-config · 822 words · retro minor: HISTORY.md was read after ratio had printed the same 24 entries as its growth trace, 6KB paid twice; deferred, first sightings: an Untested mark whose confirming run was reported but never logged has no candidate class (evidence-outside-the-log mechanism), and Finish names no home for declined candidates; the log by directory path in a worktree of the config seeded a project README, filed as #20
+2026-11-15 · claude-config · 830 words · fix small: Find candidates reads the growth trace ratio printed in place of HISTORY.md, which holds the same entries

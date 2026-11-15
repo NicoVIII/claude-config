@@ -13,7 +13,7 @@ The pass must never end with **more words in the SKILL.md than it started** — 
 
 ## Find candidates
 
-Read the SKILL.md against its `HISTORY.md` and its directory's commit messages (`git log --format='%h %s%n%b'`): every rule was added for a reason, and the commit that added it states the reason — the message, so pull a patch for one commit only when its message doesn't identify the text it added. Rank by:
+Read the SKILL.md against the growth trace `ratio` printed, which carries every `HISTORY.md` entry, and its directory's commit messages (`git log --format='%h %s%n%b'`): every rule was added for a reason, and the commit that added it states the reason — the message, so pull a patch for one commit only when its message doesn't identify the text it added. Rank by:
 
 - **Sentences that justify a rule rather than instruct its executor** — motivation, war stories, why a gap exists; the test `author-skill` applies when drafting (12e09b7). This is where the words are, and a low ratio is no evidence against it (75bd76e).
 - **Prose that only makes a model reproduce a fixed pipeline** — flags, field names, counting rules re-derived every run. The ladder's script rung turns it into one. A mechanism the git log shows patched more than twice is the same signal.
