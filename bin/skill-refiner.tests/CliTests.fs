@@ -965,6 +965,63 @@ let private treeTests =
                       "and no README appeared inside the config tree's skills/, where it would read as a table")
           }
 
+          test "logs a config worktree's skill, named by its directory, there and seeds nothing" {
+              withRoot (fun root ->
+                  // Arrange — a worktree of the config, beside the live root
+                  // the binary ships in
+                  root |> skill "demo" (words 7)
+                  root |> skill "other" (words 7)
+                  let worktree = root |> configWorktree
+
+                  // Act
+                  let result = root |> skillRefinerIn worktree [ "skills/demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+
+                  Expect.stringContains
+                      (fileIn worktree "skills/demo/HISTORY.md" |> Option.defaultValue "")
+                      "· 7 words · created"
+                      "the worktree's skill took the entry"
+
+                  Expect.isNone (fileIn worktree "skills/README.md") "a checkout of the config is not a project"
+                  Expect.isFalse (result.Stdout.Contains "seeded") "and nothing claimed to have planted one"
+                  Expect.isNone (root |> historyFile "demo") "the live tree was left alone")
+          }
+
+          test "resolves a bare name in a config worktree to that worktree's skill" {
+              withRoot (fun root ->
+                  // Arrange
+                  root |> skill "demo" (words 7)
+                  let worktree = root |> configWorktree
+
+                  // Act
+                  let result = root |> skillRefinerIn worktree [ "demo"; "log"; "creation" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.isSome (fileIn worktree "skills/demo/HISTORY.md") "a run in the worktree means its tree"
+                  Expect.isNone (root |> historyFile "demo") "not the live one, outside the commit being prepared")
+          }
+
+          test "rates a config worktree's skill against the worktree's root README" {
+              withRoot (fun root ->
+                  // Arrange — the row exists only in the worktree's README, so
+                  // finding it proves which file was read
+                  root |> skill "demo" (words 100)
+                  root |> logged "demo" [ "retro clean" ]
+                  let worktree = root |> configWorktree
+                  listedIn worktree "demo" "🟢 Usable"
+
+                  // Act
+                  let result = root |> skillRefinerIn worktree [ "demo"; "maturity" ]
+
+                  // Assert
+                  Expect.equal result.ExitCode 0 $"should succeed, said: {result.Stderr}"
+                  Expect.stringContains result.Stdout "README says 🟢 Usable" "the worktree's table is the one read"
+                  Expect.isFalse (result.Stdout.Contains "no README table") "not the project layout's absent one")
+          }
+
           test "leaves a project's own explanation of its skills alone" {
               withRoot (fun root ->
                   // Arrange — a tree that already says something about its skills

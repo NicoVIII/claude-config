@@ -201,6 +201,50 @@ let projectHistoryFile (name: string) (root: Root) =
 let skillRefiner (args: string list) (root: Root) =
     exec "dotnet" root.SessionRepo (Path.Combine(root.Dir, "bin", "skill-refiner.dll") :: args)
 
+/// A second checkout of the config root, as `git worktree add` makes one. The
+/// root becomes a repository whose one commit holds the skills and README
+/// arranged so far, so arrange those before calling this. The session repo
+/// nested in the root is left out of it. Git's identity and signing are pinned
+/// here, since the machine's own config may lack the one or demand the other.
+let configWorktree (root: Root) =
+    let git args =
+        let result =
+            exec
+                "git"
+                root.Dir
+                ([ "-c"; "user.name=test"; "-c"; "user.email=test@example.invalid"; "-c"; "commit.gpgsign=false" ]
+                 @ args)
+
+        if result.ExitCode <> 0 then
+            let command = String.concat " " args
+            failwith $"git {command} failed: {result.Stderr}"
+
+    let worktree = Path.Combine(root.Dir, "worktree")
+    git [ "init"; "--quiet" ]
+    git [ "add"; "skills"; "README.md" ]
+    git [ "commit"; "--quiet"; "-m"; "config" ]
+    git [ "worktree"; "add"; "--quiet"; "-b"; "branch"; worktree ]
+    worktree
+
+/// Adds a row to the README at the top of a worktree, which `listed` cannot
+/// reach since it writes the root's.
+let listedIn (worktree: string) (name: string) (maturity: string) =
+    File.AppendAllText(
+        Path.Combine(worktree, "README.md"),
+        $"| [`{name}`](skills/{name}/SKILL.md) | summary | Sonnet | {maturity} |\n"
+    )
+
+/// Invokes the CLI from another directory than the session repo — a worktree.
+let skillRefinerIn (dir: string) (args: string list) (root: Root) =
+    exec "dotnet" dir (Path.Combine(root.Dir, "bin", "skill-refiner.dll") :: args)
+
+/// A file under `dir`, if it exists — for a worktree, whose layout mirrors the
+/// root's and so needs no helper per path.
+let fileIn (dir: string) (relative: string) =
+    let path = Path.Combine(dir, relative)
+
+    if File.Exists path then Some(File.ReadAllText path) else None
+
 /// The log as it stands, for assertions about what a run appended — or did not.
 let historyFile (name: string) (root: Root) =
     let path = Path.Combine(root.Dir, "skills", name, "HISTORY.md")

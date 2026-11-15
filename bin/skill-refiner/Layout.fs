@@ -1,8 +1,9 @@
 /// Where a skill tree keeps what skill-refiner reads, and the only door to the
 /// log.
 ///
-/// Two trees hold skills: the config repo this binary ships in, and the
-/// `.claude/` of whatever repo the session runs in. A skill lives beside its
+/// Two trees hold skills: the config repo this binary ships in — or another
+/// checkout of it the session runs in — and the `.claude/` of whatever repo
+/// the session runs in. A skill lives beside its
 /// HISTORY.md in either, and everything here resolves through `skillDir`, so
 /// the two are told apart in exactly one place.
 module Layout
@@ -35,12 +36,38 @@ let private configRoot () =
 
     search (Some(DirectoryInfo AppContext.BaseDirectory))
 
-/// The session repo's own tree, `.claude/` under its toplevel — the same repo
-/// `Log` names the run after, found the same way. None outside a repo, which
-/// is not an error here: the config tree may still hold the skill.
-let private projectRoot () =
-    Git.run (Directory.GetCurrentDirectory()) [ "rev-parse"; "--show-toplevel" ]
-    |> Option.map (fun toplevel -> Path.Combine(toplevel, ".claude"))
+/// Two checkouts are the same repository exactly when they share a git common
+/// directory. A path comparison cannot tell a worktree of this config from a
+/// project's tree, and treating one as the other plants a project's explainer
+/// into the config (#20).
+let private commonDir (dir: string) =
+    Git.run dir [ "rev-parse"; "--path-format=absolute"; "--git-common-dir" ]
+
+/// The config root, or the toplevel of another checkout of its repository. An
+/// empty `--show-prefix` is how git says "the toplevel", asked of git rather
+/// than compared as paths so a symlinked temp directory cannot defeat it. A
+/// config root outside git has no other checkouts, and is matched by path.
+let private isConfigCheckout (dir: string) =
+    let root = configRoot ()
+    let normalise (path: string) = Path.GetFullPath path |> Path.TrimEndingDirectorySeparator
+
+    normalise dir = normalise root
+    || Git.run dir [ "rev-parse"; "--show-prefix" ] = Some ""
+       && (match commonDir root with
+           | Some common -> commonDir dir = Some common
+           | None -> false)
+
+/// The roots of the session repo's own trees, in lookup order: its `.claude/`,
+/// and its toplevel too when the session runs in a checkout of this config —
+/// a worktree's `skills/` is the tree a run there means, not the live one.
+/// Empty outside a repo, which is not an error here: the config tree may still
+/// hold the skill. Found the way `Log` names the run's repo.
+let private sessionRoots () =
+    match Git.run (Directory.GetCurrentDirectory()) [ "rev-parse"; "--show-toplevel" ] with
+    | None -> []
+    | Some toplevel ->
+        Path.Combine(toplevel, ".claude")
+        :: (if isConfigCheckout toplevel then [ toplevel ] else [])
 
 let private isPath (skill: string) =
     skill.Contains '/' || skill.Contains Path.DirectorySeparatorChar
@@ -60,25 +87,25 @@ let skillDir (skill: string) =
     else
         let candidate root = Path.Combine(root, "skills", skill)
 
-        let trees =
-            [ projectRoot () |> Option.map candidate
-              Some(candidate (configRoot ())) ]
-            |> List.choose id
+        let trees = sessionRoots () @ [ configRoot () ] |> List.map candidate
 
         match trees |> List.tryFind Directory.Exists with
         | Some dir -> dir
         | None -> fail $"no skill named '{skill}'"
 
-/// The `skills/` directory a skill resolved in, when it is not this config's
-/// own — i.e. a tree whose readers have never seen this repo's README, and so
-/// the one case where the log needs an explainer planted beside it. Compared as
-/// paths rather than asked of `projectRoot`, so a directory named outright is
-/// judged by where it is and not by how it was reached.
+/// The `skills/` directory a skill resolved in, when it is not in a checkout
+/// of this config — i.e. a tree whose readers have never seen this repo's
+/// README, and so the one case where the log needs an explainer planted beside
+/// it. Judged from the directory rather than from how `skillDir` reached it, so
+/// a directory named outright is judged by where it is.
 let foreignSkillsDir (skill: string) =
     let holder = Path.Combine(skillDir skill, "..") |> Path.GetFullPath
-    let ours = Path.Combine(configRoot (), "skills") |> Path.GetFullPath
+    let parent = Path.Combine(holder, "..") |> Path.GetFullPath
 
-    if holder = ours then None else Some holder
+    if Path.GetFileName holder = "skills" && isConfigCheckout parent then
+        None
+    else
+        Some holder
 
 /// Checked like `skillDir` above, and for the same reason: an unreadable path
 /// returned as if it were fine surfaces as a FileNotFoundException in the
