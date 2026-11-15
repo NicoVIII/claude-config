@@ -155,6 +155,10 @@ git submodule update --init
 `CLAUDE.md`, `README.md`, or `skills/` aside first and merge back what you want
 to keep.
 
+To update, pull with `git pull --recurse-submodules`. A plain `git pull` leaves
+`standards/` on the old commit, showing as modified, until `git submodule update`
+checks out the new one.
+
 ## After cloning
 
 - Or skip the installing: open the repo in its

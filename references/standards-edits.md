@@ -10,9 +10,11 @@ Read this before changing anything under `~/.claude/standards/`. That folder is 
    git -C ~/.claude/standards merge --ff-only "$pin"
    ```
 
-   If the merge refuses, `main` and the pin have diverged: stop and say so.
+   If the merge refuses, `main` and the pin have diverged: stop and say so. If it reports `Already up to date`, `main` may be ahead of the pin — a fresh clone starts it at `origin/main` — and `git -C ~/.claude/standards log --oneline "$pin"..main` lists what the moved pin will carry besides the edit. Name those commits in the `~/.claude` commit of step 3.
 2. Edit by the rules in `~/.claude/standards/README.md`, and commit with `git -C ~/.claude/standards`. Markdown only, so there are no checks: review the diff.
 3. Stage the moved pin with `git -C ~/.claude add standards`, into the `~/.claude` commit that belongs to the same change — the `CLAUDE.md` line of a new standard, a rule that moved out of `CLAUDE.md`. Where nothing else changed there, the pin is a commit of its own.
+
+A later `git submodule update`, or a pull with `--recurse-submodules`, detaches the HEAD again and leaves `main` where it was, unpushed commits included; step 1 brings it back. `--merge` is not used: on a `main` with an unpushed commit it makes a merge commit in the standards and leaves `standards` in `~/.claude` showing a pin nobody asked for.
 
 Never push either one. Pushing `~/.claude` before the standards publishes a pin nobody else can fetch; `git push --recurse-submodules=on-demand` does both in order.
 
