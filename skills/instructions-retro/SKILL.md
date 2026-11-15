@@ -46,7 +46,9 @@ Present each finding as a concrete edit: quote the current text, show the replac
 
 1. Delete the rule.
 2. Narrow or tighten it.
-3. Move it to where it applies — a global rule that only one repo needs goes to that repo's `AGENTS.md` or a skill, and one that holds only for one kind of work goes to a standard, written by the rules in `~/.claude/standards/README.md`; personal preferences never go into a project repo.
+3. Move it to where it applies — so it loads exactly when its work comes up:
+   - Down, when it loads more widely than it applies: a global rule that only one repo needs goes to that repo's `AGENTS.md` or a skill, and one that holds only for one kind of work goes to a standard, written by the rules in `~/.claude/standards/README.md`. Personal preferences never go into a project repo.
+   - Up, when it applies more widely than it loads: a standard whose `CLAUDE.md` line is **Ignored** while its work comes up in most sessions is imported with `@standards/<file>` in place of the line — its words then load in every session, but its reading no longer depends on the line being acted on. That counts as adding text.
 4. Add a rule — last resort.
 
 An edit that **adds** text waits for a second sighting: on a first sighting, propose no edit, list it after the numbered findings as deferred, and log it. Apply on first sighting anyway when I corrected it mid-run, when the edit only removes text, or when the text is certainly wrong (it contradicts another source, points at something that no longer exists, or steers a correct follower to a worse answer).
