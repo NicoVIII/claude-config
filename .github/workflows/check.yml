@@ -31,9 +31,9 @@ jobs:
       # base image and the features, and a run that cannot pull the image logs
       # the importer's error and builds everything as before. So does every
       # run after the base image's tag has moved to a new digest, until a push
-      # to main has published an image built on it: that happened within two
-      # days of the first publish. What a changed feature costs is not known.
-      # The one run that changed one met a new base image as well.
+      # to main has published an image built on it: the tag moved three times
+      # in two months. A changed feature rebuilds itself and every feature
+      # installed after it: a bump at layer 9 of 15 took ~150s against ~85s.
       #
       # The image is public, which is what lets this job read it without a
       # login and without any permission on packages. It must not have one: a
