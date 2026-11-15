@@ -37,6 +37,8 @@ First match wins:
 
 A seven-year-old issue for a feature the repo still lacks is `keep`, not `obsolete`.
 
+The type label is a second axis, checked on every issue whatever its verdict, `keep` included: missing or wrong by the standard, propose the one it should carry. Where two types fit, name the runner-up and why it lost. Label lines are one-line checks and don't count toward the cap below. *(Untested on a large unlabelled backlog: whether one group of 40 label lines is still reviewable.)*
+
 Cap a run at ~15 non-`keep` verdicts, then report the rest as unreviewed and stop. A half-checked backlog believed to be fully checked is worse than an untouched one.
 
 ## Propose & apply
@@ -55,6 +57,9 @@ body fix (1)
   #106 "Alternative sources" — no acceptance criterion; propose: ...
 ask (1)
   #107 getShortcutTarget — lostmsu, their word last 29d ago; needs a reply, not a close
+label (2)
+  #104 enhancement — none set; a new capability
+  #106 foundation — none set; dev tooling, arguably enhancement but nothing user-facing
 unreviewed (18)
 ```
 
@@ -65,12 +70,12 @@ On approval:
 - `obsolete` → `gh issue close <n> --reason "not planned" --comment $'…\n\n🤖 Written by code assistant'`
 - `body fix` → make the issue read as currently true, the way the standard says. A drifted **fact** (dead path, closed blocker, moved count, renamed symbol) goes into the body with `gh issue edit <n> --body-file`, plus `--title` when the title carries it. A **judgement or a question for me** (which of two overlaps survives, whether this is still wanted) is a `gh issue comment <n>`. Rewrite only the prose you are correcting — a correction left as a comment under a body that still reads false is the worst of both.
 - A dependency stated only in prose ("blocked by #n", "needs #n first") → record it as the relation, `gh issue edit <n> --add-blocked-by <m>`, and cut the sentence. Whether it is a dependency is the standard's test; a "related" mention stays prose.
-- A type label that is wrong by the standard → `gh issue edit <n> --add-label`/`--remove-label`. A backlog that mostly lacks type labels is not relabelled on the side: say so at the end and leave it to me. *(Untested — the standard's type labels are newer than every run of this skill; a run on an unlabelled backlog shows whether that stop is right.)*
+- `label` → `gh issue edit <n> --add-label <type>`, plus `--remove-label` for a wrong one. A type label the repo lacks is created first with `gh label create`, described by the standard's wording.
 
 Everything written to GitHub as prose ends with `🤖 Written by code assistant` on its own line. Closes, labels, and title and body edits carry their own authorship and need no marker.
 
 For `ask` issues, draft the reply and let me approve the wording. Never post one inside a batch.
 
-Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and label edits. Say which of them did not fit.
+Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and removing a wrong label. Say which of them did not fit.
 
 Stop once the approved batches are applied. Do not start fixing an issue you just kept, and do not open new issues for work you noticed on the way — tell me instead.

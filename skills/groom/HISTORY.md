@@ -11,3 +11,5 @@
 2026-10-06 · tcg-card-collector · 1024 words · fix small: verdict 5 renamed vague -> body fix and widened to drifted facts, matching the apply step and the output template
 2026-11-12 · claude-config · 1083 words · fix big: from a kickoff retro: a dependency stated only in prose is a body fix, recorded as a blocked-by relation (gh issue edit --add-blocked-by) and the sentence cut
 2026-11-14 · standards · 1125 words · fix big: conventions moved to standards/github.md: the pass reads the standard before judging and no longer restates the edit-in-place rule, the dependency test or the age rule; a mostly unlabelled backlog is reported, not relabelled (untested)
+2026-11-15 · claude-config · 1184 words · retro minor: missing type labels deferred to the user by the mostly-unlabelled stop, though 4 of 5 issues were one-line checks the standard requires; user asked for them proposed and applied
+2026-11-15 · claude-config · 1184 words · fix small: type label checked on every issue as its own label group, outside the cap; a missing type label is created first; the mostly-unlabelled stop dropped
