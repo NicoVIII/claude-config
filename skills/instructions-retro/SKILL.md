@@ -15,7 +15,7 @@ Before collecting evidence, ask whether this repo's instruction files are in sco
 - `~/.claude/references/*.md` and `~/.claude/standards/*.md` that the session actually read
 - memory: `MEMORY.md` in the project's memory directory and any memory recalled during the session
 
-Only text that was in context counts. A rule the session never loaded cannot have steered it — don't review files the run never saw. A standard is the one case where never loading is itself evidence: when its line in `CLAUDE.md` named work the session did and the file was not read, that is an **Ignored** finding against the line, not against the standard. *(Untested — one standard exists, and no session has yet skipped one.)*
+Only text that was in context counts. A rule the session never loaded cannot have steered it — don't review files the run never saw. A standard is the one case where never loading is itself evidence: when its line in `CLAUDE.md` named work the session did and the file was not read, that is an **Ignored** finding against the line, not against the standard. *(Untested — no run of this skill has reviewed a session since standards exist; the first that finds a skipped standard shows whether the line or the standard takes the finding.)*
 
 ## Collect evidence
 
