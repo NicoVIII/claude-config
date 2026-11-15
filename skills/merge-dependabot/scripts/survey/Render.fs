@@ -24,6 +24,7 @@ let private ciText =
     | Green -> "green"
     | Pending -> "pending"
     | Red _ -> "red"
+    | NoChecks -> "none"
 
 let private mergeText =
     function
@@ -61,7 +62,8 @@ let private pr (item: Pr) =
         for name, url in failing do
             printfn "  failing: %s%s" name (url |> Option.map (fun url -> $" {url}") |> Option.defaultValue "")
     | Green
-    | Pending -> ()
+    | Pending
+    | NoChecks -> ()
 
     match item.supersededBy with
     | Some other -> printfn "  superseded-by: #%d" other

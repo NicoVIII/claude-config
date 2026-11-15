@@ -13,3 +13,6 @@ gh pr diff 3 --name-only	diff-3.txt
 gh pr view 4 --json body	body-4.json
 gh pr view 4 --json mergeStateStatus	clean.json
 gh pr diff 4 --name-only	diff-1.txt
+gh pr view 5 --json body	body-5.json
+gh pr view 5 --json mergeStateStatus	clean.json
+gh pr diff 5 --name-only	diff-5.txt

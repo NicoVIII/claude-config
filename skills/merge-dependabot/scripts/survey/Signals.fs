@@ -51,8 +51,10 @@ let private ci (rollup: Wire.Check list option) =
         Red(failing |> List.map (fun check -> check.name, check.detailsUrl))
     elif checks |> List.exists (fun check -> check.conclusion.IsNone) then
         Pending
-    else
+    elif checks |> List.exists (fun check -> check.conclusion = Some "SUCCESS") then
         Green
+    else
+        NoChecks
 
 /// Named rather than derived: every ecosystem spells its manifest differently
 /// (a github-actions bump edits a workflow, a docker bump a Dockerfile), so a

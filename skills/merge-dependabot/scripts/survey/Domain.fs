@@ -64,9 +64,15 @@ module MergeState =
 /// outside the three known-good states is red, including conclusions GitHub
 /// adds after this was written.
 type Ci =
+    /// At least one check succeeded and none failed or is still running.
     | Green
     | Pending
     | Red of failing: (string * string option) list
+    /// No check ran: the rollup is empty, or every check concluded NEUTRAL or
+    /// SKIPPED. Not Green, which SKILL.md reads as evidence that CI ran (#11);
+    /// not Pending, which skips the PR, so a repo whose workflows never run on
+    /// these PRs would be skipped forever without saying why.
+    | NoChecks
 
 /// Whether the diff backs up what the body claims. A body can name a bump the
 /// committed diff no longer contains, so a PR touching nothing but lockfiles is

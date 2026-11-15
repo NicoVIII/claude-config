@@ -13,7 +13,8 @@ $ mkdir stub state && ln -s "$TESTDIR/../../../../lib/cli-stub.sh" stub/gh && ex
 
 Mergeability is asked again while GitHub answers UNKNOWN (#1 gets UNKNOWN,
 then CLEAN), a check still running is pending, a NEUTRAL or SKIPPED one is not
-red, a diff touching only lockfiles is a stale refresh, a body with no
+red, CI is green only on a SUCCESS (#1) and none where no check ran (#4) or
+every check declined (#5), a diff touching only lockfiles is a stale refresh, a body with no
 dependency line falls back to the title, the body's release links come first
 and the dependency's home only without them, and a PR taking the same
 dependency further supersedes the other.
@@ -40,9 +41,13 @@ PR #3  LEVEL=patch  CI=pending  MERGE=dirty  FILES=lock-only(packages.lock.json 
   bump: Expecto 10.2.1 -> 10.2.3 (patch)
   notes: https://github.com/haf/expecto
 
-PR #4  LEVEL=patch  CI=green  MERGE=clean  FILES=manifest
+PR #4  LEVEL=patch  CI=none  MERGE=clean  FILES=manifest
   title: Bump lodash from 4.17.20 to 4.17.23
   bump: lodash 4.17.20 -> 4.17.23 (patch)
+
+PR #5  LEVEL=patch  CI=none  MERGE=clean  FILES=manifest
+  title: Bump serde from 1.0.200 to 1.0.201
+  bump: serde 1.0.200 -> 1.0.201 (patch)
 ```
 
 ## No open PRs
