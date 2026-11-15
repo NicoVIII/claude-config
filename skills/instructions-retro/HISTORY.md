@@ -7,3 +7,5 @@
 2026-11-14 · claude-config · 1019 words · fix small: standards are a repository of their own now: an edit there follows references/standards-edits.md instead of landing in the ~/.claude commit (no retro: session that split standards/ into a submodule)
 2026-11-15 · claude-config · 1038 words · fix small: Untested mark on skipped standards no longer leans on "one standard exists": eight do, the skill has not run against one (no retro: #18 sweep)
 2026-11-15 · claude-config · 1116 words · fix small: step 3 moves a rule up as well as down: a standard Ignored while its work comes up in most sessions gets imported in place of its line (no retro: #18 sweep)
+2026-11-15 · claude-config · 1116 words · retro minor: first run against skipped standards: neither did harm, so the Untested mark named a confirming event that came without confirming. Deferred first sighting: an unread standard that did no harm has no log outcome
+2026-11-15 · claude-config · 1113 words · fix small: Untested mark on skipped standards: seen now, but none with harm, so the open question is the first Ignored one
