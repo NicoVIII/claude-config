@@ -9,8 +9,8 @@ Two modes, both scoped to the current repo: **file** a new issue, or **refine** 
 
 - **The standard:** `docs/standards/github.md` in this repo where it exists, else `~/.claude/standards/github.md`. It holds what an issue's title and body say, the type labels, how a dependency is recorded, and what a milestone is. The steps below are how to apply it and restate none of it.
 - What this repo does differently: the issue section of `AGENTS.md` / `CLAUDE.md` at the repo root (`rg -n -i -A8 '^## Issues' AGENTS.md CLAUDE.md`). It overrides the standard, and names the scope document.
-- Labels that exist: `gh label list --json name -q '.[].name'`. Where the repo lacks the type label the standard calls for, don't create it yourself: say which one is missing and ask once, because adding it changes the repo's label set. *(Untested — the standard's four type labels are newer than every run of this skill; a run in a repo without `foundation` or `question` shows whether asking is the right stop.)*
-- Open milestones and what each promises: `gh api repos/:owner/:repo/milestones --jq '.[] | "\(.number) \(.title): \(.description)"'`. The membership test usually lives in the description, not in the conventions text.
+- Labels that exist: `gh label list --json name -q '.[].name'`. Where the repo lacks the type label the standard calls for, don't create it yourself: say which one is missing and ask once, because adding it changes the repo's label set.
+- Open milestones and what each promises: `gh api repos/:owner/:repo/milestones --jq '.[] | "\(.number) \(.title): \(.description)"'`.
 - The scope document — the one the conventions name, else `docs/vision.md`, else the README's scope or non-goals section. No scope doc: skip the scope check and say so.
 
 ## File
@@ -19,10 +19,10 @@ Two modes, both scoped to the current repo: **file** a new issue, or **refine** 
    - it is a trivial fix — make the fix instead, or say it is one;
    - the scope doc lists it as a non-goal — name the line; file only if I still want it;
    - it is a small nit — add it to the repo's open sweep issue (`gh issue list --search "sweep in:title"`) as a comment, or bundle it with other nits into one new sweep issue.
-2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms: one job often hides behind two wordings ("No mobile layout" vs "Responsive pass"). On a match — the same work packet under another wording — don't file and don't comment: fold the new scope into that issue's body as Refine step 5 does. An issue that shares the goal but is a different packet — another mechanism, its own acceptance, startable on its own — is not a match: file separately, and add one "Related: #n" line to the existing issue's body.
+2. **Check for an existing issue.** `gh issue list --state open --search "<2-3 key terms>"`, then once more with synonyms. On a match — the same work packet under another wording — don't file and don't comment: fold the new scope into that issue's body as Refine step 5 does. An issue that shares the goal but is a different packet — another mechanism, its own acceptance, startable on its own — is not a match: file separately, and add one "Related: #n" line to the existing issue's body.
 3. **Write the body to the standard's bar**: someone could start it cold, without this session.
 4. **Title** by the standard: "Settings default sort is saved but never read", not "Settings issue".
-5. **Label and milestone**: the one type label the standard calls for, and a milestone only where the issue passes the membership test — the repo's own where it states one, else the standard's. Say which way the milestone came out — an unmilestoned issue should read as a decision, not an oversight.
+5. **Label and milestone**: the one type label the standard calls for, and a milestone only where the issue passes the membership test — the repo's own where it states one, else the standard's. Say which way the milestone came out.
 6. When I asked for the issue, create it directly with `gh issue create --title … --body-file … --label … [--milestone …]`, then show me the link and labels. Show a draft first only for open questions whose answer changes the shape of the work — what gets built, where it lives, how big it is — giving each your recommended answer, then fold my answers in and file without showing the draft again. A question the implementer can settle while working stays in the body's Open questions list; don't spend a round trip on it.
 
 Only file when I asked. Issues you notice while doing other work get listed at the end of the run as proposals.
@@ -39,7 +39,7 @@ For an issue that is plausible but not startable — a one-paragraph idea, no ac
 2. **Scope check** against the scope doc and the repo's decision records (e.g. `docs/decisions/`): quote any non-goal, "someday, maybe", or settled decision it touches. If the scope doc doesn't plainly cover it, ask before any interview whether to close it as not planned, park it, or change the scope doc. **Park**: do step 3, skip steps 4–5, post one comment with the facts found and the decisions left open, close the issue as not planned, and commit a line linking it into the scope doc's "someday" section.
 3. **Look up the facts** — what exists in the code, what the dependency or platform supports. Don't ask me what the repo can answer.
 4. **List the open decisions.** Interview me only on those that pass File step 6's test — the answer changes the shape of the work — and that I have not already settled in this session. Follow the `grilling` skill's rules: one question at a time, each with your recommended answer, dependencies resolved in order. Every other open decision goes into the body's Open questions list with your recommended answer.
-5. **Rewrite the body** to File's step 3 bar — the decisions made folded in, the acceptance section, anything still open — so the issue reads cleanly when work starts instead of as a body plus a comment trail. Apply it with `gh issue edit <n> --body-file …`, then show me the link; GitHub's edit history keeps the original. Fix the title in the same call with `--title` only if it misleads.
+5. **Rewrite the body** to File's step 3 bar — the decisions made folded in, the acceptance section, anything still open. Apply it with `gh issue edit <n> --body-file …`, then show me the link. Fix the title in the same call with `--title` only if it misleads.
 
 Stop once the issue is updated. Don't start implementing.
 
