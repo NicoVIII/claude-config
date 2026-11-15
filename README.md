@@ -161,37 +161,23 @@ checks out the new one.
 
 ## After cloning
 
-- Or skip the installing: open the repo in its
-  [devcontainer](.devcontainer/devcontainer.json) and everything below is already
-  there at a pinned version. It bind-mounts the host's `~/.claude`, so Claude
-  Code inside the container shares your skills, memory **and login** read-write —
-  convenient for working on this config, not a sandbox.
 - Install what the skills shell out to: [`gh`](https://cli.github.com/),
   authenticated (`prioritize`, `merge-dependabot` and `verify-bump` are built on
   it), the [.NET SDK](https://dotnet.microsoft.com/download) 10 or newer
   (`prioritize`'s gather step, `merge-dependabot`'s survey step and the shared
   `bin/skill-refiner` are F# programs — the last makes it a prerequisite of the
   skill-authoring workflow, not just of one skill), and `rg` (ripgrep).
-- To work *on* this repo you also need [`just`](https://just.systems),
-  [`lefthook`](https://lefthook.dev),
-  [`shellcheck`](https://www.shellcheck.net),
-  [`shfmt`](https://github.com/mvdan/sh) and
-  [`scrut`](https://github.com/facebookincubator/scrut) (x86_64 only for now);
-  run `lefthook install` once to activate the pre-commit checks. `just check`
-  runs the whole suite (typecheck, tests, contract tests, shell lint) by hand,
-  and fails wherever one of the last three is missing. The devcontainer has
-  them all. None of these is needed to merely use the skills.
 - Add your `settings.json` manually — it is gitignored and not tracked, because
   it holds machine preferences (`theme`, `tui`, `effortLevel`) that the
   `/config` menu rewrites. The permission allowlist is the one part worth
   versioning, so it lives in `permissions.json`; `just sync-permissions` copies
-  it in, replacing whatever `.permissions` is there. Re-run it after editing.
+  it in, replacing whatever `.permissions` is there, and needs
+  [`just`](https://just.systems) and `jq`. Re-run it after editing.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
-- `.claude/settings.json` is committed and applies only while working *in* this
-  repo: it allows `just check` and the recipes it is made of, so the
-  checks do not prompt.
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
   into every Claude Code session — review it and replace what isn't yours.
+- To change the config itself — its helpers, checks or tests — read
+  [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contents
 

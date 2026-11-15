@@ -9,6 +9,7 @@
 !/.gitignore
 !/.gitmodules
 !/CLAUDE.md
+!/CONTRIBUTING.md
 !/docs
 !/justfile
 !/lefthook.yml
