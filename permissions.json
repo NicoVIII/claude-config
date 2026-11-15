@@ -22,6 +22,7 @@
       "Bash(gh search *)",
       "Read(~/.claude/skills/**)",
       "Read(~/.claude/standards/**)",
+      "Read(//mnt/host-claude/skills/**)",
       "Read(//mnt/host-claude/standards/**)"
     ]
   }
