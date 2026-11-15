@@ -32,7 +32,7 @@ Personal — never copy them into project repos or force them on contributors. P
 What holds only under a condition lives in `~/.claude/standards/`, one file per condition. A task usually falls under several: before starting, read every file whose work the task includes — from the repo's own `docs/standards/` where it has one, since that is the version the repo conforms to:
 
 - `code-style.md` — writing or reviewing any code, alongside whichever of the others applies.
-- `architecture.md` — designing or reviewing module structure, domain types, boundaries, or error handling.
+- `architecture.md` — designing, changing, or reviewing module structure, domain types, boundaries, or error handling.
 - `testing.md` — writing, placing, or reviewing tests, or verifying by hand that a change works.
 - `repo-setup.md` — creating a repository or changing its tooling: task runner, hooks, CI, devcontainer, dependency updates, releases.
 - `server-backend.md` — designing, changing, or reviewing a server backend: its contexts, use cases, API contract, database schema, or migrations.
