@@ -92,8 +92,10 @@ The seam depends on what the helper reaches:
   only the `.claude/skills` of a throwaway session repo: a skill name its
   fixture lacks falls through to the real `skills/`, where a `log` would append
   to a real `HISTORY.md`.
-- **`dependabot-schema` has no suite.** It fetches in-process without the
-  handler seam.
+- **`dependabot-schema.tests` covers only `Check`,** fed YAML text and a
+  hand-built `Constraints`. `Schema.fetch` downloads in-process without the
+  handler seam, so the fetch, the schema's reduction to `Constraints` and
+  `Program.fs` go unexercised, and no suite drives the built program.
 
 ## Adding a helper
 

@@ -27,6 +27,12 @@ let rec private node (value: obj) =
     | :? IEnumerable as items -> items |> Seq.cast<obj> |> Seq.map node |> List.ofSeq |> Sequence
     | other -> Scalar(string other)
 
+let private deserialize (text: string) =
+    DeserializerBuilder().Build().Deserialize<obj>(text)
+
+/// For text already in hand. Invalid YAML throws YamlDotNet's own exception.
+let parse text = deserialize text |> node
+
 /// Only the parse is guarded, so a bug in the conversion above keeps its own
 /// stack trace instead of being reported as the user's file being malformed.
 let load (path: string) =
@@ -34,7 +40,7 @@ let load (path: string) =
 
     let parsed =
         try
-            DeserializerBuilder().Build().Deserialize<obj>(text)
+            deserialize text
         with error ->
             failwith $"%s{path} is not valid YAML: %s{error.Message}"
 
