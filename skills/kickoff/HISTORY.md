@@ -20,3 +20,5 @@
 2026-11-12 · claude-config · 859 words · fix big: unblocking counted from GitHub's blocked-by relations (a blocks: column on the issue query), not a #n body scan; groom records prose-only dependencies as relations
 2026-11-20 · Administration · 859 words · retro major: missed the repo backlog kept in docs (base-info §10 roadmap, pointed at from AGENTS.md); recommended oldest issue #19 by age until the user asked about untracked work
 2026-11-20 · Administration · 981 words · fix big: an in-repo backlog that AGENTS.md/CLAUDE.md points at ranks in tiers 2 and 4 beside issues; footer restored after major retro
+2026-11-20 · Administration · 981 words · retro minor: tier 4 ignored the roadmap's own "blocked on" link (Forgejo on OIDC), ranking OIDC by age alone; deferred: undated in-repo backlog items under age ranking, tier-4 same-age tie-break
+2026-11-20 · Administration · 1015 words · fix big: in-repo list items count a dependency the list states outright ("blocked on"); issues still count only recorded relations

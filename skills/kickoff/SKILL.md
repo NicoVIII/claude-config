@@ -53,7 +53,10 @@ gh issue list --state open --limit 200 --json number,title,labels,milestone,crea
 Never add `body` to that call. Fetch bodies only for suspected defects, via
 `gh issue view <n> --json body`. The `blocks:` column counts the issues GitHub
 records as blocked by this one, and it is the only dependency tiers 3 and 4
-count: a `#n` in an issue's prose is not a blocker, whatever the prose says.
+count between issues: a `#n` in an issue's prose is not a blocker, whatever the
+prose says. Items on an in-repo list have no such column; among them, an item
+the list says outright is blocked on another counts as blocked by it. "Related"
+or "see" does not count.
 
 A defect is an issue describing broken shipped behavior. Where the repo's label
 set has a `bug` label (`gh label list --json name -q '.[].name'`), that label is
