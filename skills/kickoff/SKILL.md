@@ -9,9 +9,12 @@ recommendation. Read-only: nothing here writes to GitHub or the repo.
 Scope is the repo you are `cd`'d into. Work the tiers in order and stop at the
 first that yields a candidate — read a lower tier only when everything above
 came up empty, or to fill the runners-up when the winning tier has fewer than
-three candidates. The convention being read: issues are the backlog; an open
-milestone, where present, names the current focus. Both are optional signals —
-a repo using neither still gets an answer from the tiers that apply.
+three candidates. The convention being read: issues are the backlog; an open milestone, where
+present, names the current focus. Where the repo's AGENTS.md or CLAUDE.md points
+at an in-repo list of open work (a roadmap section, a TODO doc), that list is
+backlog too: read its open items once and rank them in tiers 2 and 4 beside the
+issues, by the same rules. All three are optional signals — a repo using none
+still gets an answer from the tiers that apply.
 
 ## Tier 1 — blocked or bleeding
 
@@ -97,3 +100,7 @@ One line first: **start with X because Y (tier N)**. Then at most two
 runners-up, one line each, so I can veto without a re-run. Then stop: do not
 begin the work, do not open or edit issues, do not post anywhere — wait for my
 pick.
+
+---
+
+This skill is not yet battle-tested. At the end of the run, say briefly whether any instruction above was ambiguous, wrong, or needed a workaround. If none was and I corrected nothing during the run, log it instead: from the session repo's working directory run `~/.claude/bin/skill-refiner.sh <this skill's name> log run`, then commit the `HISTORY.md` line it names, alone, in the repo that holds the skill. Where that script does not exist, skip the logging.

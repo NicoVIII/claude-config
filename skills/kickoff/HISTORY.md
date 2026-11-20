@@ -18,3 +18,5 @@
 2026-09-23 · tcg-card-collector · 851 words · retro clean
 2026-11-12 · claude-config · 851 words · retro minor: tier-4 cross-reference scan counted #8/#10 as unblocking #7 though both bodies call it related, not a dependency (blocker weighting, deferred 2026-09-13, recurred); outcome held on age
 2026-11-12 · claude-config · 859 words · fix big: unblocking counted from GitHub's blocked-by relations (a blocks: column on the issue query), not a #n body scan; groom records prose-only dependencies as relations
+2026-11-20 · Administration · 859 words · retro major: missed the repo backlog kept in docs (base-info §10 roadmap, pointed at from AGENTS.md); recommended oldest issue #19 by age until the user asked about untracked work
+2026-11-20 · Administration · 981 words · fix big: an in-repo backlog that AGENTS.md/CLAUDE.md points at ranks in tiers 2 and 4 beside issues; footer restored after major retro
