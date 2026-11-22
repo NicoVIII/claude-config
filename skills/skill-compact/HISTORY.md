@@ -14,3 +14,4 @@
 2026-09-13 · claude-config · 773 words · fix big: floor is no-growth, not must-shrink; an empty pass changes nothing and logs no baseline
 2026-11-15 · claude-config · 822 words · retro minor: HISTORY.md was read after ratio had printed the same 24 entries as its growth trace, 6KB paid twice; deferred, first sightings: an Untested mark whose confirming run was reported but never logged has no candidate class (evidence-outside-the-log mechanism), and Finish names no home for declined candidates; the log by directory path in a worktree of the config seeded a project README, filed as #20
 2026-11-15 · claude-config · 830 words · fix small: Find candidates reads the growth trace ratio printed in place of HISTORY.md, which holds the same entries
+2026-11-22 · claude-config · 861 words · fix small: commit step: the hook, not just check, is what a ~/.claude commit owes

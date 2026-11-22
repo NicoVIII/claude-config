@@ -11,3 +11,4 @@
 2026-09-18 · tcg-card-collector · 1292 words · fix big: untested marks need the assumption and its confirmation inline; a bare not-yet-run path list is explicitly not one
 2026-11-22 · Administration · 1354 words · retro minor: edit mode named no log event and its creation-only list omitted log creation (fixed); deferred, first sighting: review gate vs. an already-approved edit, committed before showing path and summary
 2026-11-22 · Administration · 1294 words · fix big: edit mode now lists log creation as creation-only and names the fix entry an edit logs; footer removed on reaching Usable
+2026-11-22 · claude-config · 1325 words · fix small: commit step: the hook, not just check, is what a ~/.claude commit owes

@@ -42,3 +42,4 @@
 2026-11-11 · claude-config · 1430 words · fix small: Propose paragraph split into three labelled lists (what counts as a finding, how an edit is written, order and deferral); sentences carried over, no rule changed
 2026-11-12 · claude-config · 1443 words · retro minor: fix log step scoped to the reviewed skill, so an edit landing in another skill (groom) went unlogged until the user asked; deferred, first sighting: free-form feedback argument instead of a skill name, Scope covers only names and misspellings
 2026-11-12 · claude-config · 1494 words · fix big: fix entries go in the log of every skill whose SKILL.md the retro edited, a skill that did not run getting the fix alone with its clause naming the source retro
+2026-11-22 · claude-config · 1515 words · fix small: commit step: the hook, not just check, is what a ~/.claude commit owes
