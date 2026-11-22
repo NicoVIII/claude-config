@@ -43,6 +43,14 @@ let private configRoot () =
 let private commonDir (dir: string) =
     Git.run dir [ "rev-parse"; "--path-format=absolute"; "--git-common-dir" ]
 
+/// Shared is judged by file identity, not by the path git prints: a container
+/// that bind-mounts the config at a second path sees the same common directory
+/// under two names, and the binary reports the other one.
+let private sameCommonDir (a: string) (b: string) =
+    match commonDir a, commonDir b with
+    | Some x, Some y -> x = y || (Git.fileId x |> Option.exists (fun id -> Git.fileId y = Some id))
+    | _ -> false
+
 /// The config root, or the toplevel of another checkout of its repository. An
 /// empty `--show-prefix` is how git says "the toplevel", asked of git rather
 /// than compared as paths so a symlinked temp directory cannot defeat it. A
@@ -52,10 +60,7 @@ let private isConfigCheckout (dir: string) =
     let normalise (path: string) = Path.GetFullPath path |> Path.TrimEndingDirectorySeparator
 
     normalise dir = normalise root
-    || Git.run dir [ "rev-parse"; "--show-prefix" ] = Some ""
-       && (match commonDir root with
-           | Some common -> commonDir dir = Some common
-           | None -> false)
+    || Git.run dir [ "rev-parse"; "--show-prefix" ] = Some "" && sameCommonDir root dir
 
 /// The roots of the session repo's own trees, in lookup order: its `.claude/`,
 /// and its toplevel too when the session runs in a checkout of this config —
