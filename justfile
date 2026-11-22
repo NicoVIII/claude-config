@@ -29,7 +29,7 @@ sync-permissions:
 # checkouts) that a `**/*.fsproj` walk would wander into. The index is exactly
 # the allowlist .gitignore defines, and it already contains staged new projects,
 # so a helper added in the same commit is checked before it lands.
-typecheck:
+typecheck: (require "dotnet")
     #!/usr/bin/env bash
     set -euo pipefail
     git ls-files -z '*.fsproj' | while IFS= read -r -d '' proj; do
@@ -45,7 +45,7 @@ typecheck:
 #
 # Git's own variables are dropped first, as in `contract` and for its reason:
 # the skill-refiner harness runs `git init` in a throwaway session repo.
-test:
+test: (require "dotnet")
     #!/usr/bin/env bash
     set -euo pipefail
     unset $(git rev-parse --local-env-vars)
@@ -64,7 +64,7 @@ test:
 # nothing to satisfy, and the opt-in ones are the ones with teeth: SC2312 is
 # what caught `failing-log.sh` guarding a pipeline by an exit status `head`
 # always made zero, leaving its fallback branch silently dead.
-shell:
+shell: (require "shellcheck" "shfmt")
     #!/usr/bin/env bash
     set -euo pipefail
     git ls-files -z '*.sh' | xargs -0 -r shellcheck -o all -S style
@@ -81,7 +81,7 @@ shell:
 # then acts on this repository instead: `git init` rewrote `core.worktree` here,
 # and a suite that commits would have committed here. `--local-env-vars` is
 # git's list of what binds a process to one repository.
-contract:
+contract: (require "scrut")
     #!/usr/bin/env bash
     set -euo pipefail
     unset $(git rev-parse --local-env-vars)
@@ -93,4 +93,30 @@ contract:
 
 # The single entry point lefthook and CI both call, so neither can drift from
 # the other. Add new checks here, never to the workflow.
-check: typecheck test contract shell
+#
+# The requirement names every tool up front, so a container missing several
+# reports them in one run instead of one per attempt.
+check: (require "dotnet" "scrut" "shellcheck" "shfmt") typecheck test contract shell
+
+# Fail early, naming the missing tools, instead of a bare "command not found".
+#
+# Deliberately no install hint: ~/.claude is mounted into other repos'
+# devcontainers, and an agent there that is told how to install a tool installs
+# it in a container it doesn't belong in. What it needs instead is the rule it
+# can't see from there (.claude/CLAUDE.md loads only in sessions started here)
+# and where the suite does run.
+[private]
+require +tools:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    missing=()
+    for tool in {{ tools }}; do
+        command -v "${tool}" >/dev/null || missing+=("${tool}")
+    done
+    ((${#missing[@]} == 0)) && exit 0
+    {
+        echo "error: not installed here: ${missing[*]}"
+        echo "A commit of only Markdown and skills doesn't need \`just check\`: the pre-commit hook runs what the staged paths require."
+        echo "To run the full suite, work inside the claude-config devcontainer."
+    } >&2
+    exit 1

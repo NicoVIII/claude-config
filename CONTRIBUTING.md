@@ -44,6 +44,10 @@ this config, not a sandbox.
 
 - **The pre-commit hook runs only the recipes the staged paths call for.**
   [`lefthook.yml`](lefthook.yml) has the globs.
+- **A recipe whose tool is missing fails before it starts, naming the tool,**
+  and points to the devcontainer rather than to an installer: `~/.claude` is
+  mounted into other repos' containers, where Markdown-only commits owe no
+  checks and where the tools don't belong.
 - **CI runs `just check` on every push to `main` and every pull request, inside
   the devcontainer.** So [`devcontainer.json`](.devcontainer/devcontainer.json)
   is the one place a tool version is stated. Only Claude Code itself tracks
