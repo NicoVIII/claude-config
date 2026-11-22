@@ -30,7 +30,7 @@ First match wins:
 
 1. **`ask`** — anyone but me authored or commented on it. Never close or edit these without asking, whatever the age.
 2. **`done`** — the code already does it. Confirm with `rg` for the symbol or feature named, or `git log --oneline --since=<createdAt> -- <paths it names>`. No confirmation, no verdict: fall through to `keep`.
-3. **`duplicate`** — another open issue covers it. Name the survivor, and say what scope moves into it.
+3. **`duplicate`** — another open issue covers it. Name the survivor, and say what scope moves into it. Where only a slice of the scope is shared, it is not a duplicate: keep both, keep the slice in whichever issue it serves, and cut it from the other as a `body fix`. If the two bodies disagree on that slice, say which one you'd keep in that line; I decide when I approve the group.
 4. **`obsolete`** — the premise is gone: the dependency, platform, or subsystem it targets is no longer here. Same evidence bar as `done`.
 5. **`body fix`** — still plausible, but the body breaks the standard's *What an issue says* or *Relations* in a way that misleads or stops whoever starts it: it states something no longer true (dead path, closed blocker, moved count, removed feature), states a dependency only in prose, or nobody could say when it is finished. Those are examples; the standard's sections are the test, so judge against them as they read now. Edit it; never close it.
 6. **`trim`** — true and startable, but carries what *What an issue says* leaves out: facts a reader finds at the path the body names, the title or scope said again, research or rejected options in the body. Typical of issues filed before the standard's lean-body rules. One line naming what would go; groom does not rewrite it.
@@ -80,6 +80,6 @@ Everything written to GitHub as prose ends with `🤖 Written by code assistant`
 
 For `ask` issues, draft the reply and let me approve the wording. Never post one inside a batch.
 
-Not yet exercised by a run: the ~15 cap, `obsolete` closes, `ask` drafts, and removing a wrong label. Say which of them did not fit.
+Not yet exercised by a run: the ~15 cap, `obsolete` closes, and `ask` drafts. Say which of them did not fit.
 
 Stop once the approved batches are applied. Do not start fixing an issue you just kept, and do not open new issues for work you noticed on the way — tell me instead.
