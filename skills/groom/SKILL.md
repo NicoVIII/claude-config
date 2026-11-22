@@ -32,14 +32,15 @@ First match wins:
 2. **`done`** — the code already does it. Confirm with `rg` for the symbol or feature named, or `git log --oneline --since=<createdAt> -- <paths it names>`. No confirmation, no verdict: fall through to `keep`.
 3. **`duplicate`** — another open issue covers it. Name the survivor, and say what scope moves into it.
 4. **`obsolete`** — the premise is gone: the dependency, platform, or subsystem it targets is no longer here. Same evidence bar as `done`.
-5. **`body fix`** — still plausible, but the body states something no longer true (dead path, closed blocker, moved count, removed feature), states a dependency only in prose, or nobody could say when it is finished. Edit it; never close it.
-6. **`keep`** — real, distinct, legible. No action.
+5. **`body fix`** — still plausible, but the body breaks the standard's *What an issue says* or *Relations* in a way that misleads or stops whoever starts it: it states something no longer true (dead path, closed blocker, moved count, removed feature), states a dependency only in prose, or nobody could say when it is finished. Those are examples; the standard's sections are the test, so judge against them as they read now. Edit it; never close it.
+6. **`trim`** — true and startable, but carries what *What an issue says* leaves out: facts a reader finds at the path the body names, the title or scope said again, research or rejected options in the body. Typical of issues filed before the standard's lean-body rules. One line naming what would go; groom does not rewrite it.
+7. **`keep`** — real, distinct, legible. No action.
 
 A seven-year-old issue for a feature the repo still lacks is `keep`, not `obsolete`.
 
-The type label is a second axis, checked on every issue whatever its verdict, `keep` included: missing or wrong by the standard, propose the one it should carry. Where two types fit, name the runner-up and why it lost. Label lines are one-line checks and don't count toward the cap below. *(Untested on a large unlabelled backlog: whether one group of 40 label lines is still reviewable.)*
+The type label is a second axis, checked on every issue whatever its verdict, `keep` included: missing or wrong by the standard, propose the one it should carry. Where two types fit, name the runner-up and why it lost. Label and `trim` lines are one-line checks and don't count toward the cap below. *(Untested on a large unlabelled backlog: whether one group of 40 label lines is still reviewable.)*
 
-Cap a run at ~15 non-`keep` verdicts, then report the rest as unreviewed and stop. A half-checked backlog believed to be fully checked is worse than an untouched one.
+Cap a run at ~15 verdicts other than `keep` and `trim`, then report the rest as unreviewed and stop. A half-checked backlog believed to be fully checked is worse than an untouched one.
 
 ## Propose & apply
 
@@ -57,6 +58,8 @@ body fix (1)
   #106 "Alternative sources" — no acceptance criterion; propose: ...
 ask (1)
   #107 getShortcutTarget — lostmsu, their word last 29d ago; needs a reply, not a close
+trim (1)
+  #108 "Retry on timeout" — Current state restates what src/http.rs shows; the rejected backoff options belong in a comment
 label (2)
   #104 enhancement — none set; a new capability
   #106 foundation — none set; dev tooling, arguably enhancement but nothing user-facing
@@ -70,6 +73,7 @@ On approval:
 - `obsolete` → `gh issue close <n> --reason "not planned" --comment $'…\n\n🤖 Written by code assistant'`
 - `body fix` → make the issue read as currently true, the way the standard says. A drifted **fact** (dead path, closed blocker, moved count, renamed symbol) goes into the body with `gh issue edit <n> --body-file`, plus `--title` when the title carries it. A **judgement or a question for me** (which of two overlaps survives, whether this is still wanted) is a `gh issue comment <n>`. Rewrite only the prose you are correcting — a correction left as a comment under a body that still reads false is the worst of both.
 - A dependency stated only in prose ("blocked by #n", "needs #n first") → record it as the relation, `gh issue edit <n> --add-blocked-by <m>`, and cut the sentence. Whether it is a dependency is the standard's test; a "related" mention stays prose.
+- `trim` → once the other approved groups are applied, run `/file-issue` refine on each approved trim, one issue at a time: writing a body to the standard is that skill's job, and its questions stay per issue. *(Untested — refine is written for issues that are not startable yet; whether it trims a startable one without reopening its scope is unconfirmed.)*
 - `label` → `gh issue edit <n> --add-label <type>`, plus `--remove-label` for a wrong one. A type label the repo lacks is created first with `gh label create`, described by the standard's wording.
 
 Everything written to GitHub as prose ends with `🤖 Written by code assistant` on its own line. Closes, labels, and title and body edits carry their own authorship and need no marker.
