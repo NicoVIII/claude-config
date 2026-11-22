@@ -18,7 +18,7 @@ Personal — never copy them into project repos or force them on contributors. P
 - A branch with exactly one commit merges with plain `git merge` instead — it fast-forwards, so no merge commit restates the single commit below it, and falls back to a merge commit if the default branch moved meanwhile. Never `--ff-only`: that forces a rebase, putting the commit on a base its check run never saw. That commit's own subject carries the issue reference, since it may be all there is.
 - Handoff and end-of-session WIP commit on the branch with a `WIP:` subject — the one exception to the check-suite rule. They must never reach the default branch: the branch merges only once it is green and the WIP commits are squashed or amended away.
 - Commit messages follow the standard imported here, so it is always loaded and stated nowhere else in this file: @standards/commit-messages.md
-- Never push, and don't ask about pushing.
+- Never push unless a skill's step calls for it, and don't ask about pushing otherwise.
 - Landing a PR: squash when it has one commit or only throwaway messages (bot text, fixups); otherwise rebase-merge so the commits survive. Don't infer the method from how past PRs landed.
 - A fresh git worktree lacks gitignored build inputs (dependencies, generated code): provision it the way the repo's setup does before building, or missing modules read as breakage.
 
