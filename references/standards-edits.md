@@ -16,6 +16,6 @@ Read this before changing anything under `~/.claude/standards/`. That folder is 
 
 A later `git submodule update`, or a pull with `--recurse-submodules`, detaches the HEAD again and leaves `main` where it was, unpushed commits included; step 1 brings it back. `--merge` is not used: on a `main` with an unpushed commit it makes a merge commit in the standards and leaves `standards` in `~/.claude` showing a pin nobody asked for.
 
-Never push either one. Pushing `~/.claude` before the standards publishes a pin nobody else can fetch; `git push --recurse-submodules=on-demand` does both in order.
+Never push either one. Pushing `~/.claude` before the standards would publish a pin nobody else can fetch; `push.recurseSubmodules=check` (README, After cloning) makes that push refuse.
 
 A project that carries the standards at `docs/standards/` is never edited there: that copy is the version the project conforms to. Change the standard in `~/.claude/standards/`; the project takes it by moving its own pin.

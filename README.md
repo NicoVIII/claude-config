@@ -174,6 +174,10 @@ checks out the new one.
   it in, replacing whatever `.permissions` is there, and needs
   [`just`](https://just.systems) and `jq`. Re-run it after editing.
 - Use `settings.local.json` for secrets and machine-specific overrides (also gitignored).
+- Run `git config --global push.recurseSubmodules check` on the host, so a push
+  of `~/.claude` (or any repo with a submodule) refuses while the pin points at
+  a submodule commit not on its remote — such a pin breaks every clone. A dev
+  container picks it up from the host's `~/.gitconfig` when it is created.
 - If you are not me: `CLAUDE.md` holds *my* personal preferences and loads
   into every Claude Code session — review it and replace what isn't yours.
 - To change the config itself — its helpers, checks or tests — read
