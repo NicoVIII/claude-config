@@ -3,7 +3,7 @@ name: author-skill
 description: Create a new skill — global in ~/.claude/skills, or in the current repo's .claude/skills — from the current session's context, or edit an existing one against my skill standards, from inside any project. Use when I say write, create, or make a skill, edit, update, or extend a skill, turn this workflow into a skill, or want to capture what we just did as a skill. Not for reviewing a skill right after it ran — that is skill-retro.
 ---
 
-Create a new skill in `~/.claude/skills/<name>/SKILL.md` — or in the current repo's `.claude/skills/<name>/SKILL.md` when the workflow only makes sense there — capturing it while its context is live in this session; or edit an existing skill on request, holding it to the same standards. For edits, skip the creation-only steps (directory, maturity row starts at WIP) and update the README maturity-table row only if the skill's one-line summary no longer fits; post-run friction review stays with `skill-retro`.
+Create a new skill in `~/.claude/skills/<name>/SKILL.md` — or in the current repo's `.claude/skills/<name>/SKILL.md` when the workflow only makes sense there — capturing it while its context is live in this session; or edit an existing skill on request, holding it to the same standards. For edits, skip the creation-only steps (directory, `log creation`, maturity row starts at WIP), log the edit as `log fix small|big '<clause>'` graded as `skill-retro` grades a fix, and update the README maturity-table row only if the skill's one-line summary no longer fits; post-run friction review stays with `skill-retro`.
 
 ## Before writing
 
@@ -42,7 +42,3 @@ Write the SKILL.md straight to its final path, then give me that path and a summ
 - Open the skill's log: `~/.claude/bin/skill-refiner.sh <skill> log creation`. It records the current size as the origin baseline every later `ratio` is read against; re-run it after each further edit, until the first retro or fix freezes it. Never write `HISTORY.md` by hand while the script runs; when it cannot, `skill-conventions.md` gives the line to append. The name resolves to the session repo's `.claude/skills` before `~/.claude/skills` — check the echoed `logged to` path is the tree you meant, and pass the skill's directory path if not.
 - Add the maturity-table row, starting at 🚧 WIP and naming the execution model you suggested above — it is the only record of that choice, and the next author or retro writes for whatever model the row names. For a project skill the table is in the `.claude/skills/README.md` the `log creation` above seeded; it arrives empty, so the row is yours to add either way. If the skill pairs with existing ones, extend the Workflows section — in a project, wherever that repo documents its skills.
 - Commit there — the message explains why the skill exists, not what it contains.
-
----
-
-This skill is not yet battle-tested. At the end of the run, say briefly whether any instruction above was ambiguous, wrong, or needed a workaround. If none was and I corrected nothing during the run, log it instead: from the session repo's working directory run `~/.claude/bin/skill-refiner.sh <this skill's name> log run`, then commit the `HISTORY.md` line it names, alone, in the repo that holds the skill. Where that script does not exist, skip the logging.

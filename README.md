@@ -32,7 +32,7 @@ fork it and make it yours.
 
 | Skill | Summary | Suggested model | Maturity |
 | --- | --- | --- | --- |
-| [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🧪 Experimental |
+| [`author-skill`](skills/author-skill/SKILL.md) | Capture a session's workflow as a new skill, or refine an existing one. | Fable | 🟢 Usable |
 | [`skill-retro`](skills/skill-retro/SKILL.md) | Improve a skill right after running it, from observed friction. | Opus | 🟢 Usable |
 | [`skill-compact`](skills/skill-compact/SKILL.md) | Shrink a skill that has accreted more rules than it needs. | Opus | 🧪 Experimental |
 | [`instructions-retro`](skills/instructions-retro/SKILL.md) | Check whether `CLAUDE.md` and friends helped or misled a run without a skill. | Opus | 🧪 Experimental |

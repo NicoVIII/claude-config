@@ -9,3 +9,5 @@
 2026-09-13 · tcg-card-collector · 1223 words · retro minor: cat-for-review output not user-visible in the harness; deferred first sightings: logged-to path echoed the /mnt/host-claude mount, no format for marking untested rules, global commit checks only reachable via skill-conventions' repo.md link
 2026-09-13 · tcg-card-collector · 1235 words · fix small: review step hands over path plus rule summary instead of cat, whose output the harness doesn't reliably show the user
 2026-09-18 · tcg-card-collector · 1292 words · fix big: untested marks need the assumption and its confirmation inline; a bare not-yet-run path list is explicitly not one
+2026-11-22 · Administration · 1354 words · retro minor: edit mode named no log event and its creation-only list omitted log creation (fixed); deferred, first sighting: review gate vs. an already-approved edit, committed before showing path and summary
+2026-11-22 · Administration · 1294 words · fix big: edit mode now lists log creation as creation-only and names the fix entry an edit logs; footer removed on reaching Usable
