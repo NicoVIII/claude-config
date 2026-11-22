@@ -32,7 +32,7 @@ Take the strongest rung of `~/.claude/references/prose-ladder.md` that fits each
 
 Leave the earlier entries of `HISTORY.md` alone — the baselines already there are the only record of whether the floor is rising.
 
-When the pass changed the file, record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together, in the repo that holds the skill — a project skill commits into its own repo, not `~/.claude`.
+When the pass changed the file, record the new baseline: `~/.claude/bin/skill-refiner.sh <skill> log compacted '<one line>'`, which measures the file itself. The clause says what the pass cut, in the terms the candidates were picked by ("merged the retraction rules", "moved the model table to references"). Commit the skill edits and the log together, in the repo that holds the skill — a project skill commits into its own repo, not `~/.claude`. In `~/.claude`, the pre-commit hook, not `just check`, is what the commit owes there: a commit of only Markdown and skills triggers none of it, so review the diff and commit.
 
 ---
 
